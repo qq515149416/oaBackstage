@@ -1,0 +1,431 @@
+import React from "react";
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import ListTableComponent from "../component/listTableComponent.jsx";
+import InputExpansion from "../component/dialog/inputExpansion.jsx";
+import StatisticsShowComponent from "../component/statisticsShowComponent.jsx";
+import RenewalFee from "../component/dialog/renewalFee.jsx";
+import WorkOrderPost from "../component/dialog/workOrderPost.jsx";
+import { post,get } from "../tool/http.js";
+import extendElementsComponent from "../tool/extendElementsComponent";
+import Disposal from "../component/dialog/disposal.jsx";
+import TabComponent from "../component/tabComponent.jsx";
+import { inject,observer } from "mobx-react";
+import { routerConfig } from "../config/common/config.js";
+import ManualRecharge from "../component/dialog/manualRecharge.jsx";
+import Enable from "../component/icon/enable.jsx";
+import Button from '@material-ui/core/Button';
+const classNames = require('classnames');
+const dateFormat = require('dateformat');
+const qs = require('qs');
+
+/**
+ *@var  styles 是用来定义样式的
+ */
+const styles = theme => ({
+    fastExpired: {
+        background: "orange"
+    },
+    expired: {
+        background: "crimson"
+    },
+    tableHover: {
+       "&:hover": {
+            backgroundColor: "#3c8dbc !important"
+       }
+    },
+    textStyle: {
+        fontSize: 16
+    },
+    listTableComponent: {
+        marginTop: 0,
+        borderRadius: "0 0 4px 4px",
+        boxShadow: "0px 4px 5px 0px rgba(0, 0, 0, 0.1), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)"
+    },
+    listFilterComponent: {
+        marginTop: 0,
+        borderRadius: "0",
+        boxShadow: "0px 4px 5px 0px rgba(0, 0, 0, 0.1), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)"
+    }
+});
+/**
+ * @var columnData table渲染数据的字段的头部名称
+ * @var columnData.operat 属性是table表格种对应的操作功能字段，分别有：
+ * extendData、extendConfirm、extendElement、extendUrl方法
+ * extendData属性是能够以点击的形式通过弹框显示多余数据
+ * extendConfirm属性是一个提示框
+ * extendElement属性能够渲染你自定义的组件
+ * extendUrl属性能指定跳转链接
+ */
+const columnData = [
+    { id: 'business_number', numeric: true, disablePadding: true, label: '业务号' },
+    { id: 'type', numeric: true, disablePadding: true, label: '业务类型' },
+    { id: 'machine_number', numeric: true, disablePadding: true, label: '机器/机柜编号' },
+    { id: 'status', numeric: true, disablePadding: true, label: '业务状态' },
+    { id: 'resource_detail_json.ip', numeric: true, disablePadding: true, label: 'IP' },
+    { id: 'resource_detail_json.machineroom_name', numeric: true, disablePadding: true, label: '所属机房' },
+    { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
+        {id: "order_number", label: "订单号", type: "text"},
+        {id: "resource_detail", label: "资源详情", type: "subordinate", subordinate: [
+          {id: "machine_num", label: "机器编号", type: "text"},
+          {id: "cpu", label: "CPU", type: "text"},
+          {id: "memory", label: "内存", type: "text"},
+          {id: "harddisk", label: "硬盘", type: "text"},
+          {id: "bandwidth", label: "带宽", type: "text"},
+          {id: "protect", label: "防御", type: "text"},
+          {id: "loginname", label: "账号", type: "text"},
+          {id: "loginpass", label: "密码", type: "text"},
+          {id: "machine_type", label: "机器型号", type: "text"},
+          {id: "machine_note", label: "机器备注", type: "text"},
+          {id: "cabinet_id", label: "机柜编号", type: "text"}
+        ]},
+        {id: "money", label: "单价" ,type: "text"},
+        {id: "length", label: "时长" ,type: "text"},
+        {id: "start_time", label: "业务开始时间" ,type: "text"},
+        {id: "endding_time", label: "业务结束时间" ,type: "text"},
+        {id: "business_note", label: "业务备注" ,type: "text"}
+    ],extendConfirm: {
+      title: "业务订单支付",
+      content: "支付会支付业务下所有的订单",
+      icon: <Enable />,
+      ok: (data) => {
+          return new Promise((resolve,reject) => {
+              post("business/payOrderByAdmin",{
+                business_number: data.business_number,
+                coupon_id: 0
+              }).then((res) => {
+                  if(res.data.code==1) {
+                        alert(res.data.msg);
+                      resolve(res.data);
+                  } else {
+                      alert(res.data.msg);
+                      resolve(res.data);
+                  }
+              }).catch(reject);
+          });
+      }
+    },extendElement: (data) => {
+        let Element = extendElementsComponent([
+            RenewalFee,
+            WorkOrderPost,
+            Disposal
+          ]);
+          return <Element {...data} disposal_type={1} postUrl="business/renewresource" nameParam="machine_number" type="业务" />;
+    //   if(data.business_status==2) {
+
+    //   }else {
+    //     let Element = extendElementsComponent([
+    //         Disposal
+    //     ]);
+    //     return <Element {...data} disposal_type={1} postUrl="business/renewresource" nameParam="machine_number" type="业务" />;
+    //   }
+  }, extendUrl: [
+    {
+        title: "全部订单",
+        link: routerConfig.baseUrl+"/business/order",
+        param: ["business_number","client_id","client_name","machine_number",{
+          field: "resource_detail_json",
+          value: ["machineroom_id"]
+        }]
+    }
+  ], label: '操作' }
+];
+/**
+ * @var inputType 添加数据时对应字段的输入组件
+ */
+const inputType = [
+  // {
+  //   field: "client_name",
+  //   label: "客户姓名",
+  //   type: "text"
+  // },
+  {
+    field: "money",
+    label: "资源单价",
+    type: "text"
+  },
+  {
+    field: "length",
+    label: "时长",
+    type: "text"
+  },
+  {
+    field: "business_note",
+    label: "业务备注",
+    type: "text"
+  },
+  {
+    field: "business_type",
+    label: "业务类型",
+    type: "switch",
+    radioData: [
+        {
+            checked: true,
+            value: "1",
+            label: "租用主机"
+        },
+        {
+            checked: false,
+            value: "2",
+            label: "托管主机"
+        },
+        {
+            checked: false,
+            value: "3",
+            label: "租用机柜"
+        }
+    ]
+
+  },
+  {
+    field: "machine_number",
+    label: "主机/机柜编号",
+    type: "component",
+    Component: InputExpansion,
+    rule: {
+      term: "business_type",
+      execute: [
+        {
+          index: "1",
+          value: "rent_machine",
+          default: true
+        },
+        {
+          index: "3",
+          value: "cabinet"
+        },
+        {
+          index: "2",
+          value: "hosting_machine"
+        }
+      ],
+      type: "component"
+    }
+  },
+  {
+    field: "showInfo",
+    label: "",
+    type: "component",
+    Component: StatisticsShowComponent
+  }
+];
+/**
+ * @var filterType 过滤选择的字段
+ */
+const filterType = [
+    {
+        field: "type",
+        label: "业务类型",
+        options: [
+            {
+            view: "租用主机"
+            },
+            {
+            view: "托管主机"
+            },
+            {
+            view: "租用机柜"
+            }
+        ],
+        type: "select"
+    },
+    {
+        field: "start_time",
+        label: "创建时间",
+        type: "date"
+    }
+];
+/**
+ * 业务管理
+ */
+@inject("businessStores")
+@observer
+class BusinesList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: "all",
+            customerInfo: {
+                email: qs.parse(location.search.substr(1)).email,
+                money: qs.parse(location.search.substr(1)).money,
+                status: qs.parse(location.search.substr(1)).status,
+                clerk_name: qs.parse(location.search.substr(1)).clerk_name
+            }
+        };
+    }
+  componentDidMount() {
+    //   获取用户信息
+    this.getCustomerInfo(qs.parse(location.search.substr(1)).id);
+    //   通过客户ID获取对应的业务数据
+    this.props.businessStores.getData(qs.parse(location.search.substr(1)).id);
+    // inputType[inputType.findIndex(item => item.field=="client_name")].model = {
+    //   getSubordinateData: this.setClientName.bind(this)
+    // };
+    // 绑定金额触发方法
+    inputType[inputType.findIndex(item => item.field=="money")].model = {
+      getSubordinateData: this.setMoneyName.bind(this)
+    };
+    // 绑定时长触发方法
+    inputType[inputType.findIndex(item => item.field=="length")].model = {
+      getSubordinateData: this.setLengthName.bind(this)
+    };
+    // 绑定业务类型触发方法
+    inputType[inputType.findIndex(item => item.field=="business_type")].model = {
+      getSubordinateData: this.setBusinessTypeName.bind(this)
+    };
+    // 绑定机器编号触发方法
+    inputType[inputType.findIndex(item => item.field=="machine_number")].model = {
+      getSubordinateData: this.setMachineNumberName.bind(this)
+    };
+  }
+  // setClientName(param,type) {
+  //   // console.log(param);
+  //   this.props.businessStores.changeStatistics("clientName",param);
+  // }
+//   当填写金额的时候触发的方法
+  setMoneyName(param,type) {
+    this.props.businessStores.changeStatistics("unitPrice",param);
+  }
+  //   当填写时长的时候触发的方法
+  setLengthName(param,type) {
+    this.props.businessStores.changeStatistics("length",param);
+  }
+  //   当选择业务类型的时候触发的方法
+  setBusinessTypeName(param,type) {
+    let codeValue = {
+      1: "租用主机",
+      2: "托管主机",
+      3: "租用机柜"
+    };
+    this.props.businessStores.changeStatistics("businessType",codeValue[param.business_type.value]);
+  }
+  //   当填写机器编号的时候触发的方法
+  setMachineNumberName(param,type) {
+    // console.log(param);
+    this.props.businessStores.changeStatistics("productName",param);
+  }
+//   更新业务时执行的函数
+  updata() {
+    this.getCustomerInfo(qs.parse(location.search.substr(1)).id);
+    this.props.businessStores.getData(qs.parse(location.search.substr(1)).id);
+  }
+//   查询业务
+  handleChange = (value) => {
+        this.props.businessStores.findData({
+            business_status: value
+        });
+        this.setState({ value });
+    }
+    //   添加业务
+  addData = (param,callbrak) => {
+    param.client_id = qs.parse(location.search.substr(1)).id;
+    param.resource_detail = JSON.stringify(param.machine_number);
+    param.machine_number = param.machine_number.id;
+    this.props.businessStores.addData(param).then((state) => {
+      callbrak(state);
+    });
+  }
+//   删除业务
+  delData = (selectedData,callbrak) => {
+    const {businessStores} = this.props;
+    let delIng = selectedData.map(item => businessStores.delData(item));
+    callbrak(delIng);
+  }
+//   过滤业务
+  filterData = (param) => {
+    const {businessStores} = this.props;
+    businessStores.filterData(param);
+  }
+// 获取客户信息
+  getCustomerInfo = (id) => {
+    get("business/admin_customer").then((res) => {
+        if(res.data.code==1) {
+            this.setState({
+                customerInfo: {
+                    email: res.data.data.find(item => item.id == id).email,
+                    money: res.data.data.find(item => item.id == id).money,
+                    status: res.data.data.find(item => item.id == id).status,
+                    clerk_name: res.data.data.find(item => item.id == id).clerk_name
+                }
+            });
+        }
+    });
+  }
+/**
+ * 渲染方法
+ * @class ListTableComponent 这个是渲染一个table组件
+ * @class TabComponent 这个是渲染一个tab选择栏
+ */
+  render() {
+      const {classes} = this.props;
+      const { customerInfo } = this.state;
+    return (
+        <TabComponent onChange={this.handleChange} type={this.state.value} types={[
+            {
+                label: "全部",
+                value: "all"
+            },
+            {
+                label: "未付款",
+                value: 1
+            },
+            {
+                label: "审核中",
+                value: 0
+            },
+            {
+                label: "审核不通过",
+                value: -2
+            },
+            {
+                label: "取消",
+                value: -1
+            },
+            {
+                label: "到期",
+                value: 5
+            },
+            {
+                label: "退款",
+                value: 6
+            }
+        ]}>
+             <ListTableComponent
+                title={`客户账号：${customerInfo.email}&nbsp;&nbsp;&nbsp;&nbsp;客户余额：${customerInfo.money}&nbsp;&nbsp;&nbsp;&nbsp;客户账号状态：${customerInfo.status}&nbsp;&nbsp;&nbsp;&nbsp;业务员：${customerInfo.clerk_name}`}
+                operatBtns={<ManualRecharge buttonEl={(open) => (<Button variant="contained" onClick={open} color="primary">
+                充值
+              </Button>)} />}
+                operattext="业务信息"
+                listFilterComponentClassName={classes.listFilterComponent}
+                className={classes.listTableComponent}
+                inputType={inputType}
+                filterType={filterType}
+                headTitlesData={columnData}
+                data={this.props.businessStores.business}
+                currentStores={this.props.businessStores}
+                addData={this.addData.bind(this)}
+                updata={this.updata.bind(this)}
+                delData={this.delData.bind(this)}
+                filterData={this.filterData.bind(this)}
+                tableRowStyle={data => {
+                    let endTime = Math.round(new Date(data.endding_time).getTime()/1000);
+                    let nowTime = Math.round(new Date().getTime()/1000);
+                    return {
+                        classes: {
+                            root: classNames({
+                                [classes.fastExpired]:  (endTime > nowTime && (endTime - nowTime) < 60*60*24*3),
+                                [classes.expired]: endTime < nowTime
+                            }),
+                            hover: classes.tableHover
+                        }
+                    };
+                }}
+            />
+        </TabComponent>
+    );
+  }
+}
+BusinesList.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+export default withStyles(styles)(BusinesList);
