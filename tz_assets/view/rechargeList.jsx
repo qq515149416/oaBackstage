@@ -92,7 +92,7 @@ class RechargeList extends React.Component {
     render() {
         return (
             <ListTableComponent
-            title={`充值记录&nbsp;&nbsp;&nbsp;&nbsp;总共充值金额：<span style="color: #d00;">${this.props.rechargesStores.recharge.reduce((a,b) => a + parseFloat(b.recharge_amount),0)}元</span>`}
+            title={`充值记录&nbsp;&nbsp;&nbsp;&nbsp;总共税额金额：<span style="color: #d00;">${this.props.rechargesStores.recharge.reduce((a,b) => a + parseFloat(b.tax),0)}元</span>&nbsp;&nbsp;&nbsp;&nbsp;总共充值金额：<span style="color: #d00;">${this.props.rechargesStores.recharge.reduce((a,b) => a + parseFloat(b.recharge_amount),0)}元</span>`}
             operattext="充值"
             inputType={inputType}
             filterType={filterType}

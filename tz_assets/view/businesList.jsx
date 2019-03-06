@@ -85,14 +85,14 @@ const columnData = [
         {id: "endding_time", label: "业务结束时间" ,type: "text"},
         {id: "business_note", label: "业务备注" ,type: "text"}
     ],extendConfirm: {
-        rule: {
-            term: "business_status",
-            execute: 0,
-            type: "min"
+        rule: {//确认框规则
+            term: "business_status",//验证属性
+            execute: 0,//验证条件
+            type: "min"//验证方式
         },
-      title: "业务订单支付",
-      content: "支付会支付业务下所有的订单",
-      icon: <Enable />,
+      title: "业务订单支付",//确认框标题
+      content: "支付会支付业务下所有的订单",//确认框架信息
+      icon: <Enable />,//确认框触发按钮
       ok: (data) => {
           return new Promise((resolve,reject) => {
               post("business/payOrderByAdmin",{
@@ -113,14 +113,14 @@ const columnData = [
         let components = [];
         if(data.business_status>1) {
             components = [
-                RenewalFee,
-                WorkOrderPost,
-                Disposal
+                RenewalFee,//续费
+                WorkOrderPost,//提交工单
+                Disposal//下架
             ];
         } else {
             components = [
-                WorkOrderPost,
-                Disposal
+                WorkOrderPost,//提交工单
+                Disposal//下架
             ];
         }
 

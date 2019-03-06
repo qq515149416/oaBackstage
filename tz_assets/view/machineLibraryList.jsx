@@ -8,6 +8,7 @@ import { inject,observer } from "mobx-react";
 // import Tab from '@material-ui/core/Tab';
 import UploadExcelComponent from "../component/uploadExcelComponent.jsx";
 import TabComponent from "../component/tabComponent.jsx";
+import AddBusiness from "../component/dialog/addBusiness.jsx";
 
 const styles = theme => ({
     listTableComponent: {
@@ -41,7 +42,11 @@ let columnData = [
         {id: "business_end", label: "业务到期时间" ,type: "text"},
         {id: "business", label: "业务类型" ,type: "text"},
         {id: "machine_note", label: "备注" ,type: "text"}
-    ], label: '操作' }
+    ], label: '操作',extendElement: (data) => {
+        return (
+            <AddBusiness {...data} />
+        )
+}}
 ];
 const columnDataFull = [
     { id: 'machine_num', numeric: true, disablePadding: true, label: '机器编号' },
@@ -63,7 +68,11 @@ const columnDataFull = [
         {id: "business_end", label: "业务到期时间" ,type: "text"},
         {id: "business", label: "业务类型" ,type: "text"},
         {id: "machine_note", label: "备注" ,type: "text"}
-    ], label: '操作' }
+    ], label: '操作', extendElement: (data) => {
+            return (
+                <AddBusiness {...data} />
+            )
+    } }
 ];
 const inputType = [
     {

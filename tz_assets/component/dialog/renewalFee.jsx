@@ -183,7 +183,8 @@ class RenewalFee extends React.Component {
                         <p>业务编号：{this.props.business_number}</p>,
                         <p>机器编号：{this.props.machine_number}</p>,
                         <p>IP：{this.props.resource_detail_json.ip}</p>,
-                        <p>单价：{this.props.money}</p>
+                        <p>单价：{this.props.money}</p>,
+                        <p>到期时间：{this.props.endding_time}</p>
                     ]
                 }
             </DialogContentText>
