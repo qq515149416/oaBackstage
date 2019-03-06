@@ -420,6 +420,47 @@ const styles = theme => ({
           );
         }
       }
+      if(this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.rule && this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.rule.type=="max") {
+        if(this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.rule.execute > data[this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.rule.term]) {
+            return (
+              <ExpansionComponent
+                type="confirm"
+                className={classes.tableComponent}
+                tip_title={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.title}
+                tip_content={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.content}
+                ok={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.ok}
+                cancel={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.cancel}
+                input={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.input}
+                data={data}
+                updata = {this.props.updata}
+                select={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.select}
+                selectOptions={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.selectOptions}
+                icon={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.icon}
+              />
+            );
+          }
+      }
+
+      if(this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.rule && this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.rule.type=="min") {
+        if(this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.rule.execute < data[this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.rule.term]) {
+            return (
+              <ExpansionComponent
+                type="confirm"
+                className={classes.tableComponent}
+                tip_title={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.title}
+                tip_content={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.content}
+                ok={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.ok}
+                cancel={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.cancel}
+                input={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.input}
+                data={data}
+                updata = {this.props.updata}
+                select={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.select}
+                selectOptions={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.selectOptions}
+                icon={this.props.headTitlesData.find(item => item.id=="operat").extendConfirm.icon}
+              />
+            );
+          }
+      }
 
     }
     render() {

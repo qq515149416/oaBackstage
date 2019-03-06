@@ -85,6 +85,11 @@ const columnData = [
         {id: "endding_time", label: "业务结束时间" ,type: "text"},
         {id: "business_note", label: "业务备注" ,type: "text"}
     ],extendConfirm: {
+        rule: {
+            term: "business_status",
+            execute: 0,
+            type: "min"
+        },
       title: "业务订单支付",
       content: "支付会支付业务下所有的订单",
       icon: <Enable />,
@@ -105,11 +110,21 @@ const columnData = [
           });
       }
     },extendElement: (data) => {
-        let Element = extendElementsComponent([
-            RenewalFee,
-            WorkOrderPost,
-            Disposal
-          ]);
+        let components = [];
+        if(data.business_status>1) {
+            components = [
+                RenewalFee,
+                WorkOrderPost,
+                Disposal
+            ];
+        } else {
+            components = [
+                WorkOrderPost,
+                Disposal
+            ];
+        }
+
+        let Element = extendElementsComponent(components);
           return <Element {...data} disposal_type={1} postUrl="business/renewresource" nameParam="machine_number" type="业务" />;
     //   if(data.business_status==2) {
 
@@ -246,6 +261,7 @@ class BusinesList extends React.Component {
         this.state = {
             value: "all",
             customerInfo: {
+                id: qs.parse(location.search.substr(1)).id,
                 email: qs.parse(location.search.substr(1)).email,
                 money: qs.parse(location.search.substr(1)).money,
                 status: qs.parse(location.search.substr(1)).status,
@@ -342,6 +358,7 @@ class BusinesList extends React.Component {
         if(res.data.code==1) {
             this.setState({
                 customerInfo: {
+                    id: res.data.data.find(item => item.id == id).id,
                     email: res.data.data.find(item => item.id == id).email,
                     money: res.data.data.find(item => item.id == id).money,
                     status: res.data.data.find(item => item.id == id).status,
@@ -392,7 +409,7 @@ class BusinesList extends React.Component {
         ]}>
              <ListTableComponent
                 title={`客户账号：${customerInfo.email}&nbsp;&nbsp;&nbsp;&nbsp;客户余额：${customerInfo.money}&nbsp;&nbsp;&nbsp;&nbsp;客户账号状态：${customerInfo.status}&nbsp;&nbsp;&nbsp;&nbsp;业务员：${customerInfo.clerk_name}`}
-                operatBtns={<ManualRecharge buttonEl={(open) => (<Button variant="contained" onClick={open} color="primary">
+                operatBtns={<ManualRecharge postUrl="business/recharge" nameParam="email" {...customerInfo} buttonEl={(open) => (<Button variant="contained" onClick={open} color="primary">
                 充值
               </Button>)} />}
                 operattext="业务信息"

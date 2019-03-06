@@ -24,7 +24,7 @@ class ManualRecharge extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currency: 1,
+            currency: 6,
             manualRecharge: false
         }
     }
@@ -102,11 +102,11 @@ class ManualRecharge extends React.Component {
             onChange={this.handleChange('currency')}
             margin="normal"
             >
-                <MenuItem value={1}>
-                    腾正公帐(建设银行)
+                <MenuItem value={6}>
+                    支付宝
                 </MenuItem>
-                <MenuItem value={2}>
-                    腾正公帐(工商银行)
+                <MenuItem value={9}>
+                    微信支付
                 </MenuItem>
                 <MenuItem value={3}>
                     腾正公帐(招商银行)
@@ -114,23 +114,24 @@ class ManualRecharge extends React.Component {
                 <MenuItem value={4}>
                     腾正公帐(农业银行)
                 </MenuItem>
+                <MenuItem value={2}>
+                    腾正公帐(工商银行)
+                </MenuItem>
+                <MenuItem value={1}>
+                    腾正公帐(建设银行)
+                </MenuItem>
                 <MenuItem value={5}>
                     正易公帐(中国银行)
                 </MenuItem>
-                <MenuItem value={6}>
-                    支付宝
-                </MenuItem>
+
                 <MenuItem value={7}>
                     公帐支付宝
                 </MenuItem>
-                <MenuItem value={8}>
-                    财付通
-                </MenuItem>
-                <MenuItem value={9}>
-                    微信支付
-                </MenuItem>
                 <MenuItem value={10}>
                     新支付宝
+                </MenuItem>
+                <MenuItem value={8}>
+                    财付通
                 </MenuItem>
             </TextField>
             <TextField
