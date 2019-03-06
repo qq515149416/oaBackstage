@@ -42,11 +42,7 @@ let columnData = [
         {id: "business_end", label: "业务到期时间" ,type: "text"},
         {id: "business", label: "业务类型" ,type: "text"},
         {id: "machine_note", label: "备注" ,type: "text"}
-    ], label: '操作',extendElement: (data) => {
-        return (
-            <AddBusiness {...data} />
-        )
-}}
+    ], label: '操作'}
 ];
 const columnDataFull = [
     { id: 'machine_num', numeric: true, disablePadding: true, label: '机器编号' },
@@ -255,6 +251,16 @@ class MachineLibraryList extends React.Component {
         };
     }
     componentDidMount() {
+        const { value } = this.state;
+        if(value > 2) {
+            columnData = [...columnData.filter(item => {
+                if(item.id!="cabinets"&&item.id!="ip") {
+                    return item;
+                }
+            })]
+        } else {
+            columnData = [...columnDataFull];
+        }
         this.props.machineLibrarysStores.getData();
         inputType[inputType.findIndex(item => item.field=="machineroom")].model = {
             getSubordinateData: this.getCabinetData.bind(this)
