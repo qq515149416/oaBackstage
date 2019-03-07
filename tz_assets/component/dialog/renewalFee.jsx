@@ -47,6 +47,9 @@ const styles = theme => ({
     },
     iconButton: {
         ...theme.tableIconButton
+    },
+    selectAllBtn: {
+        margin: "10px 10px"
     }
 });
 class RenewalFee extends React.Component {
@@ -137,6 +140,25 @@ class RenewalFee extends React.Component {
             });
         }
     }
+    handleSelectChange = items => event => {
+        this.setState(state => {
+            items.forEach(item => {
+                state.resource[item.order_sn] = true;
+            });
+            return state;
+        });
+
+    }
+
+    handleSelectCancelChange = items => event => {
+        this.setState(state => {
+            items.forEach(item => {
+                state.resource[item.order_sn] = false;
+            });
+            return state;
+        });
+    }
+
     handleChange = name => event => {
         this.setState({
           [name]: event.target.value,
@@ -212,6 +234,14 @@ class RenewalFee extends React.Component {
                                         </Grid>
                                     ))
                                 }
+                                <Grid xs={12} item>
+                                    <Button onClick={this.handleSelectChange(resources[byKeyVal].filter(item => item.order_status!=0))} variant="contained" color="primary" className={classes.selectAllBtn}>
+                                        全选
+                                    </Button>
+                                    <Button variant="contained" onClick={this.handleSelectCancelChange(resources[byKeyVal].filter(item => item.order_status!=0))} color="primary" className={classes.selectAllBtn}>
+                                        取消全选
+                                    </Button>
+                                </Grid>
                             </Grid>
                     </ExpansionPanelDetails>
                     </ExpansionPanel>
