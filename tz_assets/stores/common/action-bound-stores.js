@@ -67,7 +67,7 @@ class ActionBoundStores {
            if(param["searchContent"]&&param["searchType"]) {
             // console.log(this[storeAttr],param,"dateFilter");
             if(param["searchType"]=="all") {
-                this[storeAttr] = this.copyData.filter(item => {
+                this[storeAttr] = this.copyData.map(item => item).filter(item => {
                     for(let key in item) {
                         // console.log(item[key].indexOf(param["searchContent"]));
                         if(typeof item[key] == "string" && item[key].indexOf(param["searchContent"])!=-1) {
@@ -76,15 +76,16 @@ class ActionBoundStores {
                     }
                 });
             } else {
-                this[storeAttr] = this.copyData.filter(item => {
+                this[storeAttr] = this.copyData.map(item => item).filter(item => {
                     // console.log(item[param["searchType"]].indexOf(param["searchContent"]));
                     if(item[param["searchType"]] && item[param["searchType"]].indexOf(param["searchContent"])!=-1) {
                         return item;
                     }
                 });
             }
+
            }
-        //    console.log(this[storeAttr],param,"searchFilter");
+           console.log(this[storeAttr],param,this.copyData,"searchFilter");
         }else if(type=="reset") {
             if(this.copyData && this.copyData.length > 0) {
                 this[storeAttr] = this.copyData;
