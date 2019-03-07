@@ -26,12 +26,14 @@ class ActionBoundStores {
     filterStoreData(storeAttr, type, param) {
 
         if(type=="select") {
+            console.log(this.copyData);
             if(!this.copyData.length) {
                 for(let key in this[storeAttr]) {
                     this.copyData[key] = this[storeAttr][key];
                 }
             } else {
-                this[storeAttr] = this.copyData;
+                this[storeAttr] = this.copyData.map(item => item);
+                // console.log(this.copyData);
             }
            for(let key in param) {
             if(key!="startTime"&&key!="endTime"&&key!="timeAttrName") {
@@ -63,6 +65,7 @@ class ActionBoundStores {
                     return item;
                }
            });
+
         //    console.log(this[storeAttr],param,"dateFilter");
            if(param["searchContent"]&&param["searchType"]) {
             // console.log(this[storeAttr],param,"dateFilter");
@@ -85,7 +88,7 @@ class ActionBoundStores {
             }
 
            }
-           console.log(this[storeAttr],param,this.copyData,"searchFilter");
+        //    console.log(this[storeAttr],param,this.copyData,"searchFilter");
         }else if(type=="reset") {
             if(this.copyData && this.copyData.length > 0) {
                 this[storeAttr] = this.copyData;

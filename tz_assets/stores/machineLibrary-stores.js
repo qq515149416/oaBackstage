@@ -54,7 +54,7 @@ class MachineLibrarysStores extends ActionBoundStores {
     ];
     @observable type = 1;
     filterData(param) {
-        this.copyData = this.machineLibrarys;
+        // this.copyData = this.machineLibrarys;
         this.filterStoreData("machineLibrarys","select",param);
     }
     changeData(param) {
