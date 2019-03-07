@@ -485,7 +485,7 @@ const styles = theme => ({
         // page = currentStores[currentStores.page].current_page-1;
     }
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.data.length - page * rowsPerPage);
-      console.log(currentStores.getRequestState);
+      // console.log(currentStores.getRequestState);
       return [
           <div>
              {

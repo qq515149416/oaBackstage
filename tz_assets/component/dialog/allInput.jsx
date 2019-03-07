@@ -79,7 +79,7 @@ class AllInput extends React.Component {
                                 e.checked = false;
                             }
                         });
-                        console.log(item.radioData.find(e => e.checked),item,this.props.editData);
+                        // console.log(item.radioData.find(e => e.checked),item,this.props.editData);
                     }
                     this[item.field] = {
                         value : item.radioData.find(e => e.checked).value

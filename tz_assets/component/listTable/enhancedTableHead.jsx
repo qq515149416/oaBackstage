@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -22,7 +22,7 @@ const styles = theme => ({
   td: {
     textAlign: "center",
     fontFamily: [
-        'Microsoft YaHei',
+      'Microsoft YaHei',
       'SimHei',
       'SimSun',
       '-apple-system',
@@ -39,63 +39,64 @@ const styles = theme => ({
     fontSize: 14,
   }
 });
+
 class EnhancedTableHead extends React.Component {
-    createSortHandler = property => event => {
-      this.props.onRequestSort(event, property);
-    };
+  createSortHandler = property => event => {
+    this.props.onRequestSort(event, property);
+  };
 
-    render() {
-      const { onSelectAllClick, order, orderBy, numSelected, rowCount, classes} = this.props;
+  render() {
+    const {onSelectAllClick, order, orderBy, numSelected, rowCount, classes} = this.props;
 
-      return (
+    return (
         <TableHead>
           <TableRow>
             <TableCell className={classes.td} padding="checkbox">
               <Checkbox
-                indeterminate={numSelected > 0 && numSelected < rowCount}
-                checked={numSelected === rowCount}
-                onChange={onSelectAllClick}
+                  indeterminate={numSelected > 0 && numSelected < rowCount}
+                  checked={numSelected === rowCount}
+                  onChange={onSelectAllClick}
               />
             </TableCell>
             {this.props.headTitlesData.map(column => {
               return (
-                <TableCell
-                  key={column.id}
-                  numeric={column.numeric}
-                  padding={column.disablePadding ? 'none' : 'default'}
-                  sortDirection={orderBy === column.id ? order : false}
-                  className={classes.td}
-                >
-                  <Tooltip
-                    title="排序"
-                    placement={column.numeric ? 'bottom-end' : 'bottom-start'}
-                    enterDelay={300}
+                  <TableCell
+                      key={column.id}
+                      numeric={column.numeric}
+                      padding={column.disablePadding ? 'none' : 'default'}
+                      sortDirection={orderBy === column.id ? order : false}
+                      className={classes.td}
                   >
-                    <TableSortLabel
-                      active={orderBy === column.id}
-                      direction={order}
-                      onClick={this.createSortHandler(column.id)}
+                    <Tooltip
+                        title="排序"
+                        placement={column.numeric ? 'bottom-end' : 'bottom-start'}
+                        enterDelay={300}
                     >
-                      {column.label}
-                    </TableSortLabel>
-                  </Tooltip>
-                </TableCell>
+                      <TableSortLabel
+                          active={orderBy === column.id}
+                          direction={order}
+                          onClick={this.createSortHandler(column.id)}
+                      >
+                        {column.label}
+                      </TableSortLabel>
+                    </Tooltip>
+                  </TableCell>
               );
             }, this)}
           </TableRow>
         </TableHead>
-      );
-    }
+    );
   }
-  EnhancedTableHead.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-    onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.string.isRequired,
-    orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
-  };
-  const EnhancedTableHeadComponent = (props) => {
-    return <EnhancedTableHead {...props} />
-  }
-  export default withStyles(styles)(EnhancedTableHead);
+}
+EnhancedTableHead.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.string.isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
+const EnhancedTableHeadComponent = (props) => {
+  return <EnhancedTableHead {...props} />
+};
+export default withStyles(styles)(EnhancedTableHead);

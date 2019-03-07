@@ -24,7 +24,6 @@ class ActionBoundStores {
     }
     @action.bound
     filterStoreData(storeAttr, type, param) {
-
         if(type=="select") {
             console.log(this.copyData);
             if(!this.copyData.length) {

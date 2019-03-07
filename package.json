@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "tz-dev": "webpack --config webpack.config.js"
+        "tz-dev": "webpack --watch --config  webpack.config.js"
     },
     "devDependencies": {
         "axios": "^0.18.0",
