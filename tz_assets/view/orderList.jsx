@@ -31,10 +31,10 @@ const columnData = [
     // { id: 'business_name', numeric: true, disablePadding: true, label: '业务员' },
     { id: 'resourcetype', numeric: true, disablePadding: true, label: '资源类型' },
     { id: 'resource', numeric: true, disablePadding: true, label: '资源' },
-    { id: 'order_type', numeric: true, disablePadding: true, label: '订单类型' },
+    // { id: 'order_type', numeric: true, disablePadding: true, label: '订单类型' },
     { id: 'price', numeric: true, disablePadding: true, label: '单价' },
-    { id: 'duration', numeric: true, disablePadding: true, label: '时长' },
-    { id: 'payable_money', numeric: true, disablePadding: true, label: '应付金额' },
+    { id: 'duration', numeric: true, disablePadding: true, label: '累计时长' },
+    // { id: 'payable_money', numeric: true, disablePadding: true, label: '应付金额' },
     { id: 'order_status', numeric: true, disablePadding: true, label: '订单状态' },
     { id: 'end_time', numeric: true, disablePadding: true, label: '到期时间' },
     { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [

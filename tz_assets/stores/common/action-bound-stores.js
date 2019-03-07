@@ -67,7 +67,7 @@ class ActionBoundStores {
            if(param["searchContent"]&&param["searchType"]) {
             // console.log(this[storeAttr],param,"dateFilter");
             if(param["searchType"]=="all") {
-                this[storeAttr] = this[storeAttr].filter(item => {
+                this[storeAttr] = this.copyData.filter(item => {
                     for(let key in item) {
                         // console.log(item[key].indexOf(param["searchContent"]));
                         if(typeof item[key] == "string" && item[key].indexOf(param["searchContent"])!=-1) {
@@ -76,7 +76,7 @@ class ActionBoundStores {
                     }
                 });
             } else {
-                this[storeAttr] = this[storeAttr].filter(item => {
+                this[storeAttr] = this.copyData.filter(item => {
                     // console.log(item[param["searchType"]].indexOf(param["searchContent"]));
                     if(item[param["searchType"]] && item[param["searchType"]].indexOf(param["searchContent"])!=-1) {
                         return item;
