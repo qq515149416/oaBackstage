@@ -2,6 +2,8 @@ import React from "react";
 import ListTableComponent from "../component/listTableComponent.jsx";
 import { inject,observer } from "mobx-react";
 
+import AddOrder from "../component/dialog/addOrder.jsx";
+
 const columnData = [
     { id: 'memory_number', numeric: true, disablePadding: false, label: '内存编码' },
     { id: 'memory_param', numeric: true, disablePadding: false, label: '内存参数' },
@@ -9,7 +11,11 @@ const columnData = [
     { id: 'room', numeric: true, disablePadding: false, label: '机房名称' },
     { id: 'created_at', numeric: true, disablePadding: false, label: '创建时间' },
     { id: 'updated_at', numeric: true, disablePadding: false, label: '更新时间' },
-    { id: 'operat', numeric: true, disablePadding: false, label: '操作' }
+    { id: 'operat', numeric: true, disablePadding: false, label: '操作', extend: true, extendElement: (data) => {
+        return (
+            <AddOrder {...data} nameParam="memory_param" />
+        )
+} }
 ];
 const inputType = [
     {

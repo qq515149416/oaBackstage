@@ -2,6 +2,8 @@ import React from "react";
 import ListTableComponent from "../component/listTableComponent.jsx";
 import { inject,observer } from "mobx-react";
 
+import AddOrder from "../component/dialog/addOrder.jsx";
+
 const columnData = [
     { id: 'ip', numeric: true, disablePadding: true, label: 'IP地址' },
     { id: 'vlan', numeric: true, disablePadding: false, label: 'vlan' },
@@ -22,7 +24,11 @@ const columnData = [
     },
     // { id: 'created_at', numeric: true, disablePadding: false, label: '创建时间' },
     // { id: 'updated_at', numeric: true, disablePadding: false, label: '更新时间' },
-    { id: 'operat', numeric: true, disablePadding: false, label: '操作' }
+    { id: 'operat', numeric: true, disablePadding: false, label: '操作', extend: true, extendElement: (data) => {
+        return (
+            <AddOrder {...data} nameParam="ip" />
+        )
+} }
 ];
 const inputType = [
   {

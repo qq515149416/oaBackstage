@@ -45,7 +45,8 @@ const styles = theme => ({
           fontSize: "18px",
           '& span': {
               color: '#d00'
-          }
+          },
+          margin: "20px 0"
       }
 });
 

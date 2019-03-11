@@ -2,6 +2,8 @@ import React from "react";
 import ListTableComponent from "../component/listTableComponent.jsx";
 import { inject,observer } from "mobx-react";
 
+import AddOrder from "../component/dialog/addOrder.jsx";
+
 /**
  * @var columnData table渲染数据的字段的头部名称
  * @var columnData.operat 属性是table表格种对应的操作功能字段，分别有：
@@ -18,7 +20,11 @@ const columnData = [
     { id: 'room', numeric: true, disablePadding: false, label: '机房名称' },
     { id: 'created_at', numeric: true, disablePadding: false, label: '创建时间' },
     { id: 'updated_at', numeric: true, disablePadding: false, label: '更新时间' },
-    { id: 'operat', numeric: true, disablePadding: false, label: '操作' }
+    { id: 'operat', numeric: true, disablePadding: false, label: '操作', extend: true, extendElement: (data) => {
+        return (
+            <AddOrder {...data} nameParam="cpu_param" />
+        )
+} }
 ];
 /**
  * @var inputType 添加数据时对应字段的输入组件

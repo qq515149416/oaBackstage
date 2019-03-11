@@ -13,8 +13,9 @@ import TabComponent from "../component/tabComponent.jsx";
 import { inject,observer } from "mobx-react";
 import { routerConfig } from "../config/common/config.js";
 import ManualRecharge from "../component/dialog/manualRecharge.jsx";
-import Enable from "../component/icon/enable.jsx";
+// import Enable from "../component/icon/enable.jsx";
 import Button from '@material-ui/core/Button';
+import SelectPay from '../component/dialog/selectPay.jsx';
 const classNames = require('classnames');
 const dateFormat = require('dateformat');
 const qs = require('qs');
@@ -57,6 +58,35 @@ const styles = theme => ({
  * extendElement属性能够渲染你自定义的组件
  * extendUrl属性能指定跳转链接
  */
+/**
+ * @description 备份代码
+ * extendConfirm: {
+        rule: {//确认框规则
+            term: "business_status",//验证属性
+            execute: 0,//验证条件
+            type: "min"//验证方式
+        },
+      title: "业务订单支付",//确认框标题
+      content: "支付会支付业务下所有的订单",//确认框架信息
+      icon: <Enable />,//确认框触发按钮
+      ok: (data) => {
+          return new Promise((resolve,reject) => {
+              post("business/payOrderByAdmin",{
+                business_number: data.business_number,
+                coupon_id: 0
+              }).then((res) => {
+                  if(res.data.code==1) {
+                        alert(res.data.msg);
+                      resolve(res.data);
+                  } else {
+                      alert(res.data.msg);
+                      resolve(res.data);
+                  }
+              }).catch(reject);
+          });
+      }
+    }
+ */
 const columnData = [
     { id: 'business_number', numeric: true, disablePadding: true, label: '业务号' },
     { id: 'type', numeric: true, disablePadding: true, label: '业务类型' },
@@ -84,44 +114,28 @@ const columnData = [
         {id: "start_time", label: "业务开始时间" ,type: "text"},
         {id: "endding_time", label: "业务结束时间" ,type: "text"},
         {id: "business_note", label: "业务备注" ,type: "text"}
-    ],extendConfirm: {
-        rule: {//确认框规则
-            term: "business_status",//验证属性
-            execute: 0,//验证条件
-            type: "min"//验证方式
-        },
-      title: "业务订单支付",//确认框标题
-      content: "支付会支付业务下所有的订单",//确认框架信息
-      icon: <Enable />,//确认框触发按钮
-      ok: (data) => {
-          return new Promise((resolve,reject) => {
-              post("business/payOrderByAdmin",{
-                business_number: data.business_number,
-                coupon_id: 0
-              }).then((res) => {
-                  if(res.data.code==1) {
-                        alert(res.data.msg);
-                      resolve(res.data);
-                  } else {
-                      alert(res.data.msg);
-                      resolve(res.data);
-                  }
-              }).catch(reject);
-          });
-      }
-    },extendElement: (data) => {
+    ],extendElement: (data) => {
         let components = [];
         if(data.business_status>1) {
             components = [
                 RenewalFee,//续费
                 WorkOrderPost,//提交工单
-                Disposal//下架
+                Disposal,//下架
+                SelectPay
             ];
         } else {
-            components = [
-                WorkOrderPost,//提交工单
-                Disposal//下架
-            ];
+            if(data.business_status>0) {
+                components = [
+                    WorkOrderPost,//提交工单
+                    Disposal,//下架
+                    SelectPay
+                ];
+            } else {
+                components = [
+                    WorkOrderPost,//提交工单
+                    Disposal//下架
+                ];
+            }
         }
 
         let Element = extendElementsComponent(components);

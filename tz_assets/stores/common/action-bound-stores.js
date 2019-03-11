@@ -5,6 +5,7 @@ class ActionBoundStores {
     @action.bound
     changeRequestState(code) {
         // console.log(code);
+        this.copyData = [];
         this.requestState = code;
     }
     @computed get getRequestState() {
