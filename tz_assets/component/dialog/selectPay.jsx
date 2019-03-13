@@ -103,6 +103,7 @@ function PaperComponent(props) {
         }).then(res => {
             if(res.data.code==1) {
                 // alert("支付成功");
+                this.props.update && this.props.update();
                 this.handleClose();
             }
             alert(res.data.msg);
@@ -168,7 +169,7 @@ function PaperComponent(props) {
         <DialogContent>
             <DialogContentText>
                 <div className={classes.total}>
-                    合计：<span>{data.filter(item => item["checked"]).reduce((a,b) => a + parseFloat(b.payable_money),0)}</span>
+                    合计：<span>{data.filter(item => item["checked"]).reduce((a,b) => a + parseFloat(b.payable_money),0).toFixed(2)}</span>
                 </div>
                 <Table className={classes.table}>
                     <TableHead>

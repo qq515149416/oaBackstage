@@ -114,7 +114,7 @@ const columnData = [
         {id: "start_time", label: "业务开始时间" ,type: "text"},
         {id: "endding_time", label: "业务结束时间" ,type: "text"},
         {id: "business_note", label: "业务备注" ,type: "text"}
-    ],extendElement: (data) => {
+    ],extendElement: (data,update) => {
         let components = [];
         if(data.business_status>1) {
             components = [
@@ -139,7 +139,7 @@ const columnData = [
         }
 
         let Element = extendElementsComponent(components);
-          return <Element {...data} disposal_type={1} postUrl="business/renewresource" nameParam="machine_number" type="业务" />;
+          return <Element {...data} disposal_type={1} update={update} postUrl="business/renewresource" nameParam="machine_number" type="业务" />;
     //   if(data.business_status==2) {
 
     //   }else {

@@ -1,27 +1,11 @@
-import { observable, action} from "mobx";
+import { observable, action, extendObservable} from "mobx";
 import {get,post} from "../tool/http.js";
 import ActionBoundStores from "./common/action-bound-stores.js";
 const dateFormat = require('dateformat');
 class CpuStores {
-    @observable id =  1;
-    @observable cpu_number =  "";
-    @observable cpu_param ="";
-    @observable cpu_used = "";
-    @observable room = "";
-    @observable room_id = 1;
-    @observable created_at = "";
-    @observable updated_at = "";
-    constructor({id, cpu_number, cpu_param, cpu_used, room, room_id, created_at, updated_at}) {
-        Object.assign(this,{
-            id,
-            cpu_number,
-            cpu_param,
-            cpu_used,
-            room,
-            room_id,
-            created_at,
-            updated_at
-        });
+    constructor(data) {
+        this.copyData = [];
+        extendObservable(this,data);
     }
 }
 class ComproomStores {
@@ -103,18 +87,7 @@ class CpusStores extends ActionBoundStores {
         get("cpu/cpu_list").then((res) => {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {
-                this.cpus = res.data.data.map(item => new CpuStores({
-                    ...{
-                        id: item.id,
-                        cpu_number: item.cpu_number,
-                        cpu_param: item.cpu_param,
-                        cpu_used: item.cpu_used,
-                        room: item.room,
-                        room_id: item.room_id,
-                        created_at: item.created_at || dateFormat(new Date(),"yyyy-mm-dd hh:MM:ss"),
-                        updated_at: item.updated_at || dateFormat(new Date(),"yyyy-mm-dd hh:MM:ss")
-                    }
-                }));
+                this.cpus = res.data.data.map(item => new CpuStores(item));
             }
         });
     }

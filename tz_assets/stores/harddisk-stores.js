@@ -1,27 +1,11 @@
-import { observable, action} from "mobx";
+import { observable, action, extendObservable} from "mobx";
 import {get,post} from "../tool/http.js";
 import ActionBoundStores from "./common/action-bound-stores.js";
 const dateFormat = require('dateformat');
 class HarddiskStores {
-    @observable id =  1;
-    @observable harddisk_number =  "";
-    @observable harddisk_param ="";
-    @observable harddisk_used = "";
-    @observable room = "";
-    @observable room_id = 1;
-    @observable created_at = "";
-    @observable updated_at = "";
-    constructor({id, harddisk_number, harddisk_param, harddisk_used, room, room_id, created_at, updated_at}) {
-        Object.assign(this,{
-            id,
-            harddisk_number,
-            harddisk_param,
-            harddisk_used,
-            room,
-            room_id,
-            created_at,
-            updated_at
-        });
+    constructor(data) {
+        this.copyData = [];
+        extendObservable(this,data);
     }
 }
 class ComproomStores {
@@ -103,18 +87,7 @@ class HarddisksStores extends ActionBoundStores {
         get("harddisk/harddisk_list").then((res) => {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {
-                this.harddisks = res.data.data.map(item => new HarddiskStores({
-                    ...{
-                        id: item.id,
-                        harddisk_number: item.harddisk_number,
-                        harddisk_param: item.harddisk_param,
-                        harddisk_used: item.harddisk_used,
-                        room: item.room,
-                        room_id: item.room_id,
-                        created_at: item.created_at || dateFormat(new Date(),"yyyy-mm-dd hh:MM:ss"),
-                        updated_at: item.updated_at || dateFormat(new Date(),"yyyy-mm-dd hh:MM:ss")
-                    }
-                }));
+                this.harddisks = res.data.data.map(item => new HarddiskStores(item));
             }
         });
     }

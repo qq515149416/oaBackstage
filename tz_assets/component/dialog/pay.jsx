@@ -91,6 +91,7 @@ function PaperComponent(props) {
         }).then(res => {
             if(res.data.code==1) {
                 alert(res.data.msg);
+                this.props.update && this.props.update();
                 this.setState({ open: false });
             } else {
                 alert(res.data.msg);
@@ -105,7 +106,7 @@ function PaperComponent(props) {
     render() {
         const { classes } = this.props;
         const { data } = this.state;
-      return (
+        return (
         <span>
           <Dialog
             open={this.state.open}
@@ -120,7 +121,7 @@ function PaperComponent(props) {
             <DialogContent>
                 <DialogContentText>
                     <div className={classes.total}>
-                        合计：<span>{data.reduce((a,b) => a + parseFloat(b.payable_money),0)}</span>
+                        合计：<span>{(data.reduce((a,b) => a + Number(b.payable_money),0.00)).toFixed(2)}</span>
                     </div>
                     <Table className={classes.table}>
                         <TableHead>

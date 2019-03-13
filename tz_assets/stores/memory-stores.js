@@ -1,27 +1,11 @@
-import { observable, action} from "mobx";
+import { observable, action, extendObservable} from "mobx";
 import {get,post} from "../tool/http.js";
 import ActionBoundStores from "./common/action-bound-stores.js";
 const dateFormat = require('dateformat');
 class MemoryStores {
-    @observable id =  1;
-    @observable memory_number =  "";
-    @observable memory_param ="";
-    @observable memory_used = "";
-    @observable room = "";
-    @observable room_id = 1;
-    @observable created_at = "";
-    @observable updated_at = "";
-    constructor({id, memory_number, memory_param, memory_used, room, room_id, created_at, updated_at}) {
-        Object.assign(this,{
-            id,
-            memory_number,
-            memory_param,
-            memory_used,
-            room,
-            room_id,
-            created_at,
-            updated_at
-        });
+    constructor(data) {
+        this.copyData = [];
+        extendObservable(this,data);
     }
 }
 class ComproomStores {
@@ -103,18 +87,7 @@ class MemorysStores extends ActionBoundStores {
         get("memory/memory_list").then((res) => {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {
-                this.memorys = res.data.data.map(item => new MemoryStores({
-                    ...{
-                        id: item.id,
-                        memory_number: item.memory_number,
-                        memory_param: item.memory_param,
-                        memory_used: item.memory_used,
-                        room: item.room,
-                        room_id: item.room_id,
-                        created_at: item.created_at || dateFormat(new Date(),"yyyy-mm-dd hh:MM:ss"),
-                        updated_at: item.updated_at || dateFormat(new Date(),"yyyy-mm-dd hh:MM:ss")
-                    }
-                }));
+                this.memorys = res.data.data.map(item => new MemoryStores(item));
             }
         });
     }

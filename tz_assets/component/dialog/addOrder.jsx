@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import FormLabel from '@material-ui/core/FormLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import {get, post} from "../../tool/http";
 
 /**
@@ -136,7 +137,7 @@ class AddOrder extends React.Component {
         resource_id: this.state.resource_id,
         business_id: this.state.business_id,
         price: this.state.money,
-        length: this.state.length,
+        duration: this.state.length,
         order_note: this.state.business_note,
         resource_type: this.state.business_type
       }).then(res => {

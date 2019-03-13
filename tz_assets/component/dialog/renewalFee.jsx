@@ -286,7 +286,7 @@ class RenewalFee extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>,
-        <Pay getRef={(ref) => this.pay = ref} />
+        <Pay getRef={(ref) => this.pay = ref} update={this.props.update} />
         ];
     }
 }
