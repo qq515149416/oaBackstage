@@ -14,7 +14,7 @@ const styles = theme => ({
     }
 });
 
-const columnData = [
+let columnData = [
     { id: 'id', numeric: true, disablePadding: false, label: 'ID' },
     { id: 'ip', numeric: true, disablePadding: false, label: 'IP' },
     { id: 'site', numeric: true, disablePadding: false, label: '地区' },
@@ -89,6 +89,28 @@ class DefenseipList extends React.Component {
         });
     }
     handleChange = (value) => {
+        if(value == 1) {
+            columnData = [
+                { id: 'id', numeric: true, disablePadding: false, label: 'ID' },
+                { id: 'ip', numeric: true, disablePadding: false, label: 'IP' },
+                { id: 'site', numeric: true, disablePadding: false, label: '地区' },
+                { id: 'protection_value', numeric: true, disablePadding: false, label: '防御值' },
+                { id: 'user', numeric: true, disablePadding: false, label: '客户账号' },
+                { id: 'nickname', numeric: true, disablePadding: false, label: '客户昵称' },
+                { id: 'target_ip', numeric: true, disablePadding: false, label: '目标ip' },
+                { id: 'status', numeric: true, disablePadding: false, label: '使用状态' },
+                { id: 'operat', numeric: true, disablePadding: false, label: '操作' }
+            ];
+        } else {
+            columnData = [
+                { id: 'id', numeric: true, disablePadding: false, label: 'ID' },
+                { id: 'ip', numeric: true, disablePadding: false, label: 'IP' },
+                { id: 'site', numeric: true, disablePadding: false, label: '地区' },
+                { id: 'protection_value', numeric: true, disablePadding: false, label: '防御值' },
+                { id: 'status', numeric: true, disablePadding: false, label: '使用状态' },
+                { id: 'operat', numeric: true, disablePadding: false, label: '操作' }
+            ];
+        }
         this.props.defenseipsStores.getData({
             status: value,
             site: "*"

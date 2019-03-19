@@ -94,6 +94,8 @@ const columnData = [
     { id: 'status', numeric: true, disablePadding: true, label: '业务状态' },
     { id: 'resource_detail_json.ip', numeric: true, disablePadding: true, label: 'IP' },
     { id: 'resource_detail_json.machineroom_name', numeric: true, disablePadding: true, label: '所属机房' },
+    { id: 'cabinets', numeric: true, disablePadding: true, label: '所属机柜' },
+    { id: 'remove', numeric: true, disablePadding: true, label: '下架状态' },
     { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
         {id: "order_number", label: "订单号", type: "text"},
         {id: "resource_detail", label: "资源详情", type: "subordinate", subordinate: [
@@ -368,7 +370,9 @@ class BusinesList extends React.Component {
   }
 // 获取客户信息
   getCustomerInfo = (id) => {
-    get("business/admin_customer").then((res) => {
+    get("business/admin_customer",{
+        id
+    }).then((res) => {
         if(res.data.code==1) {
             this.setState({
                 customerInfo: {

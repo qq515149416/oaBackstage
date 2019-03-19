@@ -10,6 +10,7 @@ const columnData = [
     { id: 'sales_name', numeric: true, disablePadding: false, label: '业务员' },
     { id: 'machine_number', numeric: true, disablePadding: false, label: '机器编号' },
     { id: 'resource_type', numeric: true, disablePadding: false, label: '资源类型' },
+    { id: 'cabinets', numeric: true, disablePadding: false, label: '机柜' },
     { id: 'removestatus', numeric: true, disablePadding: false, label: '下架状态' },
     { id: 'operat', numeric: true, disablePadding: false, label: '操作',  extend: true, extendData: [
         {id: "business_number", label: "业务号", type: "text"},
@@ -67,6 +68,7 @@ const columnData2 = [
     { id: 'business_name', numeric: true, disablePadding: false, label: '业务员' },
     { id: 'resource', numeric: true, disablePadding: false, label: '资源' },
     { id: 'resourcetype', numeric: true, disablePadding: false, label: '资源类型' },
+    { id: 'cabinets', numeric: true, disablePadding: false, label: '机柜' },
     { id: 'removestatus', numeric: true, disablePadding: false, label: '下架状态' },
     { id: 'operat', numeric: true, disablePadding: false, label: '操作',  extend: true, extendData: [
         {id: "business_sn", label: "业务号", type: "text"},

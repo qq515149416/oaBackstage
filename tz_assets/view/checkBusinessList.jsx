@@ -52,6 +52,8 @@ const columnData = [
     { id: 'type', numeric: true, disablePadding: true, label: '业务类型' },
     { id: 'machine_number', numeric: true, disablePadding: true, label: '机器/机柜编号' },
     { id: 'status', numeric: true, disablePadding: true, label: '业务状态' },
+    { id: 'cabinets', numeric: true, disablePadding: true, label: '所属机柜' },
+    { id: 'remove', numeric: true, disablePadding: true, label: '下架状态' },
     { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
         {id: "order_number", label: "订单号", type: "text"},
         {id: "resource_detail", label: "资源详情", type: "subordinate", subordinate: [
