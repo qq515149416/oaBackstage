@@ -206,16 +206,21 @@ const inputType = [
             {
                 checked: false,
                 value: "1",
-                label: "使用中"
+                label: "业务锁定"
             },
             {
                 checked: false,
                 value: "2",
-                label: "锁定"
+                label: "使用中"
             },
             {
                 checked: false,
                 value: "3",
+                label: "锁定使用"
+            },
+            {
+                checked: false,
+                value: "4",
                 label: "迁移"
             }
         ]
