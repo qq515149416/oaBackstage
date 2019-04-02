@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 import axios from  "axios";
+import { get } from "../tool/http.js";
 // const { Provider, Consumer } = React.createContext('defaultValue');
 
 // const socket = io(location.protocol+"//sk.tzidc.com:8120");
@@ -58,6 +59,30 @@ class SocketWarper extends React.Component {
     componentDidMount() {
         axios.get("/socketurl").then(resp => {
             if(resp.data.code==1) {
+                const socket = io(resp.data.data);
+                get("show/pwdDepartment").then(res => {
+                    if(res.data.code == 1) {
+                        // socket.emit("connect","start"); res.data.data.id
+                        socket.emit("login",{
+                            "depart": res.data.data.id
+                        });
+                        socket.on("new_work_order",content=>{
+                            if(content.work_order_status=="0") {
+                                if(!document.getElementById("orderListAudio")) {
+                                    let audio = new Audio();
+                                    audio.src = require("../resource/export.mp3");
+                                    audio.setAttribute("id","orderListAudio");
+                                    audio.loop = false;
+                                    audio.autoplay = true;
+                                    document.body.appendChild(audio);
+                                }
+                                if(document.getElementById("orderListAudio").ended) {
+                                    document.getElementById("orderListAudio").play();
+                                }
+                            }
+                        });
+                    }
+                });
                this.setState({
                     socket: resp.data.data
                });

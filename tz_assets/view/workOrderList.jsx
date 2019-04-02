@@ -28,6 +28,10 @@ const columnData = [
     { id: 'submit', numeric: true, disablePadding: true, label: '提交方' },
     { id: 'workstatus', numeric: true, disablePadding: true, label: '状态' },
     { id: 'department', numeric: true, disablePadding: true, label: '处理部门' },
+    { id: 'cabinet', numeric: true, disablePadding: true, label: '机柜' },
+    { id: 'machineroom', numeric: true, disablePadding: true, label: '机房' },
+    { id: 'ip', numeric: true, disablePadding: true, label: 'IP' },
+    { id: 'created_at', numeric: true, disablePadding: true, label: '发起时间' },
     { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
         {id: "business_num", label: "业务编号", type: "text"},
         {id: "sales_name", label: "业务员" ,type: "text"},

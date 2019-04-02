@@ -257,6 +257,7 @@ class WorkOrderList extends React.Component {
             { id: 'machineroom', numeric: true, disablePadding: true, label: '机房' },
             { id: 'ip', numeric: true, disablePadding: true, label: 'IP' },
             { id: 'machine_number', numeric: true, disablePadding: true, label: '机器编号' },
+            { id: 'created_at', numeric: true, disablePadding: true, label: '发起时间' },
             { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
                 {id: "business_num", label: "业务编号", type: "text"},
                 {id: "sales_name", label: "业务员" ,type: "text"},
@@ -300,6 +301,19 @@ class WorkOrderList extends React.Component {
                     "depart": res.data.data.id
                 });
                 socket.on("new_work_order",content=>{
+                    // if(content.work_order_status=="0") {
+                    //     if(!document.getElementById("orderListAudio")) {
+                    //         let audio = new Audio();
+                    //         audio.src = require("../resource/export.mp3");
+                    //         audio.setAttribute("id","orderListAudio");
+                    //         audio.loop = false;
+                    //         audio.autoplay = true;
+                    //         document.body.appendChild(audio);
+                    //     }
+                    //     if(document.getElementById("orderListAudio").ended) {
+                    //         document.getElementById("orderListAudio").play();
+                    //     }
+                    // }
                     console.log(content);
                     this.props.workOrdersStores.addData(content);
                 });

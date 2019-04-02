@@ -351,6 +351,7 @@ class AllInput extends React.Component {
         let editor = null;
         if(document.getElementById("editor")) {
             editor = new E('#editor');
+            editor.customConfig.uploadImgShowBase64 = true;
             editor.customConfig.onchange = (html) => {
                 this[this.props.inputType.find(item => item.type=="rich_text").field] = {
                     value: html

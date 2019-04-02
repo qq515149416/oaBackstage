@@ -6,6 +6,7 @@ import Obtained from "../component/icon/obtained.jsx";
 import DefensePackageSelect from "../component/dialog/defensePackageSelect.jsx";
 import DefenseBusinesRenewalFee from "../component/dialog/defenseBusinesRenewalFee.jsx";
 import extendElementsComponent from "../tool/extendElementsComponent";
+import SetIp from "../component/dialog/setIp.jsx";
 import ExpansionComponent from "../component/expansionComponent.jsx";
 import Enable from "../component/icon/enable.jsx";
 
@@ -29,7 +30,8 @@ const columnData = [
     { id: 'operat', numeric: true, disablePadding: false, label: '操作', extend: true, extendElement: (data,update) => {
         let Element = extendElementsComponent([
             // DefensePackageSelect,
-            DefenseBusinesRenewalFee
+            DefenseBusinesRenewalFee,
+            SetIp
         ]);
         return (<Element
             {...data}

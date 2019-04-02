@@ -6,7 +6,9 @@ import Approval from "../component/icon/approval.jsx";
 
 const columnData = [
     { id: 'business_number', numeric: true, disablePadding: false, label: '业务号' },
-    // { id: 'ip', numeric: true, disablePadding: false, label: 'IP' },
+    { id: 'admin_user', numeric: true, disablePadding: false, label: '业务员' },
+    { id: 'user', numeric: true, disablePadding: false, label: '客户账号' },
+    { id: 'nickname', numeric: true, disablePadding: false, label: '客户昵称' },
     { id: 'price', numeric: true, disablePadding: false, label: '价格' },
     { id: 'status', numeric: true, disablePadding: false, label: '使用状态' },
     { id: 'created_at', numeric: true, disablePadding: false, label: '创建时间' },
@@ -17,8 +19,8 @@ const columnData = [
             execute: "待审核",
             type: "equal"
           },
-        title: "下架审核",
-        content: "是否要通过此下架业务的申请",
+        title: "上架审核",
+        content: "是否要通过此上架业务的申请",
         icon: <Approval />,
         select: true,
         selectOptions: [
