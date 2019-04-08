@@ -31,6 +31,7 @@ import DisposalHistorysStores from "../../stores/disposalHistory-stores";
 import NewTypesStores from "../../stores/newType-stores";
 import ActionBoundStores from "../../stores/common/action-bound-stores";
 import DefenseBusinesReviewsStores from "../../stores/defenseBusinesReview-stores";
+import CustomerStatisticssStores from "../../stores/customerStatistics-stores";
 
 
 
@@ -73,7 +74,8 @@ export const stores = {
     dismissalReviewsStores: new DismissalReviewsStores(),
     disposalHistorysStores: new DisposalHistorysStores(),
     newTypesStores: new NewTypesStores(),
-    defenseBusinesReviewsStores: new DefenseBusinesReviewsStores()
+    defenseBusinesReviewsStores: new DefenseBusinesReviewsStores(),
+    customerStatisticssStores: new CustomerStatisticssStores()
 }
 export const domIds = [
     "user_list",
@@ -111,5 +113,6 @@ export const domIds = [
     "disposalHistory",
     "machineProcessing",
     "newTypeManagement",
-    "defenseBusinesReview"
+    "defenseBusinesReview",
+    "customerStatistics"
 ];

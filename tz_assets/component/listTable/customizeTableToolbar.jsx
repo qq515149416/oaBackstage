@@ -13,12 +13,24 @@ const styles = theme => ({
 
 class CustomizeTableToolbar extends React.Component {
     search = (start,end) => {
-        const startTime = Math.round(new Date(start.value+" 00:00:00").getTime()/1000);
-        const endTime = Math.round(new Date(end.value+" 23:59:59").getTime()/1000);
-        this.props.getData({
-            begin: startTime,
-            end: endTime,
-        });
+        let startTime = Math.round(new Date(start.value+" 00:00:00").getTime()/1000);
+        let endTime = Math.round(new Date(end.value+" 23:59:59").getTime()/1000);
+        if(this.props.type === "datetime-local") {
+            startTime = Math.round(new Date(start.value).getTime()/1000);
+            endTime = Math.round(new Date(end.value).getTime()/1000);
+        }
+        if(this.props.type === "datetime-local") {
+            this.props.getData({
+                start_time: startTime,
+                end_time: endTime,
+            });
+        } else {
+            this.props.getData({
+                begin: startTime,
+                end: endTime,
+            });
+        }
+
     }
     reset = event => {
         this.props.getData();
@@ -29,8 +41,8 @@ class CustomizeTableToolbar extends React.Component {
             <TextField
                 id="date"
                 label="开始时间"
-                type="date"
-                defaultValue={dateFormat(new Date(),"yyyy-mm-dd")}
+                type={this.props.type || "date"}
+                defaultValue={this.props.type ? dateFormat(new Date(),"yyyy-mm-ddThh:MM") : dateFormat(new Date(),"yyyy-mm-dd")}
                 InputLabelProps={{
                     shrink: true,
                 }}
@@ -42,8 +54,8 @@ class CustomizeTableToolbar extends React.Component {
             <TextField
                 id="date"
                 label="结束时间"
-                type="date"
-                defaultValue={dateFormat(new Date(),"yyyy-mm-dd")}
+                type={this.props.type || "date"}
+                defaultValue={this.props.type ? dateFormat(new Date(),"yyyy-mm-ddThh:MM") : dateFormat(new Date(),"yyyy-mm-dd")}
                 InputLabelProps={{
                     shrink: true,
                 }}
