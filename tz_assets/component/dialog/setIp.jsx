@@ -55,7 +55,7 @@ class SetIp extends React.Component {
     render() {
         const { classes } = this.props;
         return [
-            <Tooltip title="高防业务续费">
+            <Tooltip title="高防业务绑定IP">
                     <IconButton className={classes.iconButton} onClick={this.open} aria-label="renewalFee">
                         <SettingsIcon />
                     </IconButton>

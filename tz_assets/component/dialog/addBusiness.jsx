@@ -159,6 +159,7 @@ class AddBusiness extends React.Component {
       >
         <DialogTitle id="form-dialog-title">业务绑定</DialogTitle>
         <DialogContent>
+          <h4>机房：{this.props.machineroom_name || '无'}</h4>
           <TextField
               id="sales_id"
               label="业务员"
