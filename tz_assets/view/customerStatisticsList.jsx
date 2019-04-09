@@ -15,6 +15,7 @@ const styles = theme => ({
 });
 
 
+
 const inputType = [
 ];
 @inject("customerStatisticssStores")
