@@ -87,7 +87,7 @@ class FilterTableToolbar extends React.Component {
     render() {
         const {classes,filterType,types} = this.props;
         return (
-            <form className={classes.root} autoComplete="off">
+            <div className={classes.root}>
                 {
                     filterType.map(item => {
                         if(item.type=="select") {
@@ -148,13 +148,15 @@ class FilterTableToolbar extends React.Component {
                         }
                     })
                 }
-                <FormControl className={`${classes.formControl} ${classes.search}`}>
-                    <InputLabel htmlFor="input-with-icon-adornment">搜索</InputLabel>
-                    <Input
-                    id="search"
-                    inputRef={(ref) => this.search = ref}
-                    startAdornment={
-                        <InputAdornment position="start">
+                <div className={`${classes.formControl} ${classes.search}`}>
+                    {/* <InputLabel htmlFor="input-with-icon-adornment">搜索</InputLabel> */}
+                    <TextField
+                        id="input-with-icon-textfield"
+                        label="搜索"
+                        inputRef={(ref) => this.search = ref}
+                        InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
                             <Select
                                 value={this.state.search}
                                 onChange={this.handleChange}
@@ -181,13 +183,14 @@ class FilterTableToolbar extends React.Component {
 
                             </Select>
                         </InputAdornment>
-                    }
+                        ),
+                        }}
                     />
-                </FormControl>
+                </div>
                 <Button variant="contained" onClick={this.findData} color="primary" className={classes.button}>
                     搜索
                 </Button>
-            </form>
+            </div>
         );
     }
 }

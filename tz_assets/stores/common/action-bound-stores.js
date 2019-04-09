@@ -26,7 +26,7 @@ class ActionBoundStores {
     @action.bound
     filterStoreData(storeAttr, type, param) {
         if(type=="select") {
-            console.log(this.copyData);
+            // console.log(this.copyData);
             if(!this.copyData.length) {
                 for(let key in this[storeAttr]) {
                     this.copyData[key] = this[storeAttr][key];
@@ -35,6 +35,29 @@ class ActionBoundStores {
                 this[storeAttr] = this.copyData.map(item => item);
                 // console.log(this.copyData);
             }
+            //    console.log(this[storeAttr],param,"dateFilter");
+           if(param["searchContent"]&&param["searchType"]) {
+            // console.log(this[storeAttr],param,"dateFilter");
+            if(param["searchType"]=="all") {
+                this[storeAttr] = this[storeAttr].filter(item => {
+                    for(let key in item) {
+                        // console.log(item[key].indexOf(param["searchContent"]));
+                        if(typeof item[key] == "string" && item[key].indexOf(param["searchContent"])!=-1) {
+                            return item;
+                        }
+                    }
+                });
+            } else {
+                this[storeAttr] = this[storeAttr].filter(item => {
+                    // console.log(item[param["searchType"]].indexOf(param["searchContent"]));
+                    if(item[param["searchType"]] && item[param["searchType"]].indexOf(param["searchContent"])!=-1) {
+                        return item;
+                    }
+                });
+            }
+            delete param.searchContent;
+            delete param.searchType;
+           }
            for(let key in param) {
             if(key!="startTime"&&key!="endTime"&&key!="timeAttrName") {
                 this[storeAttr] = this[storeAttr].filter(item => {
@@ -66,28 +89,7 @@ class ActionBoundStores {
                }
            });
 
-        //    console.log(this[storeAttr],param,"dateFilter");
-           if(param["searchContent"]&&param["searchType"]) {
-            // console.log(this[storeAttr],param,"dateFilter");
-            if(param["searchType"]=="all") {
-                this[storeAttr] = this[storeAttr].filter(item => {
-                    for(let key in item) {
-                        // console.log(item[key].indexOf(param["searchContent"]));
-                        if(typeof item[key] == "string" && item[key].indexOf(param["searchContent"])!=-1) {
-                            return item;
-                        }
-                    }
-                });
-            } else {
-                this[storeAttr] = this[storeAttr].filter(item => {
-                    // console.log(item[param["searchType"]].indexOf(param["searchContent"]));
-                    if(item[param["searchType"]] && item[param["searchType"]].indexOf(param["searchContent"])!=-1) {
-                        return item;
-                    }
-                });
-            }
 
-           }
         //    console.log(this[storeAttr],param,this.copyData,"searchFilter");
         }else if(type=="reset") {
             if(this.copyData && this.copyData.length > 0) {
