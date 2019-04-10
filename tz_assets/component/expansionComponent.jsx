@@ -29,11 +29,15 @@ class ExpansionComponent extends React.Component {
             confirm: false,
             currency: this.props.selectOptions ? this.props.selectOptions.find(item=>item.default).value : ""
         };
+        this.param = {};
     }
     confirm_run = () => {
         if(this.props.ok) {
             if(this.note) {
                 this.props.data.note = this.note.value;
+            }
+            for(let key in this.param) {
+                this.props.data[key] = this.param[key].value;
             }
             this.props.ok(this.props.data,this.state.currency).then((data) => {
                 if(data.code==1) {
@@ -126,7 +130,7 @@ class ExpansionComponent extends React.Component {
                     {this.props.tip_content}
                   </DialogContentText>
                   {
-                      this.props.input && (
+                      this.props.input && !Array.isArray(this.props.input) && (
                         <DialogContentText id="alert-dialog-input">
                             <TextField
                                 id="note"
@@ -136,6 +140,18 @@ class ExpansionComponent extends React.Component {
                             />
                         </DialogContentText>
                       )
+                  }
+                  {
+                      this.props.input && Array.isArray(this.props.input) && this.props.input.map(item => (
+                        <DialogContentText id="alert-dialog-input">
+                            <TextField
+                                id={item.id}
+                                label={item.label}
+                                margin="normal"
+                                inputRef={ref => this.param[item.param] = ref}
+                            />
+                        </DialogContentText>
+                      ))
                   }
                   {
                       this.props.select && (

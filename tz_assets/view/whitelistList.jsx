@@ -48,7 +48,18 @@ const columnData = [
         title: "更改审核状态操作",
         content: "是否要更改此审核状态",
         select: true,
-        input: true,
+        input: [
+            {
+                id: "note",
+                label: "备注",
+                param: "note"
+            },
+            {
+                id: "record_number",
+                label: "备案编号",
+                param: "record_number"
+            }
+        ],
         selectOptions: [
             {
                 text: "审核通过",
@@ -70,6 +81,7 @@ const columnData = [
                     white_status: param,
                     id: data.id,
                     check_note: data.note,
+                    record_number: data.record_number,
                     method: "checkWhiteList"
                 }).then((res) => {
                     if(res.data.code==1) {

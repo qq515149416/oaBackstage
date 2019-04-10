@@ -161,7 +161,7 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: "overdueCabinet",
+            type: "overdueMachine",
             data: [],
             subOption: {},
             loading: true,
@@ -248,8 +248,8 @@ class Home extends React.Component {
         const {type,data,requestState} = this.state;
         return (
             <TabComponent types={[
-                {label: "5天内到期机柜", value: "overdueCabinet"},
                 {label: "5天内到期机器", value: "overdueMachine"},
+                {label: "5天内到期机柜", value: "overdueCabinet"},
                 {label: "5天内到期资源", value: "overdueRes"},
                 {label: "未支付使用的机器", value: "unpaidMachine"},
                 {label: "最近下架机器", value: "xiaJiaMachine"},
