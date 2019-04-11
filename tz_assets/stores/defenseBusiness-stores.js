@@ -47,6 +47,9 @@ class DefenseBusinessStores extends ActionBoundStores {
         if(params.customer_id) {
             getUrl = "defenseip/remove/showBusinessByCustomer";
         }
+        if(params.site_id) {
+            getUrl = "defenseip/remove/showBusinessBySite";
+        }
         this.defenseBusiness = [];
         get(getUrl,{
             ...params

@@ -20,6 +20,7 @@ const styles = theme => ({
 const columnData = [
     { id: 'binding_machine', numeric: true, disablePadding: false, label: '机器编号' },
     { id: 'customer_name', numeric: true, disablePadding: false, label: '客户名字' },
+    { id: 'white_ip', numeric: true, disablePadding: false, label: 'IP' },
     { id: 'domain_name', numeric: true, disablePadding: false, label: '绑定域名', render: (h,param) => {
         return h((
             <a target="_blank" rel="noreferrer" href={`/tz_admin/whitelist/skipBeian?domain=${param}`}>

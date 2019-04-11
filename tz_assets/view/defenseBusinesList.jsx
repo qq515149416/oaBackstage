@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import ListTableComponent from '../component/listTableComponent.jsx'
 import { inject, observer } from 'mobx-react'
 import { get, post } from '../tool/http.js'
@@ -10,8 +12,19 @@ import SetIp from '../component/dialog/setIp.jsx'
 import ExpansionComponent from '../component/expansionComponent.jsx'
 import Enable from '../component/icon/enable.jsx'
 import HighDefenseIpFlowChartDialog from '../component/dialog/highDefenseIpFlowChartDialog.jsx'
+import TabComponent from "../component/tabComponent.jsx";
 
 const qs = require('qs')
+
+//组件样式
+const styles = theme => ({
+    listTableComponent: {
+        marginTop: 0,
+        borderRadius: "0 0 4px 4px",
+        boxShadow: "0px 4px 5px 0px rgba(0, 0, 0, 0.1), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)"
+    }
+});
+
 /**
  * @var columnData table渲染数据的字段的头部名称
  * @var columnData.operat 属性是table表格种对应的操作功能字段，分别有：
@@ -127,10 +140,17 @@ const inputType = [
  */
 @inject(stores => ({
     defenseBusinessStores: stores.defenseBusinessStores,
-    defensePackagesStores: stores.defensePackagesStores
+    defensePackagesStores: stores.defensePackagesStores,
+    MachineRoomsStores: stores.MachineRoomsStores
 }))
 @observer
 class DefenseBusinesList extends React.Component {
+    constructor() {
+        super(...arguments);
+        this.state = {
+            value: 39
+        };
+    }
     componentDidMount () {
         this.props.defensePackagesStores.getData({
             site: '*'
@@ -139,7 +159,18 @@ class DefenseBusinesList extends React.Component {
             this.props.defenseBusinessStores.getData({
                 customer_id: qs.parse(location.search.substr(1)).id
             }) //根据客户获取业务数据
-        } else {
+        } else if(qs.parse(location.search.substr(1)).type && qs.parse(location.search.substr(1)).type === "site") {
+            this.props.MachineRoomsStores.getData((data) => {
+                if(data.length) {
+                    this.setState({
+                        value: data[0].id //第一个地区
+                    });
+                    this.props.defenseBusinessStores.getData({
+                        site_id: data[0].id
+                    }) // 根据地区获取业务数据
+                }
+            });
+        } else { //根据地区获取业务数据
             if (qs.parse(location.search.substr(1)).id) {
                 this.props.defenseBusinessStores.getData({
                     package_id: qs.parse(location.search.substr(1)).id
@@ -171,18 +202,27 @@ class DefenseBusinesList extends React.Component {
         })
     }
 
+    // 切换地区
+    handleChange = (value) => {
+        this.props.defenseBusinessStores.getData({
+            site_id: value
+        }) // 根据地区获取业务数据
+        this.setState({ value });
+    }
+
     /**
      * 渲染方法
      * @class ListTableComponent 这个是渲染一个table组件
      */
     render () {
+        const { classes } = this.props;
         inputType[inputType.findIndex(item => item.field == 'package_id')].defaultData = this.props.defensePackagesStores.defensePackages.map(item => {
             return {
                 value: item.id,
                 text: item.name
             }
-        })
-        return (
+        });
+        let WrapComponent = (
             <ListTableComponent
                 title="高防业务管理"
                 operattext="高防IP相关业务"
@@ -193,8 +233,33 @@ class DefenseBusinesList extends React.Component {
                 updata={this.updata.bind(this)}
                 addData={this.addData.bind(this)}
             />
-        )
+        );
+        if(qs.parse(location.search.substr(1)).type && qs.parse(location.search.substr(1)).type === "site") {
+            WrapComponent = [
+                <TabComponent onChange={this.handleChange} type={this.state.value} types={this.props.MachineRoomsStores.machineRooms.map(item => {
+                    return {
+                        label: item.machine_room_name,
+                        value: item.id
+                    }
+                })}>
+                    <ListTableComponent
+                        className={classes.listTableComponent}
+                        title="高防业务管理"
+                        operattext="高防IP相关业务"
+                        inputType={inputType}
+                        headTitlesData={columnData}
+                        data={this.props.defenseBusinessStores.defenseBusiness}
+                        currentStores={this.props.defenseBusinessStores}
+                        updata={this.updata.bind(this)}
+                        // addData={this.addData.bind(this)}
+                    />
+                </TabComponent>
+            ];
+        }
+        return WrapComponent;
     }
 }
-
-export default DefenseBusinesList
+DefenseBusinesList.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+export default withStyles(styles)(DefenseBusinesList);

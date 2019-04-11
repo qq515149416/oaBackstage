@@ -58,12 +58,13 @@ class MachineRoomsStores extends ActionBoundStores {
         });
     }
     @action.bound
-    getData() {
+    getData(callbrak) {
         this.changeRequestState(2);
         get("machine_room/showByAjax").then((res) => {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {
                 this.machineRooms = res.data.data.map(item => new MachineRoomStores(item));
+                callbrak && callbrak(res.data.data);
             }
         });
     }
