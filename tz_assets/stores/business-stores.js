@@ -60,6 +60,10 @@ class BusinessStores extends ActionBoundStores {
         });
     }
     addData(data) {
+        if(isNaN(data.length)) {
+            alert("时长只能填数字");
+            return ;
+        }
         return new Promise((resolve,reject) => {
             post("business/insert",data).then(res => {
                 if(res.data.code==1) {
