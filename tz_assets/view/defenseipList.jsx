@@ -24,30 +24,30 @@ let columnData = [
 ];
 
 const inputType = [
-    {
-        field: "site",
-        label: "地区",
-        type: "select",
-        defaultData: [{
-            value: 1,
-            text: "西安"
-        }],
-        model: {
-            selectCode: (data) => {
-              switch(data) {
-                case "西安":
-                    return 1;
-              }
-            }
-        }
-    },
+    // {
+    //     field: "site",
+    //     label: "地区",
+    //     type: "select",
+    //     defaultData: [{
+    //         value: 1,
+    //         text: "西安"
+    //     }],
+    //     model: {
+    //         selectCode: (data) => {
+    //           switch(data) {
+    //             case "西安":
+    //                 return 1;
+    //           }
+    //         }
+    //     }
+    // },
     {
         field: "protection_value",
         label: "防御值",
         type: "text"
     },
     {
-        field: "ip",
+        field: "ip_id",
         label: "",
         type: "component",
         Component: ChecksComponent
@@ -70,7 +70,7 @@ class DefenseipList extends React.Component {
             status: this.state.value,
             site: "*"
         });
-        this.props.MachineRoomsStores.getData();
+        // this.props.MachineRoomsStores.getData();
     }
     delData = (selectedData,callbrak) => {
         const {defenseipsStores} = this.props;
@@ -119,12 +119,12 @@ class DefenseipList extends React.Component {
     }
     render() {
         const { classes } = this.props;
-        inputType[inputType.findIndex(item => item.field=="site")].defaultData = this.props.MachineRoomsStores.machineRooms.map(item => {
-            return {
-              value: item.id,
-              text: item.machine_room_name
-            }
-          });
+        // inputType[inputType.findIndex(item => item.field=="site")].defaultData = this.props.MachineRoomsStores.machineRooms.map(item => {
+        //     return {
+        //       value: item.id,
+        //       text: item.machine_room_name
+        //     }
+        //   });
         return (
             <TabComponent onChange={this.handleChange} type={this.state.value} types={[
                 {

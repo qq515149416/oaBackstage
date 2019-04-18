@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "tz-dev": "webpack --watch --config  webpack.config.js"
+        "tz-dev": "webpack --config  webpack.config.js"
     },
     "devDependencies": {
         "axios": "^0.18.0",
@@ -42,7 +42,9 @@
         "react-dom": "^16.4.1",
         "react-draggable": "^3.1.1",
         "react-router-dom": "^4.3.1",
+        "react-select": "^2.4.2",
         "socket.io-client": "^2.1.1",
+        "storage-web": "^4.0.0-alpha.5",
         "wangeditor": "^3.1.1",
         "xlsx": "^0.14.1"
     }
