@@ -37,6 +37,8 @@ import MachineProcessing from "../view/machineProcessing.jsx";
 import NewTypeManagementList from "../view/newTypeManagementList.jsx";
 import DefenseBusinesReviewList from "../view/defenseBusinesReviewList.jsx";
 import CustomerStatisticsList from "../view/customerStatisticsList.jsx";
+import BusinessStatisticssList from "../view/businessStatisticssList.jsx";
+
 
 
 import { routerConfig } from "../config/common/config.js"
@@ -80,6 +82,7 @@ export default () => [
     <Route path={`${baseUrl}/machineProcessing`} component={MachineProcessing} />,
     <Route path={`${baseUrl}/newTypeManagement`} component={NewTypeManagementList} />,
     <Route path={`${baseUrl}/defenseBusinesReview`} component={DefenseBusinesReviewList} />,
-    <Route path={`${baseUrl}/customerStatistics`} component={CustomerStatisticsList} />
+    <Route path={`${baseUrl}/customerStatistics`} component={CustomerStatisticsList} />,
+    <Route path={`${baseUrl}/businessStatistics`} component={BusinessStatisticssList} />
 
 ];
