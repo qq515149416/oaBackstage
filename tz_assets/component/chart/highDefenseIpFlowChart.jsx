@@ -151,13 +151,18 @@ class HighDefenseIpFlowChart extends React.Component {
     }
 
     render () {
-        return (
+
+        return (<div style={{
+            position: "relative",
+            height: "100%"
+        }}>
             <div id="dom" style={{
                 width: '90%',
                 margin: '0 auto',
                 height: '100%'
             }}></div>
-        )
+            {this.props.children && this.props.children}
+        </div>);
     }
 }
 

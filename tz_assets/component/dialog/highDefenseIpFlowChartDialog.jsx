@@ -9,6 +9,9 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import HighDefenseIpFlowChart from '../chart/highDefenseIpFlowChart.jsx'
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+const dateFormat = require('dateformat');
 
 import { get } from '../../tool/http'
 import Button from '@material-ui/core/Button'
@@ -16,6 +19,12 @@ import Button from '@material-ui/core/Button'
 const styles = (theme) => ({
     iconButton: {
         ...theme.tableIconButton
+    },
+    dateSelect: {
+        position: "absolute",
+        right: 40,
+        zIndex: 2,
+        top: 0
     }
 
 })
@@ -25,13 +34,26 @@ class HighDefenseIpFlowChartDialog extends React.Component {
         super(props)
         this.state = {
             open: false,
-            data: []
+            data: [],
+            dateOptions: [],
+            currentDate: dateFormat(new Date(new Date().getTime()), 'yyyy-mm-dd')
         }
     }
 
     handleOpen = () => {
+        const dateOptions = [{
+            value: dateFormat(new Date(new Date().getTime()), 'yyyy-mm-dd'),
+            label: dateFormat(new Date(new Date().getTime()), 'yyyy-mm-dd')
+        }];
+        for (let i = 1; i < 5; i++) {
+            dateOptions.push({
+                value: dateFormat(new Date(new Date().getTime() - (24 * 60 * 60 * 1000 * i)).setHours(23, 59, 59, 0), 'yyyy-mm-dd HH:MM:ss'),
+                label: dateFormat(new Date(new Date().getTime() - (24 * 60 * 60 * 1000 * i)), 'yyyy-mm-dd')
+            });
+        }
         this.setState({
-            open: true
+            open: true,
+            dateOptions,
         })
     }
     handleClose = () => {
@@ -40,9 +62,9 @@ class HighDefenseIpFlowChartDialog extends React.Component {
             data: []
         })
     }
-    handleEntered = () => {
+    handleEntered = (date) => {
         get('defenseip/remove/getStatistics', {
-            timestamp: Date.parse(new Date()) / 1000,
+            timestamp: (typeof date === "string" ? Math.round(new Date(date).getTime()/1000) : Date.parse(new Date()) / 1000),
             ip: this.props.ip || ''
         }).then(res => {
             if (res.data.code === 1) {
@@ -84,8 +106,14 @@ class HighDefenseIpFlowChartDialog extends React.Component {
         })
     }
 
+    handleChange = name => event => {
+        this.handleEntered(event.target.value);
+        this.setState({ [name]: event.target.value });
+    }
+
     render () {
         const { classes } = this.props
+        const { dateOptions } = this.state;
         return [
             <Tooltip title="高防IP流量图">
                 <IconButton className={classes.iconButton} onClick={this.handleOpen} aria-label="flowChart">
@@ -106,7 +134,26 @@ class HighDefenseIpFlowChartDialog extends React.Component {
                         height: '350px'
                     }}>
                         {
-                            this.state.open ? <HighDefenseIpFlowChart {...this.props} chartData={this.state.data}/> : ''
+                            this.state.open ? (
+                                <HighDefenseIpFlowChart {...this.props} chartData={this.state.data}>
+                                    <div className={classes.dateSelect}>
+                                        <TextField
+                                        id="date-select"
+                                        select
+                                        label="时间选择"
+                                        value={this.state.currentDate}
+                                        onChange={this.handleChange('currentDate')}
+                                        margin="normal"
+                                        >
+                                            {dateOptions.map(option => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                </HighDefenseIpFlowChart>
+                            ) : ''
                         }
                     </div>
                 </DialogContent>
