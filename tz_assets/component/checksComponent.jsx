@@ -52,7 +52,7 @@ class ChecksComponent extends React.Component {
             }
             return ;
         }
-        get("ips/index").then((res) => {
+        get("ips/showIdcIps").then((res) => {
             // pageData
             if(res.data.code==1) {
                 Storages.set("ips",res.data.data,{
