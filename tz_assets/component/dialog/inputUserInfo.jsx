@@ -31,7 +31,9 @@ class InputUserInfo extends React.Component {
             userModifyInfo: false,
             qq: "",
             iphone: "",
-            note: ""
+            note: "",
+            name: "",
+            nickname: ""
         };
     }
     open = () => {
@@ -39,7 +41,9 @@ class InputUserInfo extends React.Component {
             userModifyInfo: true,
             qq: this.props.msg_qq,
             iphone: this.props.msg_phone,
-            note: this.props.remarks
+            note: this.props.remarks,
+            name: this.props.name,
+            nickname: this.props.nickname
         });
     }
     close = () => {
@@ -52,7 +56,9 @@ class InputUserInfo extends React.Component {
             uid: this.props.id,
             msg_phone: this.state.iphone,
             msg_qq: this.state.qq,
-            remarks: this.state.note
+            remarks: this.state.note,
+            name: this.state.name,
+            nickname: this.state.nickname
         }).then(res => {
             if(res.data.code==1) {
                 alert(res.data.msg);
@@ -85,6 +91,24 @@ class InputUserInfo extends React.Component {
           >
             <DialogTitle id="form-dialog-title">客户信息修改</DialogTitle>
             <DialogContent>
+                <TextField
+                    margin="dense"
+                    id="note"
+                    label="用户名"
+                    fullWidth
+                    value={this.state.name}
+                    onChange={this.handleChange('name')}
+                    inputRef = {ref => this.name = ref}
+                />
+                <TextField
+                    margin="dense"
+                    id="note"
+                    label="昵称"
+                    fullWidth
+                    value={this.state.nickname}
+                    onChange={this.handleChange('nickname')}
+                    inputRef = {ref => this.nickname = ref}
+                />
                 <TextField
                 margin="dense"
                 id="note"
