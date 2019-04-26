@@ -194,8 +194,14 @@ class Home extends React.Component {
         }
         get(types[type].url,param).then(res => {
             if(res.data.code==1) {
+                const data = res.data.data;
+                data[0].endding_time && data.sort((a,b) => {
+                    const aTime = Math.round(new Date(a.endding_time).getTime()/1000);
+                    const bTime = Math.round(new Date(b.endding_time).getTime()/1000);
+                    return aTime - bTime;
+                })
                 this.setState({
-                    data: res.data.data,
+                    data: data,
                     requestState: 1
                 });
             } else {
