@@ -57,11 +57,15 @@ class DefenseBusinesRenewalFee extends React.Component {
     renewalFeeOperat = () => {
         let duration = this.renewalFeeTypes.find(item => item.value == this.state.currency);
         var confirm_next = confirm("是否要为"+this.props[this.props.nameParam]+"，续费时长"+duration.label+"元?");
+        const extendParam = {}
+        if(this.props.status === "试用中") {
+            extendParam.start_time = Math.round(new Date(this.state.starttime+" 00:00:00").getTime()/1000);
+        }
         if(confirm_next) {
             get(this.props.postUrl,{
                 business_id: this.props.id,
                 buy_time: this.state.currency,
-                start_time: Math.round(new Date(this.state.starttime+" 00:00:00").getTime()/1000)
+                ...extendParam
             }).then((data)=>{
                 if(data.data.code==1) {
                     alert(data.data.msg);
@@ -108,17 +112,22 @@ class DefenseBusinesRenewalFee extends React.Component {
                  </MenuItem>
                 ))}
             </TextField>
-            <TextField
-                id="date"
-                label="开始时间"
-                type="date"
-                fullWidth
-                defaultValue={dateFormat(new Date(new Date().getTime()), 'yyyy-mm-dd')}
-                onChange={this.handleChange('starttime')}
-                InputLabelProps={{
-                shrink: true,
-                }}
-            />
+            {
+                this.props.status === "试用中" && (
+                    <TextField
+                        id="date"
+                        label="开始时间"
+                        type="date"
+                        fullWidth
+                        defaultValue={dateFormat(new Date(new Date().getTime()), 'yyyy-mm-dd')}
+                        onChange={this.handleChange('starttime')}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                    />
+                )
+            }
+
           </DialogContent>
           <DialogActions>
             <Button onClick={this.close} color="primary">
