@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import RenewalFeeIcon from "../icon/renewalFee.jsx";
 import MenuItem from '@material-ui/core/MenuItem';
 import { get } from "../../tool/http";
+const dateFormat = require('dateformat');
 
 const styles = theme => ({
     iconButton: {
@@ -25,7 +26,8 @@ class DefenseBusinesRenewalFee extends React.Component {
         super(props);
         this.state = {
             currency: 1,
-            renewalFee: false
+            renewalFee: false,
+            starttime: dateFormat(new Date(new Date().getTime()), 'yyyy-mm-dd')
         }
         this.renewalFeeTypes = [
             {
@@ -58,7 +60,8 @@ class DefenseBusinesRenewalFee extends React.Component {
         if(confirm_next) {
             get(this.props.postUrl,{
                 business_id: this.props.id,
-                buy_time: this.state.currency
+                buy_time: this.state.currency,
+                start_time: Math.round(new Date(this.state.starttime+" 00:00:00").getTime()/1000)
             }).then((data)=>{
                 if(data.data.code==1) {
                     alert(data.data.msg);
@@ -105,6 +108,17 @@ class DefenseBusinesRenewalFee extends React.Component {
                  </MenuItem>
                 ))}
             </TextField>
+            <TextField
+                id="date"
+                label="开始时间"
+                type="date"
+                fullWidth
+                defaultValue={dateFormat(new Date(new Date().getTime()), 'yyyy-mm-dd')}
+                onChange={this.handleChange('starttime')}
+                InputLabelProps={{
+                shrink: true,
+                }}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={this.close} color="primary">
