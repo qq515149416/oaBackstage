@@ -14,6 +14,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+const qs = require('qs');
+
 const styles = theme => ({
     root: {
       width: '100%',
@@ -43,6 +45,7 @@ const types = {
             { id: 'business_number', label: '业务编号' },
             { id: 'cabinet_number', label: '机柜编号' },
             { id: 'client_name', label: '客户名称' },
+            { id: 'nickname', label: '客户昵称' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'machine_room_name', label: '所属机房' }
         ]
@@ -53,6 +56,7 @@ const types = {
             { id: 'business_number', label: '业务编号' },
             { id: 'machine_number', label: '机器编号' },
             { id: 'client_name', label: '客户名称' },
+            { id: 'nickname', label: '客户昵称' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'ip', label: 'IP地址' }
         ]
@@ -64,7 +68,8 @@ const types = {
             { id: 'cabinet_num', label: '机柜编号' },
             { id: 'machine_num', label: '机器编号' },
             { id: 'customer_name', label: '客户名称' },
-            { id: 'end_time', label: '到期时间' },
+            { id: 'nickname', label: '客户昵称' },
+            { id: 'endding_time', label: '到期时间' },
             { id: 'resource_type', label: '资源类型' },
             { id: 'self_number', label: '自身编号' }
         ]
@@ -75,6 +80,7 @@ const types = {
             { id: 'business_number', label: '业务编号' },
             { id: 'machine_number', label: '机器编号' },
             { id: 'client_name', label: '客户名称' },
+            { id: 'nickname', label: '客户昵称' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'ip', label: 'ip地址' },
             { id: 'start_time', label: '启用时间' }
@@ -86,6 +92,7 @@ const types = {
             { id: 'business_number', label: '业务编号' },
             { id: 'machine_number', label: '机器编号' },
             { id: 'client_name', label: '客户名称' },
+            { id: 'nickname', label: '客户昵称' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'ip', label: 'ip地址' },
             { id: 'start_time', label: '启用时间' }
@@ -97,6 +104,7 @@ const types = {
             { id: 'business_number', label: '业务编号' },
             { id: 'cabinet_number', label: '机柜编号' },
             { id: 'client_name', label: '客户名称' },
+            { id: 'nickname', label: '客户昵称' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'machine_room_name', label: '所属机房' },
             { id: 'start_time', label: '启用时间' }
@@ -109,7 +117,8 @@ const types = {
             { id: 'cabinet_num', label: '机柜编号' },
             { id: 'machine_num', label: '机器编号' },
             { id: 'customer_name', label: '客户名称' },
-            { id: 'end_time', label: '到期时间' },
+            { id: 'nickname', label: '客户昵称' },
+            { id: 'endding_time', label: '到期时间' },
             { id: 'resource_type', label: '资源类型' },
             { id: 'self_number', label: '自身编号' }
         ]
@@ -127,10 +136,11 @@ const types = {
         columnData: [
             { id: 'business_sn', label: '业务编号' },
             { id: 'customer_name', label: '客户名称' },
+            { id: 'nickname', label: '客户昵称' },
             { id: 'duration', label: '购买时长' },
-            { id: 'end_time', label: '到期时间' },
+            { id: 'endding_time', label: '到期时间' },
             { id: 'resource_type', label: '资源类型' },
-            { id: 'order_type', label: '订单类型' },
+            // { id: 'order_type', label: '订单类型' },
             { id: 'payable_money', label: '应付金额' },
             { id: 'price', label: '单价' }
         ]
@@ -151,7 +161,8 @@ const types = {
             { id: 'cabinet_num', label: '机柜编号' },
             { id: 'machine_num', label: '机器编号' },
             { id: 'customer_name', label: '客户名称' },
-            { id: 'end_time', label: '到期时间' },
+            { id: 'nickname', label: '客户昵称' },
+            { id: 'endding_time', label: '到期时间' },
             { id: 'resource_type', label: '资源类型' },
             { id: 'self_number', label: '自身编号' }
         ]
@@ -192,10 +203,13 @@ class Home extends React.Component {
                 return state;
             });
         }
+        if(qs.parse(location.search.substr(1)).type && qs.parse(location.search.substr(1)).type==="admin") {
+            types[type].url = types[type].url + "X";
+        }
         get(types[type].url,param).then(res => {
             if(res.data.code==1) {
                 const data = res.data.data;
-                data[0].endding_time && data.sort((a,b) => {
+                data.length && data[0].endding_time && data.sort((a,b) => {
                     const aTime = Math.round(new Date(a.endding_time).getTime()/1000);
                     const bTime = Math.round(new Date(b.endding_time).getTime()/1000);
                     return aTime - bTime;

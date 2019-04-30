@@ -171,7 +171,7 @@ class DisposalList extends React.Component {
                 { id: 'resource', numeric: true, disablePadding: false, label: '资源' },
                 { id: 'resourcetype', numeric: true, disablePadding: false, label: '资源类型' },
                 { id: 'removestatus', numeric: true, disablePadding: false, label: '下架状态' },
-                { id: 'cabinet_id', numeric: true, disablePadding: false, label: '机柜' },
+                { id: 'cabinets', numeric: true, disablePadding: false, label: '机柜' },
                 { id: 'ip', numeric: true, disablePadding: false, label: 'IP' },
                 { id: 'operat', numeric: true, disablePadding: false, label: '操作',  extend: true, extendData: [
                     {id: "business_sn", label: "业务号", type: "text"},

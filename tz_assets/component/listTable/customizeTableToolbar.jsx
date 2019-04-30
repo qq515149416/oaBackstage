@@ -15,9 +15,11 @@ class CustomizeTableToolbar extends React.Component {
     search = (start,end) => {
         let startTime = Math.round(new Date(start.value+" 00:00:00").getTime()/1000);
         let endTime = Math.round(new Date(end.value+" 23:59:59").getTime()/1000);
+        let param = this.props.param ? this.props.param : {};
         this.props.getData({
             begin: startTime,
             end: endTime,
+            ...param
         });
 
     }
