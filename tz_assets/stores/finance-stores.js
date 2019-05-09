@@ -11,15 +11,24 @@ class FinancesStores extends ActionBoundStores {
     @observable finances = [
 
     ];
+    @observable finance_info = {
+
+    };
     type = "";
     @action.bound
     getData(param={}) {
         this.changeRequestState(2);
         this.finances = [];
-        post("business/finance",param).then((res) => {
+        get("business/finance",param).then((res) => {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {
-                this.finances = res.data.data.map(item => new FinanceStores(item));
+                this.finances = res.data.data.info.map(item => new FinanceStores(item));
+                this.finance_info = Object.keys(res.data.data).reduce((item,current) => {
+                    if(current!=="info") {
+                        item[current] = res.data.data[current];
+                    }
+                    return item;
+                },{});
             }
         });
     }

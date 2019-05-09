@@ -6,6 +6,7 @@ import { inject,observer } from "mobx-react";
 // import Paper from '@material-ui/core/Paper';
 // import Tabs from '@material-ui/core/Tabs';
 // import Tab from '@material-ui/core/Tab';
+import CustomizeTableToolbar from "../component/listTable/customizeTableToolbar.jsx";
 import TabComponent from "../component/tabComponent.jsx";
 
 const styles = theme => ({
@@ -145,6 +146,17 @@ class FinanceList extends React.Component {
             headTitlesData={columnData}
             data={this.props.financesStores.finances}
             currentStores={this.props.financesStores}
+            customizeToolbar={(
+                <div>
+                    <CustomizeTableToolbar type="datetime-local" param={{order_status: this.state.value}} getData={this.props.financesStores.getData} />
+                    <div style={{fontSize: "16px",marginTop: 20}}>
+                    <span style={{marginRight: 20}}>当前查询应收金额：<span style={{color: 'red',fontSize: '18px'}}>{this.props.financesStores.finance_info.payable}</span></span>
+                    <span style={{marginRight: 20}}>当前查询实收金额：<span style={{color: 'red',fontSize: '18px'}}>{this.props.financesStores.finance_info.paytrue}</span></span>
+                    <span style={{marginRight: 20}}>当前查询优惠金额：<span style={{color: 'red',fontSize: '18px'}}>{this.props.financesStores.finance_info.discount}</span></span>
+                    <span style={{marginRight: 20}}>当前查询总量：<span style={{color: 'red',fontSize: '18px'}}>{this.props.financesStores.finance_info.total}</span></span>
+                    </div>
+                </div>
+            )}
           />
             </TabComponent>
         );

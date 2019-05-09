@@ -83,7 +83,7 @@ function PaperComponent(props) {
         }).then(res => {
             if(res.data.code==1) {
                 this.setState({
-                    data: res.data.data.map(item => {
+                    data: res.data.data.filter(item => item["status"] === 0).map(item => {
                         item["checked"] = false;
                         return item;
                     }),

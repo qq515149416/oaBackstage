@@ -34,7 +34,7 @@ class BusinessStatisticssList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 1
+            value: 4
         }
     }
     componentDidMount() {
@@ -50,8 +50,13 @@ class BusinessStatisticssList extends React.Component {
 
     render() {
         const {classes} = this.props;
+        const { value } = this.state;
         return (
             <TabComponent onChange={this.handleChange} type={this.state.value} types={[
+                {
+                    label: "生效业务",
+                    value: 4
+                },
                 {
                     label: "全部",
                     value: 1
@@ -75,10 +80,15 @@ class BusinessStatisticssList extends React.Component {
                 currentStores={this.props.businessStatisticssStores}
                 customizeToolbar={(
                     <div>
-                        <CustomizeTableToolbar type="datetime-local" param={{str: this.state.value}} getData={this.props.businessStatisticssStores.getData} />
+                        {
+                            value != 4 ? (
+                                <CustomizeTableToolbar type="datetime-local" param={{str: this.state.value}} getData={this.props.businessStatisticssStores.getData} />
+                            ) : null
+                        }
                         <div style={{fontSize: "16px",marginTop: 20}}>
                         <span style={{marginRight: 20}}>当前查询的总量：<span style={{color: 'red',fontSize: '18px'}}>{this.props.businessStatisticssStores.detail.orders_total}</span></span>
                         <span style={{marginRight: 20}}>当前查询的预计总金额：<span style={{color: 'red',fontSize: '18px'}}>{this.props.businessStatisticssStores.detail.total}</span></span>
+                        <span style={{marginRight: 20}}>当前预计月营收：<span style={{color: 'red',fontSize: '18px'}}>{this.props.businessStatisticssStores.detail.month_total}</span></span>
                         </div>
                     </div>
                 )}
