@@ -112,10 +112,70 @@ const columnData = [
  */
 const inputType = [
     {
+        field: "isBinding",
+        radioData: [
+            {
+                checked: true,
+                value: "0",
+                label: "创建客户"
+            },
+            {
+                checked: false,
+                value: "1",
+                label: "绑定客户"
+            }
+        ],
+        type: "switch",
+        group: "root"
+    },
+    {
         field: "email",
         label: "用户邮箱",
-        type: "text"
-      }
+        type: "text",
+        group: "1"
+    },
+    {
+        field: "name",
+        label: "用户名",
+        type: "text",
+        group: "0"
+    },
+    {
+        field: "nickname",
+        label: "昵称",
+        type: "text",
+        group: "0"
+    },
+    {
+        field: "password",
+        label: "密码",
+        type: "text",
+        group: "0"
+    },
+    {
+        field: "password_confirmation",
+        label: "确认密码",
+        type: "text",
+        group: "0"
+    },
+    {
+        field: "msg_qq",
+        label: "QQ",
+        type: "text",
+        group: "0"
+    },
+    {
+        field: "msg_phone",
+        label: "手机号码",
+        type: "text",
+        group: "0"
+    },
+    {
+        field: "remarks",
+        label: "备注",
+        type: "text",
+        group: "0"
+    }
 ];
 /**
  * @var filterType 过滤选择的字段

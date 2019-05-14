@@ -385,6 +385,7 @@ class AllInput extends React.Component {
     }
     render() {
         const {classes, title, inputType, operattext} = this.props;
+        const type = inputType.find(item => item.group==="root") && inputType.find(item => item.group==="root").field;
         return (
             <Dialog
             open={this.state.open}
@@ -400,7 +401,12 @@ class AllInput extends React.Component {
             <DialogTitle id="form-dialog-title">{title}</DialogTitle>
             <DialogContent className={classes.dialogContent}>
                 {
-                    inputType.map(item => this.returnInput(item))
+                    inputType.filter(item => {
+                        if(!item.group) {
+                            return true;
+                        }
+                        return (item.group=="root" || (this[type] && this[type].value == item.group));
+                    }).map(item => this.returnInput(item))
                 }
             </DialogContent>
             <DialogActions>

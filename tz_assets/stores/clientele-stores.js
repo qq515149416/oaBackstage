@@ -15,8 +15,18 @@ class ClientelesStores extends ActionBoundStores {
         this.filterStoreData("clienteles","select",param);
     }
     bingSalesman(data) {
+        let createClienteleApi = "business/register";
+        if(data.isBinding=="1") {
+            createClienteleApi = "business/insert_clerk";
+        }
+        if(data.isBinding=="0") {
+            if(data.password != data.password_confirmation) {
+                alert("密码不一致");
+                return ;
+            }
+        }
         return new Promise((resolve,reject) => {
-            post("business/insert_clerk",data).then(res => {
+            post(createClienteleApi,data).then(res => {
                 if(res.data.code==1) {
                     this.getData();
                     resolve(true);
