@@ -18,6 +18,7 @@ const columnData = [
     { id: 'customer', numeric: true, disablePadding: false, label: '客户' },
     { id: 'salesman', numeric: true, disablePadding: false, label: '业务员' },
     { id: 'machine_sn', numeric: true, disablePadding: false, label: '产品信息' },
+    { id: 'machineroom_name', numeric: true, disablePadding: false, label: '机房' },
     { id: 'type', numeric: true, disablePadding: false, label: '产品类型' },
     { id: 'duration', numeric: true, disablePadding: false, label: '合同期（月）' },
     { id: 'price', numeric: true, disablePadding: false, label: '单价' },
@@ -28,6 +29,15 @@ const columnData = [
 
 const inputType = [
 ];
+
+const filterType = [
+    {
+        field: "created_at",
+        label: "时间",
+        type: "date"
+    }
+];
+
 @inject("businessStatisticssStores")
 @observer
 class BusinessStatisticssList extends React.Component {
@@ -47,6 +57,11 @@ class BusinessStatisticssList extends React.Component {
         });
         this.setState({ value });
     }
+
+    filterData = (param) => {
+        const {businessStatisticssStores} = this.props;
+        businessStatisticssStores.filterData(param);
+      }
 
     render() {
         const {classes} = this.props;
@@ -71,27 +86,15 @@ class BusinessStatisticssList extends React.Component {
                 }
             ]}>
                 <ListTableComponent
-                title="业务出售情况"
+                title={`当前查询的总量：${this.props.businessStatisticssStores.businessStatisticss.length}&nbsp;&nbsp;&nbsp;&nbsp;当前查询的预计总金额：${this.props.businessStatisticssStores.businessStatisticss.reduce((a,b) => a + parseFloat(b.money),0).toFixed(2)}&nbsp;&nbsp;&nbsp;&nbsp;当前预计月营收：${this.props.businessStatisticssStores.businessStatisticss.reduce((a,b) => a + parseFloat(b.price),0).toFixed(2)}`}
                 operattext="统计管理"
                 inputType={inputType}
                 headTitlesData={columnData}
+                filterType={filterType}
                 data={this.props.businessStatisticssStores.businessStatisticss}
                 className={classes.listTableComponent}
                 currentStores={this.props.businessStatisticssStores}
-                customizeToolbar={(
-                    <div>
-                        {
-                            value != 4 ? (
-                                <CustomizeTableToolbar type="datetime-local" param={{str: this.state.value}} getData={this.props.businessStatisticssStores.getData} />
-                            ) : null
-                        }
-                        <div style={{fontSize: "16px",marginTop: 20}}>
-                        <span style={{marginRight: 20}}>当前查询的总量：<span style={{color: 'red',fontSize: '18px'}}>{this.props.businessStatisticssStores.detail.orders_total}</span></span>
-                        <span style={{marginRight: 20}}>当前查询的预计总金额：<span style={{color: 'red',fontSize: '18px'}}>{this.props.businessStatisticssStores.detail.total}</span></span>
-                        <span style={{marginRight: 20}}>当前预计月营收：<span style={{color: 'red',fontSize: '18px'}}>{this.props.businessStatisticssStores.detail.month_total}</span></span>
-                        </div>
-                    </div>
-                )}
+                filterData={this.filterData.bind(this)}
             />
           </TabComponent>
         );

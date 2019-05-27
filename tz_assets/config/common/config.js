@@ -33,6 +33,8 @@ import ActionBoundStores from "../../stores/common/action-bound-stores";
 import DefenseBusinesReviewsStores from "../../stores/defenseBusinesReview-stores";
 import CustomerStatisticssStores from "../../stores/customerStatistics-stores";
 import BusinessStatisticssStores from "../../stores/businessStatistics-stores";
+import OverlaysStores from "../../stores/overlay-stores";
+import OverlayBusinesssStores from "../../stores/overlayBusiness-stores";
 
 
 
@@ -78,7 +80,9 @@ export const stores = {
     newTypesStores: new NewTypesStores(),
     defenseBusinesReviewsStores: new DefenseBusinesReviewsStores(),
     customerStatisticssStores: new CustomerStatisticssStores(),
-    businessStatisticssStores: new BusinessStatisticssStores()
+    businessStatisticssStores: new BusinessStatisticssStores(),
+    overlaysStores: new OverlaysStores(),
+    overlayBusinesssStores: new OverlayBusinesssStores()
 }
 export const domIds = [
     "user_list",
@@ -118,5 +122,7 @@ export const domIds = [
     "newTypeManagement",
     "defenseBusinesReview",
     "customerStatistics",
-    "businessStatistics"
+    "businessStatistics",
+    "overlay",
+    "overlayBusiness"
 ];

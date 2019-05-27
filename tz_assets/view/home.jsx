@@ -127,6 +127,7 @@ const types = {
         url: "overdue/showTrialDefenseIp",
         columnData: [
             { id: 'business_number', label: '业务编号' },
+            { id: 'nickname', label: '所属客户' },
             { id: 'price', label: '单月价格' },
             { id: 'status', label: '使用状态' }
         ]

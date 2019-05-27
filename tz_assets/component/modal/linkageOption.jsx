@@ -120,7 +120,7 @@ class LinkageOption extends React.Component {
         if(this.type.indexOf("machine") > -1) {
             this.selectedData = this.state.machines.find(item => item.id==event.target.value);
         } else {
-            this.selectedData = this.state.cabinets.find(item => item.cabinetid==event.target.value);
+            this.selectedData = this.state.cabinets.find(item => item.cabinet_id==event.target.value);
         }
         this.setState({
           [name]: event.target.value,
@@ -130,7 +130,7 @@ class LinkageOption extends React.Component {
         if(this.type.indexOf("machine")>-1) {
             this.selectedData = this.state.machines.find(item => item.id==value);
         } else {
-            this.selectedData = this.state.cabinets.find(item => item.cabinetid==value);
+            this.selectedData = this.state.cabinets.find(item => item.cabinet_id==value);
         }
         this.setState({
             [name]: value,
@@ -270,12 +270,12 @@ class LinkageOption extends React.Component {
                                     <List className={classes.dialogContent}>
                                         {
                                             this.state.cabinets.map(item => (
-                                                <ListItem onClick={() => this.setCheckBoxValue("cabinetChecked",item.cabinetid)} divider button>
+                                                <ListItem onClick={() => this.setCheckBoxValue("cabinetChecked",item.cabinet_id)} divider button>
                                                     <Radio
-                                                        checked={this.state.cabinetChecked==item.cabinetid}
+                                                        checked={this.state.cabinetChecked==item.cabinet_id}
                                                         value="2"
                                                         name="cabinetChecked"
-                                                        aria-label={"cabinet_id_"+item.cabinetid}
+                                                        aria-label={"cabinet_id_"+item.cabinet_id}
                                                     />
                                                     <ListItemText primary={item.cabinet_id} />
                                                 </ListItem>

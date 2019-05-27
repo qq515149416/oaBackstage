@@ -14,6 +14,9 @@ class BusinessStatisticssStores extends ActionBoundStores {
     @observable businessStatisticss = [
 
     ];
+    filterData(param) {
+        this.filterStoreData("businessStatisticss","select",param);
+    }
     @observable detail = {};
     @action.bound
     getData(param={}) {

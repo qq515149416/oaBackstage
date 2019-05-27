@@ -38,6 +38,10 @@ import NewTypeManagementList from "../view/newTypeManagementList.jsx";
 import DefenseBusinesReviewList from "../view/defenseBusinesReviewList.jsx";
 import CustomerStatisticsList from "../view/customerStatisticsList.jsx";
 import BusinessStatisticssList from "../view/businessStatisticssList.jsx";
+import OverlayList from "../view/overlayList.jsx";
+import OverlayBusinessList from "../view/overlayBusinessList.jsx";
+
+
 
 
 
@@ -83,6 +87,8 @@ export default () => [
     <Route path={`${baseUrl}/newTypeManagement`} component={NewTypeManagementList} />,
     <Route path={`${baseUrl}/defenseBusinesReview`} component={DefenseBusinesReviewList} />,
     <Route path={`${baseUrl}/customerStatistics`} component={CustomerStatisticsList} />,
-    <Route path={`${baseUrl}/businessStatistics`} component={BusinessStatisticssList} />
+    <Route path={`${baseUrl}/businessStatistics`} component={BusinessStatisticssList} />,
+    <Route path={`${baseUrl}/overlay`} component={OverlayList} />,
+    <Route path={`${baseUrl}/overlayBusiness`} component={OverlayBusinessList} />
 
 ];

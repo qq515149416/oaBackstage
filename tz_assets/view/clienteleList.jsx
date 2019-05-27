@@ -13,6 +13,7 @@ import Defense from "../component/icon/defense.jsx";
 import PersonnelTransfer from "../component/dialog/personnelTransfer.jsx";
 import { routerConfig } from "../config/common/config.js";
 import Finance from "../component/icon/finance.jsx";
+import Backup from "@material-ui/icons/Backup";
 const classNames = require('classnames');
 
 const styles = theme => ({
@@ -98,6 +99,12 @@ const columnData = [
             link: `${routerConfig.baseUrl}/defenseBusines`,
             param: ["id","email"],
             icon: <Defense />
+        },
+        {
+            title: "叠加包业务",
+            link: `${routerConfig.baseUrl}/overlayBusiness`,
+            param: ["id","email"],
+            icon: <Backup />
         },
         {
             title: "财务统计",

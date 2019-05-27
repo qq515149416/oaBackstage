@@ -13,6 +13,7 @@ import ExpansionComponent from '../component/expansionComponent.jsx'
 import Enable from '../component/icon/enable.jsx'
 import HighDefenseIpFlowChartDialog from '../component/dialog/highDefenseIpFlowChartDialog.jsx'
 import TabComponent from "../component/tabComponent.jsx";
+import OverlayBusinessSelect from "../component/dialog/overlayBusinessSelect.jsx";
 
 const qs = require('qs')
 
@@ -82,7 +83,8 @@ const columnData = [
                 // DefensePackageSelect,
                 DefenseBusinesRenewalFee,
                 SetIp,
-                HighDefenseIpFlowChartDialog
+                HighDefenseIpFlowChartDialog,
+                OverlayBusinessSelect
             ])
             return (<Element
                 {...data}
