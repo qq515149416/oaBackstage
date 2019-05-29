@@ -19,7 +19,9 @@ class DismissalReviewsStores extends ActionBoundStores {
             business: [],
             orders: [],
         };
-        get("under/show_apply_under").then((res) => {
+        get("under/show_apply_under",{
+            r: Math.random() * 1000
+        }).then((res) => {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {
                 if(type=="dismissalReview") {

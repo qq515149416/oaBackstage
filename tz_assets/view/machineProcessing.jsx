@@ -7,6 +7,7 @@ import Communication from "../component/dialog/communication.jsx";
 import TabComponent from "../component/tabComponent.jsx";
 import DealWith from "../component/icon/dealWith.jsx";
 import DefenseipReviewList from "./defenseipReviewList.jsx";
+import ResourceHistoryList from "./resourceHistoryList.jsx";
 import { inject,observer } from "mobx-react";
 import { get, post } from "../tool/http.js";
 import ChatDialog from "../component/dialog/chatDialog.jsx";
@@ -360,6 +361,7 @@ class MachineProcessing extends React.Component {
             />,
             <DisposalListWepper />,
             <DefenseipReviewList />,
+            <ResourceHistoryList type="change" />
         ];
     }
 }

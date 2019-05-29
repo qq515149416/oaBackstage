@@ -115,7 +115,9 @@ class ExpansionComponent extends React.Component {
             return [
                 <Tooltip title={this.props.tip_title}>
                     <IconButton className={classes.iconButton} onClick={this.confirm_show} aria-label="startFunction">
-                       {this.props.icon ? this.props.icon : <ImageFilterBlackWhite />}
+                       {this.props.icon ? (
+                          Object.prototype.toString.call(this.props.icon) === "[object Function]" ? this.props.icon(this.props.data) : this.props.icon
+                        ) : <ImageFilterBlackWhite />}
                     </IconButton>
                 </Tooltip>,
                 <Dialog

@@ -35,7 +35,7 @@ import CustomerStatisticssStores from "../../stores/customerStatistics-stores";
 import BusinessStatisticssStores from "../../stores/businessStatistics-stores";
 import OverlaysStores from "../../stores/overlay-stores";
 import OverlayBusinesssStores from "../../stores/overlayBusiness-stores";
-
+import ResourceHistorysStores from "../../stores/resourceHistory-stores";
 
 
 
@@ -82,7 +82,8 @@ export const stores = {
     customerStatisticssStores: new CustomerStatisticssStores(),
     businessStatisticssStores: new BusinessStatisticssStores(),
     overlaysStores: new OverlaysStores(),
-    overlayBusinesssStores: new OverlayBusinesssStores()
+    overlayBusinesssStores: new OverlayBusinesssStores(),
+    resourceHistorysStores: new ResourceHistorysStores()
 }
 export const domIds = [
     "user_list",
@@ -124,5 +125,6 @@ export const domIds = [
     "customerStatistics",
     "businessStatistics",
     "overlay",
-    "overlayBusiness"
+    "overlayBusiness",
+    "resourceHistory"
 ];

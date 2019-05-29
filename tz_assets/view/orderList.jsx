@@ -11,8 +11,10 @@ import extendElementsComponent from "../tool/extendElementsComponent";
 import Disposal from "../component/dialog/disposal.jsx";
 import RenewalFee from "../component/dialog/renewalFee.jsx";
 import SelectExpansion from "../component/dialog/selectExpansion.jsx";
+import GetResource from "../component/dialog/GetResource.jsx";
 import TabComponent from "../component/tabComponent.jsx";
 import { post,get } from "../tool/http.js";
+import { routerConfig } from "../config/common/config.js";
 const qs = require('qs');
 const styles = theme => ({
     listTableComponent: {
@@ -56,9 +58,12 @@ const columnData = [
           ]);
         if(data.order_status=="已支付") {
             if(data.type > 3) {
-                return <Element {...data} disposal_type={2} postUrl="business/renewresource" nameParam="order_sn" type="订单" />;
+                return [
+                    <Element {...data} disposal_type={2} postUrl="business/renewresource" nameParam="order_sn" type="订单" />,
+                    <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />
+                ];
             } else {
-                return null;
+                return <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />;
             }
         }else {
             if(data.type > 3) {
@@ -67,7 +72,13 @@ const columnData = [
                 return null;
             }
         }
-    }, label: '操作' }
+    },extendUrl: [
+        {
+            title: "更换记录",
+            link: routerConfig.baseUrl+"/resourceHistory",
+            param: ["id"]
+        }
+    ], label: '操作' }
 ];
 const inputType = [
     {

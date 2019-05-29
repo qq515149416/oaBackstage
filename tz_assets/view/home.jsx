@@ -205,7 +205,9 @@ class Home extends React.Component {
             });
         }
         if(qs.parse(location.search.substr(1)).type && qs.parse(location.search.substr(1)).type==="admin") {
-            types[type].url = types[type].url + "X";
+            if(types[type].url.indexOf("X") === -1) {
+                types[type].url = types[type].url + "X";
+            }
         }
         get(types[type].url,param).then(res => {
             if(res.data.code==1) {
