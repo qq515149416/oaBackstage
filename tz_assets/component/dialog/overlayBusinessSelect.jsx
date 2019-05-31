@@ -41,7 +41,7 @@ class OverlayBusinessSelect extends React.Component {
     open = () => {
         get("overlay/showBelong",{
             status: 0,
-            user_id: this.props.user_id
+            user_id: this.props.user_id || this.props.customer_id
         }).then(res => {
             if(res.data.code==1) {
                 this.setState({
@@ -58,9 +58,10 @@ class OverlayBusinessSelect extends React.Component {
         });
     }
     use = () => {
-        post("overlay/useOverlayToDIP",{
+        post(this.props.postUrl.indexOf("overlay") === -1 ? "overlay/useOverlayToDIP" : this.props.postUrl,{
             business_number: this.props.business_number,
-            belong_id: this.state.itemChecked
+            belong_id: this.state.itemChecked,
+            order_id: this.props.id
         }).then((data)=>{
             if(data.data.code==1) {
                 alert(data.data.msg);
@@ -103,7 +104,7 @@ class OverlayBusinessSelect extends React.Component {
                                         name="itemChecked"
                                         aria-label={"item_id_"+item.id}
                                     />
-                                    <ListItemText primary={item.name} />
+                                    <ListItemText primary={"名称："+item.name+"  |  "+"机房："+item.machine_room_name} />
                                 </ListItem>
                             ))
                         }

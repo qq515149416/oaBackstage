@@ -103,10 +103,19 @@ class DefensePackageList extends React.Component {
         };
     }
     componentDidMount() {
-        this.props.defensePackagesStores.getData({
-            site: this.state.value
+        // this.props.defensePackagesStores.getData({
+        //     site: this.state.value
+        // });
+        this.props.MachineRoomsStores.getData((data) => {
+            if(data.length) {
+                this.setState({
+                    value: data[data.length-1].id //第一个地区
+                });
+                this.props.defensePackagesStores.getData({
+                    site_id: data[data.length-1].id
+                }) // 根据地区获取业务数据
+            }
         });
-        this.props.MachineRoomsStores.getData();
     }
     delData = (selectedData,callbrak) => {
         const {defensePackagesStores} = this.props;
@@ -141,7 +150,7 @@ class DefensePackageList extends React.Component {
             }
           });
         return (
-            <TabComponent onChange={this.handleChange} type={this.state.value} types={this.props.MachineRoomsStores.machineRooms.map(item => {
+            <TabComponent onChange={this.handleChange} type={this.state.value} types={this.props.MachineRoomsStores.machineRooms.sort((a,b) => b.id - a.id).map(item => {
                 return {
                     label: item.machine_room_name,
                     value: item.id

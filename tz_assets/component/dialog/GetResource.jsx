@@ -198,7 +198,7 @@ class GetResource extends React.Component {
     }
 
     select = () => {
-        if(this.props.resource_type<3) {
+        if(this.props.resource_type<=3) {
             return [
                 <FormControl fullWidth component="fieldset">
                     <FormLabel component="legend">机器类型</FormLabel>

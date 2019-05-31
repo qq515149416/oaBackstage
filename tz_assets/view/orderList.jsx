@@ -15,6 +15,7 @@ import GetResource from "../component/dialog/GetResource.jsx";
 import TabComponent from "../component/tabComponent.jsx";
 import { post,get } from "../tool/http.js";
 import { routerConfig } from "../config/common/config.js";
+import OverlayBusinessSelect from "../component/dialog/overlayBusinessSelect.jsx";
 const qs = require('qs');
 const styles = theme => ({
     listTableComponent: {
@@ -56,14 +57,19 @@ const columnData = [
             RenewalFee,
             Disposal
           ]);
+
         if(data.order_status=="已支付") {
             if(data.type > 3) {
                 return [
                     <Element {...data} disposal_type={2} postUrl="business/renewresource" nameParam="order_sn" type="订单" />,
-                    <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />
+                    <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />,
+                    data.type === 4 ? <OverlayBusinessSelect {...data} postUrl="overlay/useOverlayToIDC" nameParam="order_sn" type="选择叠加包" /> : null
                 ];
             } else {
-                return <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />;
+                return [
+                    <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />,
+                    data.type < 3 ? <OverlayBusinessSelect {...data} postUrl="overlay/useOverlayToIDC" nameParam="order_sn" type="选择叠加包" /> : null
+                ];
             }
         }else {
             if(data.type > 3) {

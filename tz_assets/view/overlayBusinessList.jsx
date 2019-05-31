@@ -37,7 +37,7 @@ const styles = theme => ({
 const columnData = [
     { id: 'name', numeric: true, disablePadding: false, label: '名称' },
     // { id: 'description', numeric: true, disablePadding: false, label: '描述' },
-    // { id: 'site', numeric: true, disablePadding: false, label: '地区' },
+    { id: 'machine_room_name', numeric: true, disablePadding: false, label: '机房' },
     { id: 'protection_value', numeric: true, disablePadding: false, label: '防御值' },
     // { id: 'price', numeric: true, disablePadding: false, label: '价格' },
     { id: 'status', numeric: true, disablePadding: false, label: '上架情况' },
@@ -130,8 +130,8 @@ class OverlayBusinessList extends React.Component {
         inputType[inputType.findIndex(item => item.field == 'overlay_id')].defaultData = this.props.overlaysStores.overlays.map(item => {
             return {
                 value: item.id,
-                text: item.name
-            }
+                text: "名称："+item.name + "  |  机房：" + item.machine_room_name
+             }
         });
         let WrapComponent = (
             <TabComponent onChange={this.handleChange} type={this.state.value} types={[

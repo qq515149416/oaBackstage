@@ -73,6 +73,24 @@ const columnData = [
         label: '绑定IP'
     },
     {
+        id: 'extra_protection',
+        numeric: true,
+        disablePadding: false,
+        label: '额外防护'
+    },
+    {
+        id: 'ori_protection_value',
+        numeric: true,
+        disablePadding: false,
+        label: '基础防护'
+    },
+    {
+        id: 'protection_value',
+        numeric: true,
+        disablePadding: false,
+        label: '实际防护'
+    },
+    {
         id: 'operat',
         numeric: true,
         disablePadding: false,
@@ -165,10 +183,10 @@ class DefenseBusinesList extends React.Component {
             this.props.MachineRoomsStores.getData((data) => {
                 if(data.length) {
                     this.setState({
-                        value: data[0].id //第一个地区
+                        value: data[data.length-1].id //第一个地区
                     });
                     this.props.defenseBusinessStores.getData({
-                        site_id: data[0].id
+                        site_id: data[data.length-1].id
                     }) // 根据地区获取业务数据
                 }
             });
@@ -238,7 +256,7 @@ class DefenseBusinesList extends React.Component {
         );
         if(qs.parse(location.search.substr(1)).type && qs.parse(location.search.substr(1)).type === "site") {
             WrapComponent = [
-                <TabComponent onChange={this.handleChange} type={this.state.value} types={this.props.MachineRoomsStores.machineRooms.map(item => {
+                <TabComponent onChange={this.handleChange} type={this.state.value} types={this.props.MachineRoomsStores.machineRooms.sort((a,b) => b.id - a.id).map(item => {
                     return {
                         label: item.machine_room_name,
                         value: item.id
