@@ -46,6 +46,7 @@ const types = {
             { id: 'cabinet_number', label: '机柜编号' },
             { id: 'client_name', label: '客户名称' },
             { id: 'nickname', label: '客户昵称' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'machine_room_name', label: '所属机房' }
         ]
@@ -56,6 +57,7 @@ const types = {
             { id: 'business_number', label: '业务编号' },
             { id: 'machine_number', label: '机器编号' },
             { id: 'client_name', label: '客户名称' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'nickname', label: '客户昵称' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'ip', label: 'IP地址' }
@@ -68,6 +70,7 @@ const types = {
             { id: 'cabinet_num', label: '机柜编号' },
             { id: 'machine_num', label: '机器编号' },
             { id: 'customer_name', label: '客户名称' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'nickname', label: '客户昵称' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'resource_type', label: '资源类型' },
@@ -81,6 +84,7 @@ const types = {
             { id: 'machine_number', label: '机器编号' },
             { id: 'client_name', label: '客户名称' },
             { id: 'nickname', label: '客户昵称' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'ip', label: 'ip地址' },
             { id: 'start_time', label: '启用时间' }
@@ -93,6 +97,7 @@ const types = {
             { id: 'machine_number', label: '机器编号' },
             { id: 'client_name', label: '客户名称' },
             { id: 'nickname', label: '客户昵称' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'ip', label: 'ip地址' },
             { id: 'start_time', label: '启用时间' }
@@ -105,6 +110,7 @@ const types = {
             { id: 'cabinet_number', label: '机柜编号' },
             { id: 'client_name', label: '客户名称' },
             { id: 'nickname', label: '客户昵称' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'machine_room_name', label: '所属机房' },
             { id: 'start_time', label: '启用时间' }
@@ -118,6 +124,7 @@ const types = {
             { id: 'machine_num', label: '机器编号' },
             { id: 'customer_name', label: '客户名称' },
             { id: 'nickname', label: '客户昵称' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'resource_type', label: '资源类型' },
             { id: 'self_number', label: '自身编号' }
@@ -128,6 +135,7 @@ const types = {
         columnData: [
             { id: 'business_number', label: '业务编号' },
             { id: 'nickname', label: '所属客户' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'price', label: '单月价格' },
             { id: 'status', label: '使用状态' }
         ]
@@ -138,6 +146,7 @@ const types = {
             { id: 'business_sn', label: '业务编号' },
             { id: 'customer_name', label: '客户名称' },
             { id: 'nickname', label: '客户昵称' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'duration', label: '购买时长' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'resource_type', label: '资源类型' },
@@ -163,6 +172,7 @@ const types = {
             { id: 'machine_num', label: '机器编号' },
             { id: 'customer_name', label: '客户名称' },
             { id: 'nickname', label: '客户昵称' },
+            { id: 'sales_name', label: '业务员' },
             { id: 'endding_time', label: '到期时间' },
             { id: 'resource_type', label: '资源类型' },
             { id: 'self_number', label: '自身编号' }

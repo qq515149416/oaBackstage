@@ -38,7 +38,10 @@ const filterType = [
     }
 ];
 
-@inject("businessStatisticssStores")
+@inject(stores => ({
+    businessStatisticssStores: stores.businessStatisticssStores,
+    rechargesStores: stores.rechargesStores
+}))
 @observer
 class BusinessStatisticssList extends React.Component {
     constructor(props) {
@@ -49,6 +52,7 @@ class BusinessStatisticssList extends React.Component {
     }
     componentDidMount() {
         this.props.businessStatisticssStores.getData();
+        this.props.rechargesStores.statistics();
     }
 
     handleChange = (value) => {
@@ -59,6 +63,7 @@ class BusinessStatisticssList extends React.Component {
     }
 
     filterData = (param) => {
+        this.props.rechargesStores.statistics(param);
         const {businessStatisticssStores} = this.props;
         businessStatisticssStores.filterData(param);
       }
@@ -86,7 +91,7 @@ class BusinessStatisticssList extends React.Component {
                 }
             ]}>
                 <ListTableComponent
-                title={`当前查询的总量：${this.props.businessStatisticssStores.businessStatisticss.length}&nbsp;&nbsp;&nbsp;&nbsp;当前查询的预计总金额：${this.props.businessStatisticssStores.businessStatisticss.reduce((a,b) => a + parseFloat(b.money),0).toFixed(2)}&nbsp;&nbsp;&nbsp;&nbsp;当前预计月营收：${this.props.businessStatisticssStores.businessStatisticss.reduce((a,b) => a + parseFloat(b.price),0).toFixed(2)}`}
+                title={`当前查询的总量：${this.props.businessStatisticssStores.businessStatisticss.length}&nbsp;&nbsp;&nbsp;&nbsp;当前查询的预计总金额：${this.props.businessStatisticssStores.businessStatisticss.reduce((a,b) => a + parseFloat(b.money),0).toFixed(2)}&nbsp;&nbsp;&nbsp;&nbsp;当前预计月营收：${this.props.rechargesStores.month_total}&nbsp;&nbsp;&nbsp;&nbsp;税收：${this.props.rechargesStores.tax_total}`}
                 operattext="统计管理"
                 inputType={inputType}
                 headTitlesData={columnData}

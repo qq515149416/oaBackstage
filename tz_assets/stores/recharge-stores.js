@@ -13,6 +13,8 @@ class RechargesStores extends ActionBoundStores {
     @observable recharge = [
 
     ];
+    @observable month_total = 0;
+    @observable tax_total = 0;
     filterData(param) {
         this.filterStoreData("recharge","select",param);
     }
@@ -27,6 +29,16 @@ class RechargesStores extends ActionBoundStores {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {
                 this.recharge = res.data.data.map(item => new RechargeStores(item));
+            }
+        });
+    }
+    @action.bound
+    statistics(param={}) {
+        get("business/marketrecharge",param).then((res) => {
+            this.changeRequestState(res.data.code);
+            if(res.data.code==1) {
+                this.month_total = res.data.data.month_total;
+                this.tax_total = res.data.data.tax_total;
             }
         });
     }

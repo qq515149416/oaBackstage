@@ -113,11 +113,11 @@ const columnData = [
             />)
         },
         extendConfirm: {
-            rule: {
-                term: 'status',
-                execute: '正在使用',
-                type: 'equal'
-            },
+            // rule: {
+            //     term: 'status',
+            //     execute: '正在使用',
+            //     type: 'equal'
+            // },
             title: '下架申请',
             content: '是否要下架次业务',
             icon: <Obtained/>,
