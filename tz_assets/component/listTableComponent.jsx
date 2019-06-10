@@ -17,6 +17,7 @@ import FilterTableToolbar from "./listTable/filterTableToolbar.jsx";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import ReactExport from "react-data-export";
+import Snackbar from '@material-ui/core/Snackbar';
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -111,18 +112,67 @@ const styles = theme => ({
         paddingBottom: theme.spacing.unit * 4
     }
   });
+
+  class DelSnackbar extends React.Component {
+    constructor() {
+        super(...arguments);
+        this.state = {
+            open: false,
+            msg: ""
+        };
+    }
+    componentDidMount() {
+        // console.log(this.props.inputRef);
+        this.props.inputRef && this.props.inputRef(this);
+    }
+    handleClick = (msg) => {
+        this.setState(state => {
+            state.open = true;
+            state.msg = msg;
+            return state;
+        });
+    }
+    handleClose = () => {
+        this.setState(state => {
+            state.open = false;
+            return state;
+        });
+      }
+      render() {
+        const { open, msg } = this.state;
+        return (
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                key={`${'top'},${'center'}`}
+                open={open}
+                onClose={this.handleClose}
+                ContentProps={{
+                'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{msg}</span>}
+            />
+        );
+      }
+  }
+
   @inject("commonStores")
   @observer
   class EnhancedTable extends React.Component {
     constructor(props) {
       super(props);
-
+    const { nosort } = this.props;
       this.state = {
         order: 'asc',
         orderBy: 'calories',
         selected: [],
         page: 0,
         rowsPerPage: 10
+      };
+      Array.prototype.extendSort = function(fn) {
+        if(!nosort) {
+            return this.sort(fn);
+        }
+        return this;
       };
 
     }
@@ -463,6 +513,12 @@ const styles = theme => ({
       }
 
     }
+    showPrompt = (msg) => {
+        this.delSnackbar.handleClick(msg);
+    }
+    hidePrompt = () => {
+        this.delSnackbar.handleClose();
+    }
     render() {
       const { classes } = this.props;
       const {  order, orderBy, selected  } = this.state;
@@ -486,6 +542,10 @@ const styles = theme => ({
     }
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.data.length - page * rowsPerPage);
       // console.log(currentStores.getRequestState);
+    //  if(!this.props.nosort) {
+    //     this.props.data;
+    //  }
+
       return [
           <div>
              {
@@ -515,6 +575,8 @@ const styles = theme => ({
             checkAll={this.props.checkAll}
             selectedData={selected}
             addTitle={this.props.addTitle}
+            showPrompt={this.showPrompt}
+            hidePrompt={this.hidePrompt}
           />
           {
               this.props.customizeToolbar && (
@@ -562,8 +624,7 @@ const styles = theme => ({
                     )
                 }
                 {this.props.data.length > 0 && this.props.data
-                  .sort(getSorting(order, orderBy))
-                //   .sort()
+                  .extendSort(getSorting(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((n,i,arr) => {
                     const isSelected = this.isSelected(n.id);
@@ -719,7 +780,7 @@ const styles = theme => ({
                 />
               )
           }
-
+          <DelSnackbar inputRef={ref => this.delSnackbar = ref} />
         </Paper>
       ];
     }

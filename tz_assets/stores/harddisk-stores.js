@@ -50,9 +50,9 @@ class HarddisksStores extends ActionBoundStores {
             }).then((res) => {
                 if(res.data.code==1) {
                     this.delStoreData("harddisks",id);
-                    resolve(true);
+                    resolve(res);
                 } else {
-                    resolve(false);
+                    resolve(res);
                 }
             }).catch(reject);
         });

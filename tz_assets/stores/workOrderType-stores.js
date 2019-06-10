@@ -16,10 +16,10 @@ class WorkOrderTypesStores extends ActionBoundStores {
             post("worktype/delete",data).then(res => {
                 if(res.data.code==1) {
                     this.getData();
-                    resolve(true);
+                    resolve(res);
                 }else {
-                    alert(res.data.msg);
-                    resolve(false);
+                    // alert(res.data.msg);
+                    resolve(res);
                 }
             }).catch(reject);
         });

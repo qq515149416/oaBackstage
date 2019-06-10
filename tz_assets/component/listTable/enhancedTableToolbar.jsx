@@ -39,6 +39,8 @@ const toolbarStyles = theme => ({
     },
   });
 
+
+
   let EnhancedTableToolbar = props => {
     const { numSelected, classes, selectedData, getParentData } = props;
     let data = selectedData.map(item => getParentData().find((e) => e.id == item));
@@ -48,13 +50,19 @@ const toolbarStyles = theme => ({
             props.handleSelectAllEmptyClick();
             props.delData(selectedData,(delIng) => {
                 Promise.all(delIng).then((ret) => {
-                    selectedData.forEach((item,index) => {
-                      if(ret[index]) {
-                        console.log("ID:"+item+"，删除成功");
-                      } else {
-                        console.warn("ID:"+item+"，删除失败");
-                      }
+                    ret.forEach(item => {
+                        props.showPrompt(item.data.msg);
                     });
+                    setTimeout(() => {
+                        props.hidePrompt();
+                    },2000);
+                    // selectedData.forEach((item,index) => {
+                    //   if(ret[index]) {
+                    //     console.log("ID:"+item+"，删除成功");
+                    //   } else {
+                    //     console.warn("ID:"+item+"，删除失败");
+                    //   }
+                    // });
                 });
             });
         }

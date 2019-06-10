@@ -39,9 +39,9 @@ class CabinetsStores extends ActionBoundStores {
             }).then((res) => {
                 if(res.data.code==1) {
                     this.delStoreData("cabinets",id);
-                    resolve(true);
+                    resolve(res);
                 } else {
-                    resolve(false);
+                    resolve(res);
                 }
             }).catch(reject);
         });

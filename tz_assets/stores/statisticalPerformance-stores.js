@@ -12,6 +12,9 @@ class StatisticalPerformancesStores extends ActionBoundStores {
     @observable statisticalPerformances = [
 
     ];
+    @observable statisticalPerformanceInfo = {
+
+    };
     business_type = 1
     @action.bound
     getData(param={}) {
@@ -19,6 +22,12 @@ class StatisticalPerformancesStores extends ActionBoundStores {
         let url = 'pfmStatistics/pfmBig';
         if(location.search.indexOf("?type=recharge") > -1) {
             url = 'rechargeStatistics/list';
+        }
+        if(location.search.indexOf("?type=all") > -1) {
+            url = 'pfmStatistics/performance';
+        }
+        if(location.search.indexOf("business_id=") > -1) {
+            url = 'business/performanceorder';
         }
         if(location.search.indexOf("?id") > -1) {
             param["customer_id"] = qs.parse(location.search.substr(1)).id;
@@ -29,7 +38,18 @@ class StatisticalPerformancesStores extends ActionBoundStores {
         })).then((res) => {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {
-                this.statisticalPerformances = res.data.data.map(item => new StatisticalPerformanceStores(item));
+                if(location.search.indexOf("?type=all") > -1) {
+                    this.statisticalPerformances = res.data.data.count.map(item => {
+                        item.business_id = item.id;
+                        item.begin = param.begin || 'null';
+                        item.end = param.end || 'null';
+                        item.type = item.id ? 'oreder' : 'sum';
+                        return new StatisticalPerformanceStores(item);
+                    });
+                    this.statisticalPerformanceInfo = res.data.data;
+                } else {
+                    this.statisticalPerformances = res.data.data.map(item => new StatisticalPerformanceStores(item));
+                }
             }
         });
     }

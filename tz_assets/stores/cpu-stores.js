@@ -50,9 +50,9 @@ class CpusStores extends ActionBoundStores {
             }).then((res) => {
                 if(res.data.code==1) {
                     this.delStoreData("cpus",id);
-                    resolve(true);
+                    resolve(res);
                 } else {
-                    resolve(false);
+                    resolve(res);
                 }
             }).catch(reject);
         });

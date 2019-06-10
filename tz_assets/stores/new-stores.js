@@ -57,9 +57,9 @@ class NewsStores extends ActionBoundStores {
             }).then((res) => {
                 if(res.data.code==1) {
                     this.delStoreData("articles",id);
-                    resolve(true);
+                    resolve(res);
                 } else {
-                    resolve(false);
+                    resolve(res);
                 }
             }).catch(reject);
         });
