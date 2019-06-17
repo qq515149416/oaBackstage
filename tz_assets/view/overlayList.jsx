@@ -16,7 +16,7 @@ const styles = theme => ({
 const columnData = [
     { id: 'name', numeric: true, disablePadding: false, label: '名称' },
     { id: 'description', numeric: true, disablePadding: false, label: '描述' },
-    { id: 'site', numeric: true, disablePadding: false, label: '地区' },
+    { id: 'machine_room_name', numeric: true, disablePadding: false, label: '地区' },
     { id: 'protection_value', numeric: true, disablePadding: false, label: '防御值' },
     { id: 'price', numeric: true, disablePadding: false, label: '价格' },
     { id: 'sell_status', numeric: true, disablePadding: false, label: '上架情况' },
@@ -110,7 +110,7 @@ class OverlayList extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {
-            value: 39
+            value: 50
         };
     }
     componentDidMount() {
