@@ -28,10 +28,29 @@ class SelectExpansion extends React.Component {
         });
     }
     setCurrentData = (param,type) => {
-        this.props.setComponentParam(param.value);
-        this.setState({
-            buttonName: param.text
-        });
+        if(Array.isArray(param)) {
+            this.props.setComponentParam(param);
+            if(param.length > 1) {
+                this.setState({
+                    buttonName: param[0].text + "到"  + param[param.length-1].text + "之间的资源"
+                });
+            } else {
+                if(param.length) {
+                    this.setState({
+                        buttonName: param[0].text
+                    });
+                } else {
+                    this.setState({
+                        buttonName: "不允许为空"
+                    });
+                }
+            }
+        } else {
+            this.props.setComponentParam(param.value);
+            this.setState({
+                buttonName: param.text
+            });
+        }
     }
     render() {
         const {classes} = this.props;
@@ -53,7 +72,7 @@ class SelectExpansion extends React.Component {
                         />
                     )
                 }
-                <SelectModal getData={this.props.getData} data={this.props.data} setCurrentData={this.setCurrentData} getRef={(ref) => this.selectModal = ref} />
+                <SelectModal check={(this.props.param && this.props.param.check)} getData={this.props.getData} data={this.props.data} setCurrentData={this.setCurrentData} getRef={(ref) => this.selectModal = ref} />
             </div>
         );
     }

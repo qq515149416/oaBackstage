@@ -360,8 +360,8 @@ class MachineProcessing extends React.Component {
                 type={1}
             />,
             <DisposalListWepper />,
-            <DefenseipReviewList />,
-            <ResourceHistoryList type="change" />
+            <DefenseipReviewList prohibitedPage={true} />,
+            <ResourceHistoryList prohibitedPage={true} type="change" />
         ];
     }
 }

@@ -15,6 +15,7 @@ import GetResource from "../component/dialog/GetResource.jsx";
 import TabComponent from "../component/tabComponent.jsx";
 import { post,get } from "../tool/http.js";
 import { routerConfig } from "../config/common/config.js";
+import UpdateOrder from "../component/dialog/updateOrder.jsx";
 import OverlayBusinessSelect from "../component/dialog/overlayBusinessSelect.jsx";
 const qs = require('qs');
 const styles = theme => ({
@@ -52,7 +53,7 @@ const columnData = [
         // {id: "order_status", label: "订单状态" ,type: "text"},
         {id: "order_note", label: "订单备注" ,type: "text"},
         {id: "created_at", label: "创建时间" ,type: "text"}
-    ],extendElement: (data) => {
+    ],extendElement: (data, update) => {
         let Element = extendElementsComponent([
             RenewalFee,
             Disposal
@@ -63,19 +64,28 @@ const columnData = [
                 return [
                     <Element {...data} disposal_type={2} postUrl="business/renewresource" nameParam="order_sn" type="订单" />,
                     <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />,
+                    <UpdateOrder update={update} {...data} postUrl="business/updateorder" nameParam="order_sn" type="更改" />,
                     data.type === 4 ? <OverlayBusinessSelect {...data} postUrl="overlay/useOverlayToIDC" nameParam="order_sn" type="选择叠加包" /> : null
                 ];
             } else {
                 return [
+                    <UpdateOrder update={update} {...data} postUrl="business/updateorder" nameParam="order_sn" type="更改" />,
                     <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />,
                     data.type < 3 ? <OverlayBusinessSelect {...data} postUrl="overlay/useOverlayToIDC" nameParam="order_sn" type="选择叠加包" /> : null
                 ];
             }
         }else {
             if(data.type > 3) {
-                return <Disposal {...data} disposal_type={2} />;
+                return [
+                    <Disposal {...data} disposal_type={2} />,
+                    <UpdateOrder update={update} {...data} postUrl="business/updateorder" nameParam="order_sn" type="更改" />,
+                    <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />
+                ];
             } else {
-                return null;
+                return [
+                    <UpdateOrder update={update} {...data} postUrl="business/updateorder" nameParam="order_sn" type="更改" />,
+                    <GetResource {...data} postUrl="business/change" nameParam="order_sn" type="更换" />
+                ];
             }
         }
     },extendUrl: [
@@ -131,7 +141,8 @@ const inputType = [
         defaultData: [],
         Component: SelectExpansion,
         param: {
-            buttonName: "选择资源"
+            buttonName: "选择资源",
+            check: true
         },
         rule: {
             term: "resource_type",
@@ -241,11 +252,11 @@ class OrderList extends React.Component {
         param.customer_name = qs.parse(location.search.substr(1)).client_name;
         if(param.resource_type>7) {
             param.machine_sn = qs.parse(location.search.substr(1)).machine_number;
-            param.resource = param.resource;
+            param.resource_id = param.resource;
         } else {
-            param.machine_sn = param.resource.label;
+            // param.machine_sn = param.resource.label;
             param.resource_id = param.resource.id;
-            param.resource = param.resource.value;
+            param.resource = param.resource;
         }
         this.props.ordersStores.addData(param).then((state) => {
             callbrak(state);
@@ -280,6 +291,37 @@ class OrderList extends React.Component {
         }
         this.props.ordersStores.type = value;
         this.setState({ value });
+    }
+    //   更新订单时执行的函数
+    updata() {
+        let param = {};
+        if(qs.parse(location.search.substr(1)).client_id) {
+            param = {
+                id: qs.parse(location.search.substr(1)).client_id
+            }
+        }
+        get("business/admin_customer",param).then((res) => {
+            if(res.data.code==1) {
+                let customerInfo = res.data.data.find(item => item.id == qs.parse(location.search.substr(1)).client_id);
+                this.setState({
+                    title: `客户账号：${customerInfo.email}&nbsp;&nbsp;&nbsp;&nbsp;客户余额：${customerInfo.money}&nbsp;&nbsp;&nbsp;&nbsp;客户账号状态：${customerInfo.status}&nbsp;&nbsp;&nbsp;&nbsp;业务员：${customerInfo.clerk_name}`
+                });
+            }
+        });
+        this.props.ordersStores.getData({
+            business_sn: qs.parse(location.search.substr(1)).business_number
+        });
+        this.getResourceData({
+            resource_type: {
+                value: 4
+            }
+        },"init");
+        inputType[inputType.findIndex(item => item.field=="resource_type")].model = {
+            getSubordinateData: this.getResourceData.bind(this)
+        };
+        inputType[inputType.findIndex(item => item.field=="resource")].model = {
+            getSubordinateData: this.getResourceData.bind(this)
+        };
     }
     render() {
         const {classes} = this.props;
@@ -370,6 +412,7 @@ class OrderList extends React.Component {
                     currentStores={this.props.ordersStores}
                     addData={this.addData.bind(this)}
                     delData={this.delData.bind(this)}
+                    updata={this.updata.bind(this)}
                 />
             </TabComponent>
         );

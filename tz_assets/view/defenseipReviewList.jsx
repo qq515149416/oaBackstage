@@ -76,6 +76,7 @@ class DefenseipReviewList extends React.Component {
             data={this.props.defenseipReviewsStores.defenseipReviews}
             currentStores={this.props.defenseipReviewsStores}
             updata={this.updata.bind(this)}
+            {...this.props}
           />
         );
       }

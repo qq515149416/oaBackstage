@@ -433,7 +433,7 @@ class GetResource extends React.Component {
           maxWidth="lg"
           onEntered={this.show}
         >
-          <DialogTitle id="form-dialog-title">续费</DialogTitle>
+          <DialogTitle id="form-dialog-title">更换资源</DialogTitle>
           <DialogContent>
             <DialogContentText>
                 <div>

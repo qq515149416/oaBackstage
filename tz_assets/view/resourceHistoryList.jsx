@@ -125,6 +125,7 @@ class ResourceHistoryList extends React.Component {
             data={data}
             currentStores={this.props.resourceHistorysStores}
             updata={this.updata.bind(this)}
+            {...this.props}
           />
         );
       }

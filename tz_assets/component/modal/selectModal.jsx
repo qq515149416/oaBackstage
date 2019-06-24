@@ -17,6 +17,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FormLabel from '@material-ui/core/FormLabel';
 import {get} from "../../tool/http.js";
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import { inject,observer } from "mobx-react";
 
 const styles = theme => ({
@@ -49,9 +52,10 @@ class SelectModal extends React.Component {
         this.state = {
             open: false,
             type: "",
-            itemChecked: 0,
+            itemChecked: this.props.check ? [] : 0,
             lineChecked: 0,
-            search_text: ""
+            search_text: "",
+            checkedAll: false
         };
         this.type = "";
     }
@@ -90,10 +94,34 @@ class SelectModal extends React.Component {
         this.setState({ lineChecked: event.target.value });
     }
     setCheckBoxValue = (name,value) => {
-        this.selectedData = this.props.data.find(item => item.text==value);
-        this.setState({
-            [name]: value,
-        });
+        if(this.props.check) {
+            if(!this.selectedData) {
+                this.selectedData = [this.props.data.find(item => item.text==value)];
+            } else {
+                if(this.selectedData.find(item => item.text==value)) {
+                    this.selectedData.splice(this.selectedData.findIndex(item => item.text==value),1);
+                } else {
+                    this.selectedData.push(this.props.data.find(item => item.text==value));
+                }
+            }
+            if(this.props.data.filter(item => item.text.indexOf(this.state.search_text) > -1).length===this.selectedData.length) {
+                this.setState({
+                    checkedAll: true
+                });
+            } else {
+                this.setState({
+                    checkedAll: false
+                });
+            }
+            this.setState({
+                [name]: this.selectedData,
+            });
+        } else {
+            this.selectedData = this.props.data.find(item => item.text==value);
+            this.setState({
+                [name]: value,
+            });
+        }
     }
     selectedMachineValue = (type) => {
         switch(type) {
@@ -114,6 +142,21 @@ class SelectModal extends React.Component {
     selectedValue = () => {
         this.props.setCurrentData(this.selectedData,this.selectedMachineValue(this.type));
         this.handleClose();
+    }
+    handleCheckAll = name => event => {
+        if(this.state.checkedAll) {
+            this.selectedData = [];
+            this.setState({
+                [name]: false,
+                itemChecked: this.selectedData
+            });
+        } else {
+            this.selectedData = this.props.data.filter(item => item.text.indexOf(this.state.search_text) > -1);
+            this.setState({
+                [name]: true,
+                itemChecked: this.selectedData
+            });
+        }
     }
     render() {
         const { classes } = this.props;
@@ -165,17 +208,43 @@ class SelectModal extends React.Component {
                             onChange={this.handleSearchChange('search_text')}
                             margin="normal"
                         />
+                        {
+                            this.props.check && (
+                                <FormGroup row>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox checked={this.state.checkedAll} onChange={this.handleCheckAll('checkedAll')} value="全选" />
+                                        }
+                                        label={("全选"+(this.state.checkedAll ? ("（共"+this.state.itemChecked.length+"个）"):""))}
+                                    />
+                                </FormGroup>
+                            )
+                        }
                    </div>
                     <List className={classes.list}>
                         {
                             this.props.data.filter(item => item.text.indexOf(this.state.search_text) > -1).map(item => (
                                 <ListItem onClick={() => this.setCheckBoxValue("itemChecked",item.text)} divider button>
-                                    <Radio
-                                        checked={this.state.itemChecked==item.text}
-                                        value={item.text}
-                                        name="itemChecked"
-                                        aria-label={"item_id_"+item.text}
-                                    />
+                                    {
+                                        this.props.check ? (
+                                            <Checkbox
+                                                checked={!!this.state.itemChecked.find(e => e.text === item.text)}
+                                                value={item.text}
+                                                name="itemChecked"
+                                                inputProps={{
+                                                    'aria-label': "item_id_"+item.text,
+                                                }}
+                                            />
+                                        ) : (
+                                            <Radio
+                                                checked={this.state.itemChecked==item.text}
+                                                value={item.text}
+                                                name="itemChecked"
+                                                aria-label={"item_id_"+item.text}
+                                            />
+                                        )
+                                    }
+
                                     <ListItemText primary={item.text} />
                                 </ListItem>
                             ))
