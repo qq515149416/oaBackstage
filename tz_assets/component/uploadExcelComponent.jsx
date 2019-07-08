@@ -12,14 +12,16 @@ const styles = theme => ({
 
 class UploadExcelComponent extends React.Component {
     getExcelTemplate = event => {
-       window.open("/tz_admin/machine/excel_template");
+        const getExcel = this.props.getExcel || "/tz_admin/machine/excel_template";
+       window.open(getExcel);
     }
     postExcel = event => {
+        const postExcel = this.props.postExcel || "machine/handle_excel";
         this.file.click();
         this.file.onchange = function() {
             const formData = new FormData();
             formData.append("handle_excel",this.files[0])
-            postFile("machine/handle_excel",formData).then(res => {
+            postFile(postExcel,formData).then(res => {
                 if(res.data.code == 1) {
                     alert(res.data.msg);
                 } else {
@@ -40,7 +42,9 @@ class UploadExcelComponent extends React.Component {
     }
 }
 UploadExcelComponent.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    getExcel: PropTypes.string,
+    postExcel: PropTypes.string
 };
 
 export default withStyles(styles)(UploadExcelComponent);

@@ -450,7 +450,7 @@ class MachineLibraryList extends React.Component {
             delData={this.delData.bind(this)}
             changeData={this.changeData.bind(this)}
             filterData={this.filterData.bind(this)}
-            customizeToolbar={<UploadExcelComponent />}
+            customizeToolbar={<UploadExcelComponent getExcel="/tz_admin/machine/excel_template" postExcel="machine/handle_excel" />}
           />
             </TabComponent>
         );

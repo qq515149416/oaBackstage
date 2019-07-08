@@ -75,7 +75,8 @@ const columnData = [
         {id: "length", label: "时长" ,type: "text"},
         {id: "start_time", label: "业务开始时间" ,type: "text"},
         {id: "endding_time", label: "业务结束时间" ,type: "text"},
-        {id: "business_note", label: "业务备注" ,type: "text"}
+        {id: "business_note", label: "业务备注" ,type: "text"},
+        {id: "check_note", label: "审核备注" ,type: "text"}
     ], extendConfirm: {
         rule: {
             term: "business_status",
@@ -140,6 +141,11 @@ const columnData = [
 const inputType = [
 ];
 /**
+ * @var filterType 搜索数据时对应字段的输入组件
+ */
+const filterType = [
+];
+/**
  * 审核上架机器
  */
 @inject("businessStores")
@@ -158,6 +164,11 @@ class CheckBusinessList extends React.Component {
   updata() {
     this.props.businessStores.getAllData();
   }
+   //   过滤充值记录
+   filterData = (param) => {
+    const {businessStores} = this.props;
+    businessStores.filterData(param);
+  }
    /**
  * 渲染方法
  * @class ListTableComponent 这个是渲染一个table组件
@@ -169,11 +180,13 @@ class CheckBusinessList extends React.Component {
         title="业务管理"
         operattext="业务信息"
         inputType={inputType}
+        filterType={filterType}
         headTitlesData={columnData}
         data={this.props.businessStores.business}
         currentStores={this.props.businessStores}
         checkAll={this.checkAll.bind(this)}
         updata={this.updata.bind(this)}
+        filterData={this.filterData.bind(this)}
         tableRowStyle={data => {
             return {
                 classes: {

@@ -9,11 +9,17 @@ import { inject,observer } from "mobx-react";
 import {post} from "../tool/http.js";
 import InputExpansionComponent from "../component/inputExpansionComponent.jsx";
 import TabComponent from "../component/tabComponent.jsx";
+import UploadExcelComponent from "../component/uploadExcelComponent.jsx";
 
 const styles = theme => ({
     listTableComponent: {
         marginTop: 0,
         borderRadius: "0 0 4px 4px",
+        boxShadow: "0px 4px 5px 0px rgba(0, 0, 0, 0.1), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)"
+    },
+    listFilterComponent: {
+        marginTop: 0,
+        borderRadius: "0",
         boxShadow: "0px 4px 5px 0px rgba(0, 0, 0, 0.1), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)"
     }
 });
@@ -138,6 +144,11 @@ const inputType = [
         Component: InputExpansionComponent
     }
 ];
+/**
+ * @var filterType 搜索数据时对应字段的输入组件
+ */
+const filterType = [
+];
 @inject("whitelistsStores")
 @observer
 class WhitelistList extends React.Component {
@@ -198,6 +209,20 @@ class WhitelistList extends React.Component {
             </Paper>
 
     */
+    //   批量审核
+    checkAll(selectedData,callbrak) {
+        const {whitelistsStores} = this.props;
+        let delIng = selectedData.map(item => whitelistsStores.checkAll({
+            ...item,
+            white_status: item.business_status
+        }));
+        callbrak(delIng);
+    }
+    //   过滤充值记录
+   filterData = (param) => {
+    const {whitelistsStores} = this.props;
+    whitelistsStores.filterData(param);
+  }
     render() {
         const {classes} = this.props;
         return (
@@ -225,15 +250,35 @@ class WhitelistList extends React.Component {
             ]}>
                 <ListTableComponent
                     className={classes.listTableComponent}
+                    listFilterComponentClassName={classes.listFilterComponent}
                     title="白名单"
                     operattext="白名单操作"
                     inputType={inputType}
                     headTitlesData={columnData}
+                    filterType={filterType}
                     data={this.props.whitelistsStores.whitelists}
                     currentStores={this.props.whitelistsStores}
                     addData={this.addData.bind(this)}
                     delData={this.delData.bind(this)}
                     updata={this.updata.bind(this)}
+                    checkAll={this.checkAll.bind(this)}
+                    filterData={this.filterData.bind(this)}
+                    customizeToolbar={<UploadExcelComponent getExcel="/tz_admin/whitelist/excelTemplate" postExcel="whitelist/handleExcel" />}
+                    checkSelectOptions={[
+                        {
+                            text: "审核通过",
+                            value: 1,
+                            default: true
+                        },
+                        {
+                            text: "审核不通过",
+                            value: 2
+                        },
+                        {
+                            text: "黑名单",
+                            value: 3
+                        }
+                    ]}
                 />
             </TabComponent>
         );

@@ -14,6 +14,7 @@ class WhitelistsStores extends ActionBoundStores {
     @observable binding_machine = "";
     @observable customer_id = "";
     @observable customer_name = "";
+    status = {"1": "审核通过", "2": "审核不通过", "3": "黑名单"};
     type = 0;
     delData(id) {
         return new Promise((resolve, reject) => {
@@ -26,6 +27,24 @@ class WhitelistsStores extends ActionBoundStores {
                     resolve(res);
                 } else {
                     resolve(res);
+                }
+            }).catch(reject);
+        });
+    }
+    filterData(param) {
+        this.filterStoreData("whitelists","select",param);
+    }
+    checkAll(data) {
+        return new Promise((resolve,reject) => {
+            post("whitelist/check",data).then((res) => {
+                if(res.data.code==1) {
+                    this.changeStoreData("whitelists",WhitelistStores,Object.assign(data,{
+                        status: this.status[data.white_status],
+                        white_status: data.white_status
+                    }));
+                    resolve(true);
+                } else {
+                    resolve(false);
                 }
             }).catch(reject);
         });

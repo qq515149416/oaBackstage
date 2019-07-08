@@ -52,18 +52,18 @@ if(location.search.indexOf("?type=all") > -1) {
         { id: 'cdn_count', numeric: true, disablePadding: false, label: 'CDN营业额' },
         { id: 'cloud_count', numeric: true, disablePadding: false, label: '云营业额' },
         { id: 'sum', numeric: true, disablePadding: false, label: '小计营业额' },
-        { id: 'operat', numeric: true, disablePadding: false, extend: true, extendUrl: [
-            {
-                title: "查看全部",
-                link: routerConfig.baseUrl+"/statisticalPerformance",
-                param: ["business_id","begin","end"],
-                rule: {
-                    term: "type",
-                    type: "equal",
-                    execute: "oreder"
-                }
-            }
-          ], label: '操作'}
+        // { id: 'operat', numeric: true, disablePadding: false, extend: true, extendUrl: [
+        //     {
+        //         title: "查看全部",
+        //         link: routerConfig.baseUrl+"/statisticalPerformance",
+        //         param: ["business_id","begin","end"],
+        //         rule: {
+        //             term: "type",
+        //             type: "equal",
+        //             execute: "oreder"
+        //         }
+        //     }
+        //   ], label: '操作'}
     ];
 }
 
@@ -148,6 +148,62 @@ class StatisticalPerformanceList extends React.Component {
                 break;
             }
         }
+        if(location.search.indexOf("?type=all") > -1) {
+            this.props.statisticalPerformancesStores.business_type = value;
+            this.props.statisticalPerformancesStores.statisticalPerformances = [];
+            this.props.statisticalPerformancesStores.statisticalPerformanceInfo = {};
+            switch(value) {
+                case 1:
+                    title = "业绩统计";
+                    columnData = [
+                        { id: 'name', numeric: true, disablePadding: false, label: '业务员' },
+                        { id: 'idc_count', numeric: true, disablePadding: false, label: 'IDC营业额' },
+                        { id: 'defense_count', numeric: true, disablePadding: false, label: '高防IP营业额' },
+                        { id: 'flow_count', numeric: true, disablePadding: false, label: '流量包营业额' },
+                        { id: 'cdn_count', numeric: true, disablePadding: false, label: 'CDN营业额' },
+                        { id: 'cloud_count', numeric: true, disablePadding: false, label: '云营业额' },
+                        { id: 'sum', numeric: true, disablePadding: false, label: '小计营业额' },
+                        // { id: 'operat', numeric: true, disablePadding: false, extend: true, extendUrl: [
+                        //     {
+                        //         title: "查看全部",
+                        //         link: routerConfig.baseUrl+"/statisticalPerformance",
+                        //         param: ["business_id","begin","end"],
+                        //         rule: {
+                        //             term: "type",
+                        //             type: "equal",
+                        //             execute: "oreder"
+                        //         }
+                        //     }
+                        //     ], label: '操作'}
+                    ];
+                break;
+                case 2:
+                    title = "机房营业统计";
+                    columnData = [
+                        { id: 'name', numeric: true, disablePadding: false, label: '机房' },
+                        { id: 'idc_count', numeric: true, disablePadding: false, label: 'IDC营业额' },
+                        { id: 'defense_count', numeric: true, disablePadding: false, label: '高防IP营业额' },
+                        { id: 'flow_count', numeric: true, disablePadding: false, label: '流量包营业额' },
+                        { id: 'cdn_count', numeric: true, disablePadding: false, label: 'CDN营业额' },
+                        { id: 'cloud_count', numeric: true, disablePadding: false, label: '云营业额' },
+                        { id: 'sum', numeric: true, disablePadding: false, label: '小计营业额' },
+                        // { id: 'operat', numeric: true, disablePadding: false, extend: true, extendUrl: [
+                        //     {
+                        //         title: "查看全部",
+                        //         link: routerConfig.baseUrl+"/statisticalPerformance",
+                        //         param: ["business_id","begin","end"],
+                        //         rule: {
+                        //             term: "type",
+                        //             type: "equal",
+                        //             execute: "oreder"
+                        //         }
+                        //     }
+                        //     ], label: '操作'}
+                    ];
+                break;
+            }
+            this.props.statisticalPerformancesStores.getData();
+        }
         this.setState({ value });
     }
 
@@ -204,31 +260,42 @@ class StatisticalPerformanceList extends React.Component {
         }
         if(location.search.indexOf("?type=all") > -1) {
             return (
-                <ListTableComponent
-                    title={title}
-                    operattext="业绩管理"
-                    inputType={inputType}
-                    className={classes.listTableComponent}
-                    headTitlesData={columnData}
-                    data={this.props.statisticalPerformancesStores.statisticalPerformances}
-                    currentStores={this.props.statisticalPerformancesStores}
-                    nosort={true}
-                    customizeToolbar={[
-                        <CustomizeTableToolbar getData={this.props.statisticalPerformancesStores.getData} />,
-                        <div>
-                            <span style={{
-                                fontSize: "16px"
-                            }}>应收金额：{this.props.statisticalPerformancesStores.statisticalPerformanceInfo.payable_money}</span>
-                            <span style={{
-                                margin: "0 20px",
-                                fontSize: "16px"
-                            }}>优惠金额：{this.props.statisticalPerformancesStores.statisticalPerformanceInfo.preferential_amount}</span>
-                            <span style={{
-                                fontSize: "16px"
-                            }}>实收金额：{this.props.statisticalPerformancesStores.statisticalPerformanceInfo.actual_payment}</span>
-                        </div>
-                    ]}
-                />
+                <TabComponent onChange={this.handleChange} type={this.state.value} types={[
+                    {
+                        label: "业务员业绩统计",
+                        value: 1
+                    },
+                    {
+                        label: "机房营业统计",
+                        value: 2
+                    }
+                ]}>
+                    <ListTableComponent
+                        title={title}
+                        operattext="业绩管理"
+                        inputType={inputType}
+                        className={classes.listTableComponent}
+                        headTitlesData={columnData}
+                        data={this.props.statisticalPerformancesStores.statisticalPerformances}
+                        currentStores={this.props.statisticalPerformancesStores}
+                        nosort={true}
+                        customizeToolbar={[
+                            <CustomizeTableToolbar getData={this.props.statisticalPerformancesStores.getData} />,
+                            <div>
+                                <span style={{
+                                    fontSize: "16px"
+                                }}>应收金额：{this.props.statisticalPerformancesStores.statisticalPerformanceInfo.payable_money}</span>
+                                <span style={{
+                                    margin: "0 20px",
+                                    fontSize: "16px"
+                                }}>优惠金额：{this.props.statisticalPerformancesStores.statisticalPerformanceInfo.preferential_amount}</span>
+                                <span style={{
+                                    fontSize: "16px"
+                                }}>实收金额：{this.props.statisticalPerformancesStores.statisticalPerformanceInfo.actual_payment}</span>
+                            </div>
+                        ]}
+                    />
+                </TabComponent>
             );
         }
         if(location.search.indexOf("?type=recharge") > -1) {

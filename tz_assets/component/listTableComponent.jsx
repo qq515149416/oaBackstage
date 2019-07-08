@@ -573,6 +573,7 @@ const styles = theme => ({
             handleSelectAllEmptyClick={this.handleSelectAllEmptyClick}
             delData={this.props.delData}
             checkAll={this.props.checkAll}
+            checkSelectOptions={this.props.checkSelectOptions}
             selectedData={selected}
             addTitle={this.props.addTitle}
             showPrompt={this.showPrompt}

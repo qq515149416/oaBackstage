@@ -23,7 +23,8 @@ const columnData = [
         // {id: "salesman_name", label: "充值人" ,type: "text"},
         {id: "trade_no", label: "充值单号" ,type: "text"},
         {id: "timestamp", label: "充值时间" ,type: "text"},
-        {id: "voucher", label: "凭据" ,type: "text"}
+        {id: "voucher", label: "凭据" ,type: "text"},
+        {id: "remarks", label: "备注" ,type: "text"}
     ], label: '操作' }
 ];
 const inputType = [

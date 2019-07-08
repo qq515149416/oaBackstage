@@ -37,6 +37,9 @@ const toolbarStyles = theme => ({
     title: {
       flex: '0 0 auto',
     },
+    iconButton: {
+        ...theme.tableIconButton
+    }
   });
 
 
@@ -69,7 +72,13 @@ const toolbarStyles = theme => ({
     }
     const checkAllData = (result,param) => {
         let isCheck = confirm(`是否要对选中的${numSelected}个数据进行审批？`);
-        const postAllData = selectedData.filter(id => data.find(item => item.id == id).business_status == 0).map(id => Object.assign({},{
+        const postAllData = selectedData.filter(id => {
+            if(data.find(item => item.id == id).business_status!==undefined) {
+                return data.find(item => item.id == id).business_status == 0;
+            } else {
+                return data.find(item => item.id == id).white_status == 0;
+            }
+        }).map(id => Object.assign({},{
             id,
             business_number: data.find(item => item.id == id).business_number,
             business_status: param,
@@ -81,9 +90,9 @@ const toolbarStyles = theme => ({
                 Promise.all(checkAllIng).then((ret) => {
                     selectedData.forEach((item,index) => {
                       if(ret[index]) {
-                        console.log("ID:"+item+"，删除成功");
+                        console.log("ID:"+item+"，审批成功");
                       } else {
-                        console.warn("ID:"+item+"，删除失败");
+                        console.warn("ID:"+item+"，审批失败");
                       }
                     });
                 });
@@ -115,7 +124,7 @@ const toolbarStyles = theme => ({
             <div>
               {
                 props.delData && (<Tooltip title="删除">
-                  <IconButton onClick={()=>{delData();}} aria-label="Delete">
+                  <IconButton className={classes.iconButton} onClick={()=>{delData();}} aria-label="Delete">
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>)
@@ -125,23 +134,25 @@ const toolbarStyles = theme => ({
                     <ExpansionComponent
                     type="confirm"
                     tip_title="批量审批操作"
-                    tip_content="此操作将会应用在选中的业务上请谨慎操作"
+                    tip_content="此操作将会应用在选中的数据上请谨慎操作"
                     ok={checkAllData.bind(this)}
                     select={true}
                     input={true}
                     data={{}}
                     icon={<Approval />}
-                    selectOptions={[
-                        {
-                            text: "审核通过",
-                            value: 1
-                        },
-                        {
-                            text: "审核不通过",
-                            value: -2,
-                            default: true
-                        }
-                    ]}
+                    selectOptions={(
+                        props.checkSelectOptions ? props.checkSelectOptions : [
+                            {
+                                text: "审核通过",
+                                value: 1
+                            },
+                            {
+                                text: "审核不通过",
+                                value: -2,
+                                default: true
+                            }
+                        ]
+                    )}
                     />
                   )
               }

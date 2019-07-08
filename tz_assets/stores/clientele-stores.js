@@ -2,6 +2,7 @@ import { observable, action, extendObservable} from "mobx";
 import {get,post} from "../tool/http.js";
 import ActionBoundStores from "./common/action-bound-stores.js";
 const dateFormat = require('dateformat');
+// const qs = require('qs');
 class ClienteleStores {
     constructor(data) {
         extendObservable(this,data);
@@ -41,6 +42,10 @@ class ClientelesStores extends ActionBoundStores {
     getData() {
         this.changeRequestState(2);
         this.clienteles = [];
+        // const param = {};
+        // if(qs.parse(location.search.substr(1)).new_version==="1.0") {
+        //     param.debug = "1";
+        // }
         get("business/admin_customer").then((res) => {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {

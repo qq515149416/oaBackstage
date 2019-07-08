@@ -19,6 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ChangeStatus from "./changeStatus.jsx";
 import TextField from '@material-ui/core/TextField';
 import { get,post } from '../../tool/http';
+import { SocketContext } from '../../config/socket.jsx';
 const classNames = require('classnames');
 
 const styles = (theme) => ({
@@ -243,5 +244,4 @@ class ChatDialog extends React.Component {
 ChatDialog.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-
 export default withStyles(styles)(ChatDialog);
