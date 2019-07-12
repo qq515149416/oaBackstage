@@ -15,6 +15,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import {get, post} from "../../tool/http";
+import FilterSelect from "../utensil/filterSelect.jsx";
 
 /**
  *@var  styles 是用来定义样式的
@@ -116,6 +117,49 @@ class AddOrder extends React.Component {
           });
     }
   };
+    newHandleChange = (name,value) => {
+        this.setState({[name]: value.id});
+        if (name === 'sales_id') {
+            this.setState({
+            clients: []
+            });
+            // 根据业务员的id获取客户列表
+            post('business/select_users', {
+            salesman_id: value.id
+            }).then((res) => {
+            if (res.data.code === 1) {
+                this.setState({
+                clients: res.data.data
+                })
+            } else {
+                alert(res.data.msg);
+            }
+            }).catch(error => {
+            console.log(error);
+            alert('获取该业务员名下的客户列表失败！');
+            });
+        }
+        if(name === 'client_id') {
+            this.setState({
+                business: []
+              });
+              // 根据业务员的id获取客户列表
+              get('business/showbusiness', {
+                client_id: value.id
+              }).then((res) => {
+                if (res.data.code === 1) {
+                  this.setState({
+                    business: res.data.data
+                  })
+                } else {
+                  alert(res.data.msg);
+                }
+              }).catch(error => {
+                console.log(error);
+                alert('获取该业务列表失败！');
+              });
+        }
+    };
   componentDidMount() {
   };
   open = () => {
@@ -187,7 +231,38 @@ class AddOrder extends React.Component {
                 <div>
                     <b>所属机房：</b>{this.props.room || this.props.ip_comproomname}
                 </div>
-                <TextField
+                <FilterSelect
+                    placeholder="业务员(请选择选项方可提交)"
+                    suggestions={this.state.sales}
+                    onChange={(item) => {
+                        this.newHandleChange('sales_id',item);
+                    }}
+                />
+                <FilterSelect
+                    placeholder="业务员名下的客户(请选择选项方可提交)"
+                    suggestions={this.state.clients.map(item => {
+                        if(!item._name) {
+                          item._name = "账号："+(item.name || "");
+                          item._name += " 邮箱：" + (item.email || "");
+                          item.name = item._name;
+                        }
+                        return item;
+                    })}
+                    onChange={(item) => {
+                        this.newHandleChange('client_id',item);
+                    }}
+                />
+                <FilterSelect
+                    placeholder="客户的业务(请选择选项方可提交)"
+                    suggestions={this.state.business.map(item => {
+                        item.name = `业务号：${item.business_number} | 机器编号：${item.machine_number} | 结束时间：${item.endding_time}`;
+                        return item;
+                    })}
+                    onChange={(item) => {
+                        this.newHandleChange('business_id',item);
+                    }}
+                />
+                {/* <TextField
                     id="sales_id"
                     label="业务员"
                     select
@@ -201,8 +276,8 @@ class AddOrder extends React.Component {
                         {item.name}
                         </MenuItem>
                     )) : <MenuItem value={''}>暂无业务员</MenuItem>}}
-                </TextField>
-                <TextField
+                </TextField> */}
+                {/* <TextField
                     id="client_id"
                     label="业务员名下的客户"
                     value={this.state.client_id}
@@ -221,8 +296,8 @@ class AddOrder extends React.Component {
                         }
                         </MenuItem>
                     )) : <MenuItem value={''}>暂无客户</MenuItem>}
-                </TextField>
-                <TextField
+                </TextField> */}
+                {/* <TextField
                     id="business"
                     label="业务员名下的客户"
                     value={this.state.business_id}
@@ -238,7 +313,7 @@ class AddOrder extends React.Component {
                             <span>结束时间：{item.endding_time}&nbsp;|</span>
                         </MenuItem>
                     )) : <MenuItem value={''}>暂无业务</MenuItem>}
-                </TextField>
+                </TextField> */}
                 <TextField
                     id="money"
                     label="价格/单价"

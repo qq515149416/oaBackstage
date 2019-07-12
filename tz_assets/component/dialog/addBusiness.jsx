@@ -14,6 +14,7 @@ import Radio from '@material-ui/core/Radio';
 import FormLabel from '@material-ui/core/FormLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import {get, post} from "../../tool/http";
+import FilterSelect from "../utensil/filterSelect.jsx";
 
 /**
  *@var  styles 是用来定义样式的
@@ -93,6 +94,29 @@ class AddBusiness extends React.Component {
       });
     }
   };
+    newHandleChange = (name,value) => {
+        this.setState({[name]: value.id});
+        if (name === 'sales_id') {
+            this.setState({
+            clients: []
+            });
+            // 根据业务员的id获取客户列表
+            post('business/select_users', {
+            salesman_id: value.id
+            }).then((res) => {
+            if (res.data.code === 1) {
+                this.setState({
+                clients: res.data.data
+                })
+            } else {
+                alert(res.data.msg);
+            }
+            }).catch(error => {
+            console.log(error);
+            alert('获取该业务员名下的客户列表失败！');
+            });
+        }
+    };
   componentDidMount() {
   };
   open = () => {
@@ -160,7 +184,14 @@ class AddBusiness extends React.Component {
         <DialogTitle id="form-dialog-title">业务绑定</DialogTitle>
         <DialogContent>
           <h4>机房：{this.props.machineroom_name || '无'}</h4>
-          <TextField
+          <FilterSelect
+            placeholder="业务员(请选择选项方可提交)"
+            suggestions={this.state.sales}
+            onChange={(item) => {
+                this.newHandleChange('sales_id',item);
+            }}
+          />
+          {/* <TextField
               id="sales_id"
               label="业务员"
               select
@@ -174,8 +205,8 @@ class AddBusiness extends React.Component {
                   {item.name}
                 </MenuItem>
             )) : <MenuItem value={''}>暂无业务员</MenuItem>}}
-          </TextField>
-          <TextField
+          </TextField> */}
+          {/* <TextField
               id="client_id"
               label="业务员名下的客户"
               value={this.state.client_id}
@@ -194,7 +225,21 @@ class AddBusiness extends React.Component {
                   }
                 </MenuItem>
             )) : <MenuItem value={''}>暂无客户</MenuItem>}
-          </TextField>
+          </TextField> */}
+          <FilterSelect
+            placeholder="业务员名下的客户(请选择选项方可提交)"
+            suggestions={this.state.clients.map(item => {
+                if(!item._name) {
+                    item._name = "账号："+(item.name || "");
+                    item._name += " 邮箱：" + (item.email || "");
+                    item.name = item._name;
+                }
+                return item;
+            })}
+            onChange={(item) => {
+                this.newHandleChange('client_id',item);
+            }}
+          />
           <TextField
               id="money"
               label="价格/单价"

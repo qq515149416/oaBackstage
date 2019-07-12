@@ -267,6 +267,12 @@ class GetResource extends React.Component {
                             label="联通"
                             labelPlacement="end"
                         />
+                        <FormControlLabel
+                            value="3"
+                            control={<Radio color="primary" />}
+                            label="BGP"
+                            labelPlacement="end"
+                        />
                     </RadioGroup>
                 </FormControl>
             );

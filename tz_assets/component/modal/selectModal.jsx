@@ -196,6 +196,15 @@ class SelectModal extends React.Component {
                                     aria-label={"ip_resource2"}
                                     onChange={this.handleChange}
                                 /> 联通
+                            </FormLabel>,
+                            <FormLabel>
+                                <Radio
+                                    checked={this.state.lineChecked==3}
+                                    value={3}
+                                    name="ip_resource"
+                                    aria-label={"ip_resource2"}
+                                    onChange={this.handleChange}
+                                /> GBP
                             </FormLabel>
                         ]:null
                     }
