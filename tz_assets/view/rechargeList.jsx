@@ -4,8 +4,7 @@ import { inject,observer } from "mobx-react";
 const qs = require('qs');
 
 const columnData = [
-    { id: 'customer_name', numeric: true, disablePadding: false, label: '客户名称' },
-    { id: 'nickname', numeric: true, disablePadding: false, label: '昵称' },
+    { id: 'customer_name', numeric: true, disablePadding: false, label: '客户' },
     { id: 'salesman_name', numeric: true, disablePadding: false, label: '充值人' },
     { id: 'money_before', numeric: true, disablePadding: false, label: '充值前余额' },
     { id: 'money_after', numeric: true, disablePadding: false, label: '充值后余额' },

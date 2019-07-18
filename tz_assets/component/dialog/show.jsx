@@ -8,6 +8,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Collapse from '@material-ui/core/Collapse';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 const ShowStyle = theme => ({
     title_container: {
         overflow: "hidden",
@@ -29,6 +35,16 @@ const ShowStyle = theme => ({
         // height: 600
     }
 });
+
+const StyledTableCell = withStyles(theme => ({
+    head: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    body: {
+      fontSize: 14,
+    },
+}))(TableCell);
 class Show extends React.Component {
     constructor(props) {
         super(props);
@@ -109,6 +125,44 @@ class Show extends React.Component {
                                             }
                                         </Collapse>
                                     </div>
+                                </DialogContentText>
+                            );
+                        } else if(item.type=="table") {
+                            return (
+                                <DialogContentText className={classes.title_container}>
+                                    <div className={classes.title_type}>
+                                        <Typography variant="h6" id="tableTitle">
+                                            {item.label}：
+                                        </Typography>
+                                    </div>
+                                    <Table style={{
+                                        overflow: "hidden"
+                                    }}>
+                                        <TableHead>
+                                            <TableRow>
+                                                {
+                                                    item.tableData.map(e => (
+                                                        <StyledTableCell>{e.label}</StyledTableCell>
+                                                    ))
+                                                }
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {
+                                                item.content.map(data => (
+                                                    <TableRow>
+                                                        {
+                                                           item.tableData.map(e => (
+                                                                <TableCell>
+                                                                    {data[e.id]}
+                                                                </TableCell>
+                                                           ))
+                                                        }
+                                                    </TableRow>
+                                                ))
+                                            }
+                                        </TableBody>
+                                    </Table>
                                 </DialogContentText>
                             );
                         }

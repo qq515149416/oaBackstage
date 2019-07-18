@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ListTableComponent from "../component/listTableComponent.jsx";
 import { inject,observer } from "mobx-react";
+import Approval from "../component/icon/approval.jsx";
 // import Paper from '@material-ui/core/Paper';
 // import Tabs from '@material-ui/core/Tabs';
 // import Tab from '@material-ui/core/Tab';
 import CustomizeTableToolbar from "../component/listTable/customizeTableToolbar.jsx";
 import TabComponent from "../component/tabComponent.jsx";
+import { post } from "../tool/http.js";
 
 const styles = theme => ({
     listTableComponent: {
@@ -53,8 +55,55 @@ const columnData = [
         {id: "business_number", label: "业务号" ,type: "text"},
         {id: "before_money", label: "支付前余额", type: "text"},
         {id: "after_money", label: "支付后余额" ,type: "text"},
-        {id: "created_at", label: "创建时间" ,type: "text"}
-    ],label: '操作'
+        {id: "created_at", label: "创建时间" ,type: "text"},
+        {id: "order_arr", label: "订单详情" ,type: "table",tableData: [
+            {
+                id: "business_sn",
+                label: "业务号",
+                type: "text"
+            },
+            {
+                id: "order_sn",
+                label: "订单号",
+                type: "text"
+            },
+            {
+                id: "order_type",
+                label: "新购/续费",
+                type: "text"
+            },
+            {
+                id: "payable_money",
+                label: "应付金额",
+                type: "text"
+            },
+            {
+                id: "resource_type",
+                label: "资源类型",
+                type: "text"
+            }
+        ]}
+    ],extendConfirm: {
+        icon: <Approval />,
+        title: "复核操作",
+        content: "是否要对此流水提出复核申请？",
+        input: true,
+        ok: (data) => {
+            return new Promise((resolve,reject) => {
+                post("business/ordersReview",{
+                    flow_id: data.flow_id,
+                    reason: data.note
+                }).then((res) => {
+                    alert(res.data.msg);
+                    if(res.data.code==1) {
+                        resolve(res.data);
+                    } else {
+                        resolve(res.data);
+                    }
+                }).catch(reject);
+            });
+        }
+    },label: '操作'
     }
 ];
 const inputType = [

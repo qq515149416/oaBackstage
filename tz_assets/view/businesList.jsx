@@ -278,7 +278,7 @@ class BusinesList extends React.Component {
             value: "all",
             customerInfo: {
                 id: qs.parse(location.search.substr(1)).id,
-                email: qs.parse(location.search.substr(1)).email,
+                nickname: qs.parse(location.search.substr(1)).nickname,
                 money: qs.parse(location.search.substr(1)).money,
                 status: qs.parse(location.search.substr(1)).status,
                 clerk_name: qs.parse(location.search.substr(1)).clerk_name
@@ -377,7 +377,7 @@ class BusinesList extends React.Component {
             this.setState({
                 customerInfo: {
                     id: res.data.data.find(item => item.id == id).id,
-                    email: res.data.data.find(item => item.id == id).email,
+                    nickname: res.data.data.find(item => item.id == id).nickname,
                     money: res.data.data.find(item => item.id == id).money,
                     status: res.data.data.find(item => item.id == id).status,
                     clerk_name: res.data.data.find(item => item.id == id).clerk_name
@@ -426,7 +426,7 @@ class BusinesList extends React.Component {
             }
         ]}>
              <ListTableComponent
-                title={`客户账号：${customerInfo.email}&nbsp;&nbsp;&nbsp;&nbsp;客户余额：${customerInfo.money}&nbsp;&nbsp;&nbsp;&nbsp;客户账号状态：${customerInfo.status}&nbsp;&nbsp;&nbsp;&nbsp;业务员：${customerInfo.clerk_name}`}
+                title={`客户账号：${customerInfo.nickname}&nbsp;&nbsp;&nbsp;&nbsp;客户余额：${customerInfo.money}&nbsp;&nbsp;&nbsp;&nbsp;客户账号状态：${customerInfo.status}&nbsp;&nbsp;&nbsp;&nbsp;业务员：${customerInfo.clerk_name}`}
                 operatBtns={<ManualRecharge postUrl="business/recharge" nameParam="email" {...customerInfo} buttonEl={(open) => (<Button variant="contained" onClick={open} color="primary">
                 充值
               </Button>)} />}

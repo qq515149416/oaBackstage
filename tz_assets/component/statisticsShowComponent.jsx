@@ -10,12 +10,12 @@ const styles = theme => ({
 });
 
 @inject("businessStores")
-@observer 
+@observer
 class StatisticsShowComponent extends React.Component {
     render() {
         return (
             <div>
-                <p>客户姓名：{qs.parse(location.search.substr(1)).email}</p>
+                <p>客户姓名：{qs.parse(location.search.substr(1)).nickname}</p>
                 <p>资源单价：{this.props.businessStores.statistics.unitPrice}</p>
                 <p>时长：{this.props.businessStores.statistics.length}个月</p>
                 <p>业务类型：{this.props.businessStores.statistics.businessType}</p>

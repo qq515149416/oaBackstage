@@ -81,12 +81,12 @@ const columnData = [
             ManualRecharge,
             PersonnelTransfer
           ]);
-        return <Element postUrl="business/recharge" update={update} nameParam="email" {...data} />;
+        return <Element postUrl="business/recharge" update={update} nameParam="nickname" {...data} />;
     }, extendUrl: [
         {
             title: "添加业务",
             link: `${routerConfig.baseUrl}/business`,
-            param: ["id","email","money","status","clerk_name"]
+            param: ["id","nickname","money","status","clerk_name"]
         },
         {
             title: "充值记录",
