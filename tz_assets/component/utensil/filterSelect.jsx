@@ -75,6 +75,13 @@ class FilterSelect extends React.Component {
         inputValue: '',
         openSelect: false
     };
+    componentDidMount() {
+        if(this.props.value && !this.state.inputValue) {
+            this.setState({
+                inputValue: this.props.value
+            });
+        }
+    }
     getSuggestions = inputValue => {
         const { suggestions } = this.props;
         console.log(suggestions);

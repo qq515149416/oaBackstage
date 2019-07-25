@@ -222,7 +222,7 @@ class OrderList extends React.Component {
             if(res.data.code==1) {
                 let customerInfo = res.data.data.find(item => item.id == qs.parse(location.search.substr(1)).client_id);
                 this.setState({
-                    title: `客户账号：${customerInfo.email}&nbsp;&nbsp;&nbsp;&nbsp;客户余额：${customerInfo.money}&nbsp;&nbsp;&nbsp;&nbsp;客户账号状态：${customerInfo.status}&nbsp;&nbsp;&nbsp;&nbsp;业务员：${customerInfo.clerk_name}`
+                    title: `客户账号：${customerInfo.nickname}&nbsp;&nbsp;&nbsp;&nbsp;客户余额：${customerInfo.money}&nbsp;&nbsp;&nbsp;&nbsp;客户账号状态：${customerInfo.status}&nbsp;&nbsp;&nbsp;&nbsp;业务员：${customerInfo.clerk_name}`
                 });
             }
         });

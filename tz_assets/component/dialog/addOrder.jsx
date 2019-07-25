@@ -244,6 +244,7 @@ class AddOrder extends React.Component {
                         if(!item._name) {
                           item._name = "账号："+(item.name || "");
                           item._name += " 邮箱：" + (item.email || "");
+                          item._name += " 昵称：" + (item.nickname || "");
                           item.name = item._name;
                         }
                         return item;

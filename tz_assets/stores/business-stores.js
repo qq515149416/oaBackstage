@@ -92,10 +92,11 @@ class BusinessStores extends ActionBoundStores {
         });
     }
     @action.bound
-    getData(id) {
+    getData(id,business_type) {
         this.changeRequestState(2);
         get("business/showbusiness",{
-            client_id: id
+            client_id: id,
+            business_type
         }).then(res => {
             this.changeRequestState(res.data.code);
             if(res.data.code==1) {

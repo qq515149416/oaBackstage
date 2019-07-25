@@ -9,6 +9,8 @@ import { inject,observer } from "mobx-react";
 import UploadExcelComponent from "../component/uploadExcelComponent.jsx";
 import TabComponent from "../component/tabComponent.jsx";
 import AddBusiness from "../component/dialog/addBusiness.jsx";
+import FilterSelect from "../component/utensil/filterSelect.jsx";
+import { get, post } from "../tool/http";
 
 const styles = theme => ({
     listTableComponent: {
@@ -24,6 +26,8 @@ const styles = theme => ({
 });
 let columnData = [
     { id: 'machine_num', numeric: true, disablePadding: true, label: '机器编号' },
+    { id: 'nickname', numeric: true, disablePadding: true, label: '客户' },
+    { id: 'name', numeric: true, disablePadding: true, label: '业务员' },
     { id: 'cpu', numeric: true, disablePadding: true, label: 'CPU' },
     { id: 'memory', numeric: true, disablePadding: true, label: '内存' },
     { id: 'harddisk', numeric: true, disablePadding: true, label: '硬盘' },
@@ -48,8 +52,10 @@ let columnData = [
         )
 }}
 ];
-const columnDataFull = [
+let columnDataFull = [
     { id: 'machine_num', numeric: true, disablePadding: true, label: '机器编号' },
+    { id: 'nickname', numeric: true, disablePadding: true, label: '客户' },
+    { id: 'name', numeric: true, disablePadding: true, label: '业务员' },
     { id: 'cpu', numeric: true, disablePadding: true, label: 'CPU' },
     { id: 'memory', numeric: true, disablePadding: true, label: '内存' },
     { id: 'harddisk', numeric: true, disablePadding: true, label: '硬盘' },
@@ -167,6 +173,7 @@ const inputType = [
         type: "text"
     },
     {
+        group: "root",
         field: "business_type",
         label: "业务类型",
         type: "switch",
@@ -192,6 +199,45 @@ const inputType = [
                 label: "托管预备机器"
             }
         ]
+    },
+    {
+        group: "2,4",
+        field: "sales_id",
+        label: "业务员",
+        type: "component",
+        defaultData: [],
+        Component: props => (
+            <FilterSelect
+                placeholder="(请选择选项方可提交)"
+                suggestions={props.data}
+                onChange={props.setComponentParam}
+          />
+        )
+    },
+    {
+        group: "2,4",
+        field: "customer_id",
+        label: "客户",
+        type: "component",
+        defaultData: [],
+        Component: props => {
+            if(props.editData) {
+                if(props.editData.customer_id) {
+                    props.setComponentParam({
+                        id: props.editData.customer_id,
+                        name: props.editData.nickname
+                    });
+                }
+            }
+            return (
+                <FilterSelect
+                    value={props.editData ? props.editData.nickname : null}
+                    placeholder="(请选择选项方可提交)"
+                    suggestions={props.data}
+                    onChange={props.setComponentParam}
+              />
+            );
+        }
     },
     {
         field: "used_status",
@@ -256,7 +302,10 @@ class MachineLibraryList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 1
+            value: 1,
+            customers: [],
+            sales: [],
+            customer_error: {}
         };
     }
     componentDidMount() {
@@ -270,6 +319,74 @@ class MachineLibraryList extends React.Component {
         } else {
             columnData = [...columnDataFull];
         }
+
+        get('business/select_sales').then((res) => {
+            if (res.data.code === 1) {
+                this.setState({
+                    sales: res.data.data
+                })
+            } else {
+                alert(res.data.msg);
+            }
+        }).catch(error => {
+            console.log(error);
+            alert('获取该业务员名下的客户列表失败！');
+        });
+
+        inputType[inputType.findIndex(item => item.field=="sales_id")].Component = props => {
+            if(props.editData && this.state.customers.length===0 && (!this.state.customer_error[props.editData.id])) {
+                post('business/select_users', {
+                    salesman_id: props.editData.admin_id
+                }).then((res) => {
+                    if (res.data.code === 1) {
+                        this.setState(state => {
+                            state.customers = res.data.data;
+                            state.customer_error[props.editData.id] = res.data.data.length === 0 ? true : false;
+                            return state;
+                        });
+                    } else {
+                        this.setState(state => {
+                            state.customer_error[props.editData.id] = true;
+                            return state;
+                        });
+                        alert(res.data.msg);
+                    }
+                }).catch(error => {
+                    console.log(error);
+                    this.setState(state => {
+                        state.customer_error[props.editData.id] = true;
+                        return state;
+                    });
+                    alert('获取该业务员名下的客户列表失败！');
+                });
+            }
+            return (
+                <FilterSelect
+                    value={props.editData ? props.editData.name : null}
+                    placeholder="(请选择选项方可提交)"
+                    suggestions={props.data}
+                    onChange={(item) => {
+                        // 根据业务员的id获取客户列表
+                        post('business/select_users', {
+                            salesman_id: item.id
+                        }).then((res) => {
+                            if (res.data.code === 1) {
+                            this.setState({
+                                customers: res.data.data
+                            })
+                            } else {
+                                alert(res.data.msg);
+                            }
+                        }).catch(error => {
+                            console.log(error);
+                            alert('获取该业务员名下的客户列表失败！');
+                        });
+                        props.setComponentParam(item);
+                    }}
+              />
+            );
+        };
+
         this.props.machineLibrarysStores.getData();
         inputType[inputType.findIndex(item => item.field=="machineroom")].model = {
             getSubordinateData: this.getCabinetData.bind(this)
@@ -286,6 +403,9 @@ class MachineLibraryList extends React.Component {
     }
     changeData = (param,callbrak) => {
         const {machineLibrarysStores} = this.props;
+        if(param.customer_id) {
+            param.customer_id = param.customer_id.id;
+        }
         machineLibrarysStores.changeData(param).then((state) => {
           callbrak(state);
         });
@@ -297,6 +417,9 @@ class MachineLibraryList extends React.Component {
     }
     addData = (param,callbrak) => {
         // console.log(param);
+        if(param.customer_id) {
+            param.customer_id = param.customer_id.id;
+        }
         this.props.machineLibrarysStores.addData(param).then((state) => {
           callbrak(state);
         });
@@ -366,6 +489,16 @@ class MachineLibraryList extends React.Component {
     }
     render() {
         const {classes} = this.props;
+        inputType[inputType.findIndex(item => item.field=="sales_id")].defaultData = this.state.sales;
+        inputType[inputType.findIndex(item => item.field=="customer_id")].defaultData = this.state.customers.map(item => {
+            if(!item._name) {
+                item._name = "账号："+(item.name || "");
+                item._name += " 邮箱：" + (item.email || "");
+                item._name += " 昵称：" + (item.nickname || "");
+                item.name = item._name;
+            }
+            return item;
+        });
         inputType[inputType.findIndex(item => item.field=="machineroom")].defaultData = this.props.machineLibrarysStores.comprooms.map(item => {
             return {
               value: item.roomid,
@@ -443,7 +576,15 @@ class MachineLibraryList extends React.Component {
             operattext="机器资源"
             inputType={inputType}
             filterType={filterType}
-            headTitlesData={columnData}
+            headTitlesData={columnData.filter(item => {
+                if(this.state.value!=2 && this.state.value!=4) {
+                    if(item.id!="nickname"&&item.id!="name") {
+                        return item;
+                    }
+                } else {
+                    return item;
+                }
+            })}
             data={this.props.machineLibrarysStores.machineLibrarys}
             currentStores={this.props.machineLibrarysStores}
             addData={this.addData.bind(this)}

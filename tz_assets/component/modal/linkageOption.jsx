@@ -17,6 +17,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import {get} from "../../tool/http.js";
 import { inject,observer } from "mobx-react";
+const qs = require('qs');
 
 const styles = theme => ({
     paper: {
@@ -178,7 +179,8 @@ class LinkageOption extends React.Component {
                         this.type.indexOf("machine") > -1 ? [
                             <Button variant="contained" onClick={this.getMachineData({
                                 machineroom: this.state.currency,
-                                business_type: this.selectedMachineValue(this.type)
+                                business_type: this.selectedMachineValue(this.type),
+                                customer_id: qs.parse(location.search.substr(1)).id
                             })} color="primary">
                                 获取所属机器/机柜
                             </Button>,

@@ -10,6 +10,7 @@ import Approval from "../component/icon/approval.jsx";
 import CustomizeTableToolbar from "../component/listTable/customizeTableToolbar.jsx";
 import TabComponent from "../component/tabComponent.jsx";
 import { post } from "../tool/http.js";
+import { routerConfig } from "../config/common/config.js";
 
 const styles = theme => ({
     listTableComponent: {
@@ -50,6 +51,7 @@ const columnData = [
     { id: 'type', numeric: true, disablePadding: false, label: '类型' },
     { id: 'actual_payment', numeric: true, disablePadding: false, label: '实际金额' },
     { id: 'preferential_amount', numeric: true, disablePadding: false, label: '优惠金额' },
+    { id: 'review_status', numeric: true, disablePadding: false, label: '复核状态' },
     { id: 'pay_time', numeric: true, disablePadding: false, label: '支付时间' },
     { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
         {id: "business_number", label: "业务号" ,type: "text"},
@@ -88,11 +90,24 @@ const columnData = [
         title: "复核操作",
         content: "是否要对此流水提出复核申请？",
         input: true,
-        ok: (data) => {
+        select: true,
+        selectOptions: [
+            {
+                text: "有疑问需要解决",
+                value: 0
+            },
+            {
+                text: "复核通过",
+                value: 1,
+                default: true
+            }
+        ],
+        ok: (data,param) => {
             return new Promise((resolve,reject) => {
                 post("business/ordersReview",{
                     flow_id: data.flow_id,
-                    reason: data.note
+                    reason: data.note,
+                    status: param
                 }).then((res) => {
                     alert(res.data.msg);
                     if(res.data.code==1) {
@@ -103,7 +118,13 @@ const columnData = [
                 }).catch(reject);
             });
         }
-    },label: '操作'
+    }, extendUrl: [
+        {
+            title: "复核信息",
+            link: routerConfig.baseUrl+"/ordersReviewBig",
+            param: ["flow_id"]
+        }
+    ],label: '操作'
     }
 ];
 const inputType = [
@@ -130,6 +151,10 @@ class FinanceList extends React.Component {
         }
         this.props.financesStores.type = value;
         this.setState({ value });
+    }
+    //   更新数据
+    updata() {
+        this.props.financesStores.getData();
     }
     render() {
         const {classes} = this.props;

@@ -23,6 +23,7 @@ class InputExpansion extends React.Component {
     }
     setCurrentData = (param,type) => {
         if(type==1||type==2) {
+            param._id = param.id;
             param.id = param.machine_num;
             if(this.props.getData) {
                 this.props.getData(param.machine_num,type);

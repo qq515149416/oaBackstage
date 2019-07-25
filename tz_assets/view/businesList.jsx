@@ -16,6 +16,7 @@ import ManualRecharge from "../component/dialog/manualRecharge.jsx";
 // import Enable from "../component/icon/enable.jsx";
 import Button from '@material-ui/core/Button';
 import SelectPay from '../component/dialog/selectPay.jsx';
+import AddResource from '../component/dialog/addResource.jsx';
 const classNames = require('classnames');
 const dateFormat = require('dateformat');
 const qs = require('qs');
@@ -139,6 +140,9 @@ const columnData = [
                 ];
             }
         }
+        if(data.business_type==3) {
+            components.push(AddResource);
+        }
 
         let Element = extendElementsComponent(components);
           return <Element {...data} disposal_type={1} update={update} postUrl="business/renewresource" nameParam="machine_number" type="业务" />;
@@ -245,17 +249,29 @@ const inputType = [
  */
 const filterType = [
     {
-        field: "type",
-        label: "业务类型",
+        field: "status",
+        label: "业务状态",
         options: [
             {
-            view: "租用主机"
+                view: "付款使用中"
             },
             {
-            view: "托管主机"
+                view: "未付款使用"
             },
             {
-            view: "租用机柜"
+                view: "审核中"
+            },
+            {
+                view: "审核不通过"
+            },
+            {
+                view: "取消"
+            },
+            {
+                view: "到期"
+            },
+            {
+                view: "退款"
             }
         ],
         type: "select"
@@ -275,7 +291,7 @@ class BusinesList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: "all",
+            value: 1,
             customerInfo: {
                 id: qs.parse(location.search.substr(1)).id,
                 nickname: qs.parse(location.search.substr(1)).nickname,
@@ -289,7 +305,7 @@ class BusinesList extends React.Component {
     //   获取用户信息
     this.getCustomerInfo(qs.parse(location.search.substr(1)).id);
     //   通过客户ID获取对应的业务数据
-    this.props.businessStores.getData(qs.parse(location.search.substr(1)).id);
+    this.props.businessStores.getData(qs.parse(location.search.substr(1)).id,this.state.value);
     // inputType[inputType.findIndex(item => item.field=="client_name")].model = {
     //   getSubordinateData: this.setClientName.bind(this)
     // };
@@ -343,9 +359,10 @@ class BusinesList extends React.Component {
   }
 //   查询业务
   handleChange = (value) => {
-        this.props.businessStores.findData({
-            business_status: value
-        });
+        this.props.businessStores.getData(qs.parse(location.search.substr(1)).id,value);
+        // this.props.businessStores.findData({
+        //     business_status: value
+        // });
         this.setState({ value });
     }
     //   添加业务
@@ -397,32 +414,16 @@ class BusinesList extends React.Component {
     return (
         <TabComponent onChange={this.handleChange} type={this.state.value} types={[
             {
-                label: "全部",
-                value: "all"
-            },
-            {
-                label: "未付款",
+                label: "租用主机",
                 value: 1
             },
             {
-                label: "审核中",
-                value: 0
+                label: "托管主机",
+                value: 2
             },
             {
-                label: "审核不通过",
-                value: -2
-            },
-            {
-                label: "取消",
-                value: -1
-            },
-            {
-                label: "到期",
-                value: 5
-            },
-            {
-                label: "退款",
-                value: 6
+                label: "租用机柜",
+                value: 3
             }
         ]}>
              <ListTableComponent

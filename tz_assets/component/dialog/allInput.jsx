@@ -405,7 +405,13 @@ class AllInput extends React.Component {
                         if(!item.group) {
                             return true;
                         }
-                        return (item.group=="root" || (this[type] && this[type].value == item.group));
+                        if(item.group.indexOf(",")===-1) {
+                            return (item.group=="root" || (this[type] && this[type].value == item.group));
+                        } else {
+                            let rule = item.group.split(",");
+                            return (item.group=="root" || (this[type] && rule.indexOf(this[type].value+"") != -1));
+                        }
+
                     }).map(item => this.returnInput(item))
                 }
             </DialogContent>

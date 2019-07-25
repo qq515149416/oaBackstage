@@ -104,7 +104,8 @@ const columnData = [
             post("business/check",{
                 business_number: data.business_number,
                 business_status: param,
-                check_note: data.note
+                check_note: data.note,
+                parent_business: data.parent_business
             }).then((res) => {
                 if(res.data.code==1) {
                     alert("审核成功");
@@ -187,6 +188,7 @@ class CheckBusinessList extends React.Component {
         checkAll={this.checkAll.bind(this)}
         updata={this.updata.bind(this)}
         filterData={this.filterData.bind(this)}
+        nosort={true}
         tableRowStyle={data => {
             return {
                 classes: {
