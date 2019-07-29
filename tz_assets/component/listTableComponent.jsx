@@ -527,7 +527,6 @@ const styles = theme => ({
         if(this.props.prohibitedPage) {
             rowsPerPage = this.props.data.length;
         }
-
     const ExtendComponent = this.props.extendComponent || null;
       const currentStores = this.props.currentStores || this.props.commonStores;
       const excelHeadTitlesData = Array.from(this.props.headTitlesData);
@@ -633,8 +632,8 @@ const styles = theme => ({
                     if(this.props.tableRowStyle) {
                         styleParma = this.props.tableRowStyle(n);
                     }
-                    return (
-                      <TableRow
+                    return [
+                        <TableRow
                         hover
                         role="checkbox"
                         aria-checked={isSelected}
@@ -716,8 +715,9 @@ const styles = theme => ({
                             </TableCell>
                           ):null
                         }
-                      </TableRow>
-                    );
+                      </TableRow>,
+                      this.props.detailPanel && this.props.detailPanel(n,this.props.headTitlesData)
+                    ];
                   })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 49 * emptyRows }}>

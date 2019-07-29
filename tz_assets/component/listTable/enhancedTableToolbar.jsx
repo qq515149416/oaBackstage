@@ -78,7 +78,7 @@ const toolbarStyles = theme => ({
             } else {
                 return data.find(item => item.id == id).white_status == 0;
             }
-        }).map(id => Object.assign({},{
+        }).map(id => Object.assign(data.find(item => item.id == id),{
             id,
             business_number: data.find(item => item.id == id).business_number,
             business_status: param,

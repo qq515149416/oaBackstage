@@ -17,6 +17,12 @@ import ManualRecharge from "../component/dialog/manualRecharge.jsx";
 import Button from '@material-ui/core/Button';
 import SelectPay from '../component/dialog/selectPay.jsx';
 import AddResource from '../component/dialog/addResource.jsx';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import ExpansionComponent from "../component/expansionComponent.jsx";
 const classNames = require('classnames');
 const dateFormat = require('dateformat');
 const qs = require('qs');
@@ -50,6 +56,135 @@ const styles = theme => ({
         boxShadow: "0px 4px 5px 0px rgba(0, 0, 0, 0.1), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)"
     }
 });
+
+const StyledTableCell = withStyles(theme => ({
+    head: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    body: {
+      fontSize: 14,
+    },
+}))(TableCell);
+
+const StyledTableRow = withStyles(theme => ({
+    root: {
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.background.default,
+      },
+    },
+  }))(TableRow);
+
+class Machine extends React.Component {
+    state = {
+        rows: [],
+        expand: true
+    }
+    componentDidMount() {
+        get("business/showcabinetmachine",{
+            parent_business: this.props.data.id
+        }).then(res => {
+            if(res.data.code==1) {
+                this.setState({
+                    rows: res.data.data
+                });
+            }
+        })
+    }
+    componentWillReceiveProps(nextProps) {
+        get("business/showcabinetmachine",{
+            parent_business: nextProps.data.id
+        }).then(res => {
+            if(res.data.code==1) {
+                this.setState({
+                    rows: res.data.data
+                });
+            }
+        });
+    }
+    handleClick = () => {
+        this.setState(state => {
+            state.expand = !state.expand;
+            return state;
+        });
+    }
+    render() {
+        const { rows, expand } = this.state;
+        return (
+            rows.length ?
+            (
+                <TableRow>
+                    <TableCell colSpan={this.props.headTitlesData.length+1}>
+                        <div>
+                            {
+                            expand && (
+                                <Table>
+                                    <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell>业务号</StyledTableCell>
+                                        <StyledTableCell>机器编号</StyledTableCell>
+                                        <StyledTableCell align="right">资源类型</StyledTableCell>
+                                        <StyledTableCell align="right">IP</StyledTableCell>
+                                        <StyledTableCell align="right">所属机房</StyledTableCell>
+                                        <StyledTableCell align="right">所属机柜</StyledTableCell>
+                                        <StyledTableCell align="right">业务状态</StyledTableCell>
+                                        <StyledTableCell align="right">下架状态</StyledTableCell>
+                                        <StyledTableCell align="right">操作</StyledTableCell>
+                                    </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                    {rows.map(row => (
+                                        <StyledTableRow key={row.business_number}>
+                                            <StyledTableCell component="th" scope="row">
+                                                {row.business_number}
+                                            </StyledTableCell>
+                                            <StyledTableCell align="right">{row.machine_number}</StyledTableCell>
+                                            <StyledTableCell align="right">{row.type}</StyledTableCell>
+                                            <StyledTableCell align="right">{row.ip}</StyledTableCell>
+                                            <StyledTableCell align="right">{row.machineroom_name}</StyledTableCell>
+                                            <StyledTableCell align="right">{row.cabinets}</StyledTableCell>
+                                            <StyledTableCell align="right">{row.status}</StyledTableCell>
+                                            <StyledTableCell align="right">{row.remove}</StyledTableCell>
+                                            <StyledTableCell align="right">
+                                                <ExpansionComponent
+                                                    type="show"
+                                                    data={[
+                                                        {id: "client_name", label: "客户", type: "text"},
+                                                        {id: "sales_name", label: "业务员", type: "text"},
+                                                        {id: "money", label: "单价", type: "text"},
+                                                        {id: "length", label: "累计时长", type: "text"},
+                                                        {id: "start_time", label: "开始时间", type: "text"},
+                                                        {id: "endding_time", label: "结束时间", type: "text"},
+                                                        // {id: "remove", label: "下架状态", type: "text"},
+                                                        {id: "business_note", label: "业务备注", type: "text"},
+                                                        {id: "check_note", label: "审核备注", type: "text"}
+                                                    ].map((item,index) => {
+                                                        // console.log(item,i,arr);
+                                                        return {
+                                                        ...item,
+                                                        content: row[item.id]
+                                                        };
+                                                    })}
+                                                />
+                                            </StyledTableCell>
+                                        </StyledTableRow>
+                                    ))}
+                                    </TableBody>
+                                </Table>
+                            )
+                            }
+                            <Button fullWidth color="primary" onClick={this.handleClick}>
+                                {expand ? "收起" : "展开"}
+                            </Button>
+                        </div>
+                    </TableCell>
+                </TableRow>
+            ) : null
+        )
+    }
+}
+
+
 /**
  * @var columnData table渲染数据的字段的头部名称
  * @var columnData.operat 属性是table表格种对应的操作功能字段，分别有：
@@ -355,7 +490,7 @@ class BusinesList extends React.Component {
 //   更新业务时执行的函数
   updata() {
     this.getCustomerInfo(qs.parse(location.search.substr(1)).id);
-    this.props.businessStores.getData(qs.parse(location.search.substr(1)).id);
+    this.props.businessStores.getData(qs.parse(location.search.substr(1)).id,this.state.value);
   }
 //   查询业务
   handleChange = (value) => {
@@ -443,6 +578,9 @@ class BusinesList extends React.Component {
                 updata={this.updata.bind(this)}
                 delData={this.delData.bind(this)}
                 filterData={this.filterData.bind(this)}
+                detailPanel={(data,column) => (
+                    <Machine data={data} headTitlesData={column} />
+                )}
                 tableRowStyle={data => {
                     let endTime = Math.round(new Date(data.endding_time).getTime()/1000);
                     let nowTime = Math.round(new Date().getTime()/1000);

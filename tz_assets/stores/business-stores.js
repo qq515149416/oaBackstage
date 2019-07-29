@@ -70,7 +70,7 @@ class BusinessStores extends ActionBoundStores {
                     // this.addStoreData("business",BusinesStores,Object.assign(JSON.parse(data.resource_detail),{
                     //     id: res.data.data
                     // }));
-                    this.getData(data.client_id);
+                    this.getData(data.client_id,data.business_type);
                     resolve(true);
                 }else {
                     alert(res.data.msg);
