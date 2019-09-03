@@ -79,7 +79,8 @@ class GetResource extends React.Component {
         this.props.MachineRoomsStores.getData();
         post("business/getresource",{
             resource_type: this.state.resource_type,
-            order_id: this.props.id
+            order_id: this.props.id,
+            parent_business: this.props.parent_business
         }).then(res => {
             if(res.data.code == 1) {
                 this.setState({
@@ -136,7 +137,8 @@ class GetResource extends React.Component {
                 order_id: this.props.id,
                 resource_type: this.state.resource_type,
                 resource_id: this.state.resource_id,
-                change_reason: this.state.change_reason
+                change_reason: this.state.change_reason,
+                parent_business: this.props.parent_business
             }).then(res => {
                 alert(res.data.msg);
                 if(res.data.code==1) {
@@ -174,7 +176,8 @@ class GetResource extends React.Component {
         post("business/getresource",{
             resource_type: this.state.resource_type,
             [name]: event.target.value,
-            order_id: this.props.id
+            order_id: this.props.id,
+            parent_business: this.props.parent_business
         }).then(res => {
             if(res.data.code == 1) {
                 this.setState({
@@ -198,7 +201,7 @@ class GetResource extends React.Component {
     }
 
     select = () => {
-        if(this.props.resource_type<=3) {
+        if(this.props.resource_type<=3 && (!this.props.parent_business)) {
             return [
                 <FormControl fullWidth component="fieldset">
                     <FormLabel component="legend">机器类型</FormLabel>
@@ -244,7 +247,7 @@ class GetResource extends React.Component {
                     </TextField>
                 </FormControl>
             ];
-        } else if(this.props.resource_type==4) {
+        } else if(this.props.resource_type==4 && (!this.props.parent_business)) {
             return (
                 <FormControl fullWidth component="fieldset">
                     <FormLabel component="legend">运营商</FormLabel>

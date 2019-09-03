@@ -59,6 +59,7 @@ class UnderOperation extends React.Component {
         if(this.props.obtained_type == 1) {
             param["business_number"] = this.props.business_number;
             param["type"] = 1;
+            param["parent_business"] = this.props.parent_business;
             if(this.state.type != 1) {
                 param["remove_status"] = 0;
                 param["remove_reason"] = this.note.value;

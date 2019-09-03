@@ -32,7 +32,7 @@ const ShowStyle = theme => ({
         minWidth: theme.breakpoints.values.md
     },
     dialogContent: {
-        // height: 600
+        maxHeight: 600
     }
 });
 
@@ -50,7 +50,8 @@ class Show extends React.Component {
         super(props);
         this.state = {
             open: false,
-            isnext: false
+            isnext: false,
+            subordinate_data: {}
         };
     }
     componentDidMount() {
@@ -63,8 +64,18 @@ class Show extends React.Component {
     handleClose = () => {
         this.setState({ open: false });
     };
-    handleClick = () => {
-        this.setState(state => ({ isnext: !state.isnext }));
+    handleClick = item => event => {
+        if(item.getData&&item.source&&(!this.state.isnext)) {
+            item.getData(item.source).then(data => {
+                this.setState(state => {
+                    state.isnext = !state.isnext;
+                    state.subordinate_data = data;
+                    return state;
+                });
+            });
+        } else {
+            this.setState(state => ({ isnext: !state.isnext }));
+        }
     }
     render() {
         const {classes} = this.props;
@@ -100,12 +111,17 @@ class Show extends React.Component {
                                 </DialogContentText>
                             );
                         }else if(item.type=="subordinate") {
-                            let content_data = JSON.parse(item.content);
+                            let content_data = {};
+                            if(!item.getData) {
+                                content_data = JSON.parse(item.content);
+                            } else {
+                                content_data = this.state.subordinate_data;
+                            }
                             return (
                                 <DialogContentText className={classes.title_container}>
                                     <div>
                                         <span className={classes.title_type}>{item.label}：</span>
-                                        <Button onClick={this.handleClick} variant="contained" color="primary">
+                                        <Button onClick={this.handleClick(item)} variant="contained" color="primary">
                                             {this.state.isnext ? "点击隐藏" : "点击查看更多"}
                                         </Button>
                                     </div>
@@ -115,10 +131,10 @@ class Show extends React.Component {
                                                 item.subordinate.map(e => (
                                                     <p>
                                                         {
-                                                            content_data[e.id] && [
+                                                            content_data[e.id] != undefined ? [
                                                                 <span>{e.label}：</span>,
                                                                 <span>{content_data[e.id]}</span>
-                                                            ]
+                                                            ] : null
                                                         }
                                                     </p>
                                                 ))
@@ -153,9 +169,15 @@ class Show extends React.Component {
                                                     <TableRow>
                                                         {
                                                            item.tableData.map(e => (
+                                                               e.type == "component" ? (
+                                                                <TableCell>
+                                                                    {e.render(data)}
+                                                                </TableCell>
+                                                               ) : (
                                                                 <TableCell>
                                                                     {data[e.id]}
                                                                 </TableCell>
+                                                               )
                                                            ))
                                                         }
                                                     </TableRow>

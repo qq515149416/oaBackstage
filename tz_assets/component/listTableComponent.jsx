@@ -685,7 +685,8 @@ const styles = theme => ({
                                     // console.log(item,i,arr);
                                     return {
                                       ...item,
-                                      content: n[item.id]
+                                      content: n[item.id],
+                                      source: n
                                     };
                                   })}
                                 />)

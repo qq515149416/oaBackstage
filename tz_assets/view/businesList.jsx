@@ -23,6 +23,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ExpansionComponent from "../component/expansionComponent.jsx";
+import GetResource from "../component/dialog/GetResource.jsx";
 const classNames = require('classnames');
 const dateFormat = require('dateformat');
 const qs = require('qs');
@@ -149,6 +150,27 @@ class Machine extends React.Component {
                                                 <ExpansionComponent
                                                     type="show"
                                                     data={[
+                                                        {id: "resource_detail", label: "资源详情", type: "subordinate", subordinate: [
+                                                            {id: "machine_num", label: "机器编号", type: "text"},
+                                                            {id: "cpu", label: "CPU", type: "text"},
+                                                            {id: "memory", label: "内存", type: "text"},
+                                                            {id: "harddisk", label: "硬盘", type: "text"},
+                                                            {id: "bandwidth", label: "带宽", type: "text"},
+                                                            {id: "protect", label: "防御", type: "text"},
+                                                            {id: "loginname", label: "账号", type: "text"},
+                                                            {id: "loginpass", label: "密码", type: "text"},
+                                                            {id: "cabinets", label: "机柜编号", type: "text"}
+                                                        ],getData: data => new Promise((resolve,reject) => {
+                                                            get("business/cabinetmachinedetail",{
+                                                                business_id: data.id
+                                                            }).then(res => {
+                                                                if(res.data.code==1) {
+                                                                    resolve(res.data.data);
+                                                                } else {
+                                                                    resolve({});
+                                                                }
+                                                            }).catch(reject);
+                                                        })},
                                                         {id: "client_name", label: "客户", type: "text"},
                                                         {id: "sales_name", label: "业务员", type: "text"},
                                                         {id: "money", label: "单价", type: "text"},
@@ -162,9 +184,17 @@ class Machine extends React.Component {
                                                         // console.log(item,i,arr);
                                                         return {
                                                         ...item,
-                                                        content: row[item.id]
+                                                        content: row[item.id],
+                                                        source: row
                                                         };
                                                     })}
+                                                />
+                                                <GetResource {...row} postUrl="business/change" nameParam="business_number" type="更换" />
+                                                <Disposal {...row} disposal_type={1} postUrl="under/apply_under" nameParam="business_number" type="下架" />
+                                                <ExpansionComponent
+                                                    type="link"
+                                                    title="更换记录"
+                                                    link={routerConfig.baseUrl+"/resourceHistory?id="+row.id+"&parent_business="+row.parent_business}
                                                 />
                                             </StyledTableCell>
                                         </StyledTableRow>

@@ -42,7 +42,8 @@ class ClearMachineLibrary extends React.Component {
         post(this.props.postUrl,{
             business_number: this.props.business_number,
             type: 1,
-            loginpass: this.loginpass.value
+            loginpass: this.loginpass.value,
+            parent_business: this.props.parent_business
         }).then((data)=>{
             if(data.data.code==1) {
                 alert(data.data.msg);

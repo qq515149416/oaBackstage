@@ -51,7 +51,8 @@ const columnData = [
                 post("business/checkchange",{
                     change_status: param,
                     change_id: data.id,
-                    check_note: data.note
+                    check_note: data.note,
+                    parent_business: data.parent_business
                 }).then((res) => {
                     if(res.data.code==1) {
                         alert(res.data.msg);
@@ -86,7 +87,8 @@ class ResourceHistoryList extends React.Component {
     componentDidMount() {
         if(location.search.indexOf("?id") > -1) {
             this.props.resourceHistorysStores.getData({
-                order_id: qs.parse(location.search.substr(1)).id
+                order_id: qs.parse(location.search.substr(1)).id,
+                ...qs.parse(location.search.substr(1))
             });
         } else {
             this.props.resourceHistorysStores.getData();
@@ -96,7 +98,8 @@ class ResourceHistoryList extends React.Component {
     updata() {
         if(location.search.indexOf("?id") > -1) {
             this.props.resourceHistorysStores.getData({
-                order_id: qs.parse(location.search.substr(1)).id
+                order_id: qs.parse(location.search.substr(1)).id,
+                ...qs.parse(location.search.substr(1))
             });
         } else {
             this.props.resourceHistorysStores.getData();

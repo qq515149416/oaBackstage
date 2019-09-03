@@ -9,8 +9,16 @@ import Approval from "../component/icon/approval.jsx";
 // import Tab from '@material-ui/core/Tab';
 import CustomizeTableToolbar from "../component/listTable/customizeTableToolbar.jsx";
 import TabComponent from "../component/tabComponent.jsx";
-import { post } from "../tool/http.js";
+import { post, get } from "../tool/http.js";
 import { routerConfig } from "../config/common/config.js";
+
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Collapse from '@material-ui/core/Collapse';
 
 const styles = theme => ({
     listTableComponent: {
@@ -42,6 +50,337 @@ const styles = theme => ({
 //     ],label: '操作'
 //     }
 // ];
+
+class ShowComponent extends React.Component {
+    state = {
+        open: false,
+        data: null,
+        isnext: false
+    }
+    handleOpen = () => {
+        get("business/showOrderDetail",{
+            order_sn: this.props.data.order_sn
+        }).then(res => {
+            if(res.data.code==1) {
+                this.setState({
+                    open: true,
+                    data: res.data.data
+                });
+            }
+        });
+    }
+    handleClose = () => {
+        this.setState({
+            open: false
+        });
+    }
+    handleClick = item => event => {
+        this.setState(state => ({ isnext: !state.isnext }));
+    }
+    subordinate = (data) => {
+        if((data.type==1 || data.type==2) && data.resource) {
+            return (
+                <DialogContentText style={{
+                    overflow: "hidden",
+                    marginBottom: 20
+                }}>
+                    <div>
+                        <span style={{
+                            fontWeight: "bold",
+                            float: "left",
+                            fontSize: "16px",
+                        }}>资源详细：</span>
+                        <Button onClick={this.handleClick(data.resource)} variant="contained" color="primary">
+                            {this.state.isnext ? "点击隐藏" : "点击查看更多"}
+                        </Button>
+                    </div>
+                    <div style={{
+                        float: "left",
+                        fontSize: "16px",
+                    }}>
+                        <Collapse in={this.state.isnext}>
+                            {
+                                data.resource.cpu ? (
+                                    <p>
+                                        CPU ：{data.resource.cpu}
+                                    </p>
+                                ) : null
+                            }
+                            {
+                                data.resource.harddisk ? (
+                                    <p>
+                                        硬盘 ：{data.resource.harddisk}
+                                    </p>
+                                ) : null
+                            }
+                            {
+                                data.resource.memory ? (
+                                    <p>
+                                        内存 ：{data.resource.memory}
+                                    </p>
+                                ) : null
+                            }
+                            {
+                                data.resource.bandwidth ? (
+                                    <p>
+                                        带宽 ：{data.resource.bandwidth}
+                                    </p>
+                                ) : null
+                            }
+                            {
+                                data.resource.protect ? (
+                                    <p>
+                                        防护 ：{data.resource.protect}
+                                    </p>
+                                ) : null
+                            }
+                            {
+                                data.resource.machine_type ? (
+                                    <p>
+                                        型号 ：{data.resource.machine_type}
+                                    </p>
+                                ) : null
+                            }
+                        </Collapse>
+                    </div>
+                </DialogContentText>
+            );
+        }
+        if((data.type==11 || data.type==12) && data.resource) {
+            return (
+                <DialogContentText style={{
+                    overflow: "hidden",
+                    marginBottom: 20
+                }}>
+                    <div>
+                        <span style={{
+                            fontWeight: "bold",
+                            float: "left",
+                            fontSize: "16px",
+                        }}>资源详细：</span>
+                        <Button onClick={this.handleClick(data.resource)} variant="contained" color="primary">
+                            {this.state.isnext ? "点击隐藏" : "点击查看更多"}
+                        </Button>
+                    </div>
+                    <div style={{
+                        float: "left",
+                        fontSize: "16px",
+                    }}>
+                        <Collapse in={this.state.isnext}>
+                            {
+                                data.resource.name ? (
+                                    <p>
+                                        套餐名称 ：{data.resource.name}
+                                    </p>
+                                ) : null
+                            }
+                            {
+                                data.resource.description ? (
+                                    <p>
+                                        套餐描述 ：{data.resource.description}
+                                    </p>
+                                ) : null
+                            }
+                            {
+                                data.resource.protection_value ? (
+                                    <p>
+                                        套餐防御值 ：{data.resource.protection_value}
+                                    </p>
+                                ) : null
+                            }
+                        </Collapse>
+                    </div>
+                </DialogContentText>
+            )
+        }
+        return null;
+    }
+    render() {
+        const { open, data } = this.state;
+        return [
+            <Button color="primary" onClick={this.handleOpen}>
+                查看
+            </Button>,
+             <Dialog open={open} fullWidth maxWidth="lg" onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">查看详细信息</DialogTitle>
+                {
+                    data && (
+                        <DialogContent>
+                            {
+                                data.duration ? (
+                                    <DialogContentText style={{
+                                        overflow: "hidden",
+                                        marginBottom: 20
+                                    }}>
+                                        <span style={{
+                                            fontWeight: "bold",
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>时长：</span>
+                                        <p style={{
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>
+                                            {data.duration}
+                                        </p>
+                                    </DialogContentText>
+                                ) : null
+                            }
+                            {
+                                data.machine_num ? (
+                                    <DialogContentText style={{
+                                        overflow: "hidden",
+                                        marginBottom: 20
+                                    }}>
+                                        <span style={{
+                                            fontWeight: "bold",
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>机器编号：</span>
+                                        <p style={{
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>
+                                            {data.machine_num}
+                                        </p>
+                                    </DialogContentText>
+                                ) : null
+                            }
+                            {
+                                data.machine_type ? (
+                                    <DialogContentText style={{
+                                        overflow: "hidden",
+                                        marginBottom: 20
+                                    }}>
+                                        <span style={{
+                                            fontWeight: "bold",
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>机器型号：</span>
+                                        <p style={{
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>
+                                            {data.machine_type}
+                                        </p>
+                                    </DialogContentText>
+                                ) : null
+                            }
+                            {
+                                data.machineroom ? (
+                                    <DialogContentText style={{
+                                        overflow: "hidden",
+                                        marginBottom: 20
+                                    }}>
+                                        <span style={{
+                                            fontWeight: "bold",
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>机房名称：</span>
+                                        <p style={{
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>
+                                            {data.machineroom}
+                                        </p>
+                                    </DialogContentText>
+                                ) : null
+                            }
+                            {
+                                data.price ? (
+                                    <DialogContentText style={{
+                                        overflow: "hidden",
+                                        marginBottom: 20
+                                    }}>
+                                        <span style={{
+                                            fontWeight: "bold",
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>单价：</span>
+                                        <p style={{
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>
+                                            {data.price}
+                                        </p>
+                                    </DialogContentText>
+                                ) : null
+                            }
+                            {
+                                data.resource_type ? (
+                                    <DialogContentText style={{
+                                        overflow: "hidden",
+                                        marginBottom: 20
+                                    }}>
+                                        <span style={{
+                                            fontWeight: "bold",
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>资源种类：</span>
+                                        <p style={{
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>
+                                            {data.resource_type}
+                                        </p>
+                                    </DialogContentText>
+                                ) : null
+                            }
+                            {
+                               this.subordinate(data)
+                            }
+                            {
+                                data.pay_time ? (
+                                    <DialogContentText style={{
+                                        overflow: "hidden",
+                                        marginBottom: 20
+                                    }}>
+                                        <span style={{
+                                            fontWeight: "bold",
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>付款时间：</span>
+                                        <p style={{
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>
+                                            {data.pay_time}
+                                        </p>
+                                    </DialogContentText>
+                                ) : null
+                            }
+                            {
+                                data.end_time ? (
+                                    <DialogContentText style={{
+                                        overflow: "hidden",
+                                        marginBottom: 20
+                                    }}>
+                                        <span style={{
+                                            fontWeight: "bold",
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>结束时间：</span>
+                                        <p style={{
+                                            float: "left",
+                                            fontSize: "16px",
+                                        }}>
+                                            {data.end_time}
+                                        </p>
+                                    </DialogContentText>
+                                ) : null
+                            }
+                        </DialogContent>
+                    )
+                }
+                <DialogActions>
+                    <Button onClick={this.handleClose} color="primary">
+                        关闭
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        ];
+    }
+}
 
 const columnData = [
     { id: 'customer_email', numeric: true, disablePadding: false, label: '客户' },
@@ -83,6 +422,12 @@ const columnData = [
                 id: "resource_type",
                 label: "资源类型",
                 type: "text"
+            },
+            {
+                id: "action",
+                label: "操作",
+                type: "component",
+                render: (data) => (<ShowComponent data={data} />)
             }
         ]}
     ],extendConfirm: {

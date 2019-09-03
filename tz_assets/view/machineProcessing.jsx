@@ -72,7 +72,8 @@ class DisposalList extends React.Component {
                         return new Promise((resolve,reject) => {
                             post("under/do_under",{
                                 business_number: data.business_number,
-                                type: 1
+                                type: 1,
+                                parent_business: data.parent_business
                             }).then((res) => {
                                 if(res.data.code==1) {
                                     alert(res.data.msg);
@@ -143,7 +144,8 @@ class DisposalList extends React.Component {
                     return new Promise((resolve,reject) => {
                         post("under/do_under",{
                             business_number: data.business_number,
-                            type: 1
+                            type: 1,
+                            parent_business: data.parent_business
                         }).then((res) => {
                             if(res.data.code==1) {
                                 alert(res.data.msg);

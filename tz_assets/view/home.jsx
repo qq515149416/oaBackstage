@@ -63,6 +63,18 @@ const types = {
             { id: 'ip', label: 'IP地址' }
         ]
     },
+    overdueDIP: {
+        url: "overdue/showOverdueDIP",
+        columnData: [
+            { id: 'business_number', label: '业务编号' },
+            { id: 'status', label: '使用状态' },
+            { id: 'price', label: '单价' },
+            { id: 'sales_name', label: '业务员' },
+            { id: 'nickname', label: '客户昵称' },
+            { id: 'end_at', label: '到期时间' },
+            { id: 'target_ip', label: '绑定IP' }
+        ]
+    },
     overdueRes: {
          url: "overdue/showOverdueRes",
          columnData: [
@@ -284,6 +296,7 @@ class Home extends React.Component {
                 {label: "5天内到期机器", value: "overdueMachine"},
                 {label: "5天内到期机柜", value: "overdueCabinet"},
                 {label: "5天内到期资源", value: "overdueRes"},
+                {label: "5天内到期高防", value: "overdueDIP"},
                 {label: "未支付使用的机器", value: "unpaidMachine"},
                 {label: "最近下架机器", value: "xiaJiaMachine"},
                 {label: "未支付使用的机柜", value: "unpaidCabinet"},

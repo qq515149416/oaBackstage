@@ -42,7 +42,8 @@ class Disposal extends React.Component {
                 post("under/apply_under",{
                     business_number: this.props.business_number,
                     remove_reason: this.remove_reason.value,
-                    type: 1
+                    type: 1,
+                    parent_business: this.props.parent_business
                 }).then((data)=>{
                     if(data.data.code==1) {
                         alert(data.data.msg);

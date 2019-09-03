@@ -20,6 +20,7 @@ let columnData = [
     { id: 'resourcetype', numeric: true, disablePadding: false, label: '业务类型' },
     { id: 'length', numeric: true, disablePadding: false, label: '累计时长' },
     { id: 'price', numeric: true, disablePadding: false, label: '单价' },
+    { id: 'ip', numeric: true, disablePadding: false, label: 'IP' },
     { id: 'updated_at', numeric: true, disablePadding: false, label: '下架时间' },
     { id: 'remove_status', numeric: true, disablePadding: false, label: '下架状态' },
     { id: 'operat', numeric: true, disablePadding: false, label: '操作',  extend: true, extendData: [
@@ -68,6 +69,7 @@ class DisposalHistoryList extends React.Component {
                 { id: 'resourcetype', numeric: true, disablePadding: false, label: '业务类型' },
                 { id: 'length', numeric: true, disablePadding: false, label: '累计时长' },
                 { id: 'price', numeric: true, disablePadding: false, label: '单价' },
+                { id: 'ip', numeric: true, disablePadding: false, label: 'IP' },
                 { id: 'updated_at', numeric: true, disablePadding: false, label: '下架时间' },
                 { id: 'remove_status', numeric: true, disablePadding: false, label: '下架状态' },
                 { id: 'operat', numeric: true, disablePadding: false, label: '操作',  extend: true, extendData: [
