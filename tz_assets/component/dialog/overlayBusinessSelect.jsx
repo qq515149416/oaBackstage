@@ -48,6 +48,8 @@ class OverlayBusinessSelect extends React.Component {
                     overlay: true,
                     data: res.data.data
                 });
+            } else {
+                alert(res.data.msg);
             }
         });
 
@@ -57,20 +59,34 @@ class OverlayBusinessSelect extends React.Component {
             overlay: false
         });
     }
-    use = () => {
+    postUse = (state = false) => {
+        let expansion_param = {
+
+        };
+        if(state) {
+            expansion_param["is_ignore"] = 1;
+        }
         post(this.props.postUrl.indexOf("overlay") === -1 ? "overlay/useOverlayToDIP" : this.props.postUrl,{
             business_number: this.props.business_number,
             belong_id: this.state.itemChecked,
-            order_id: this.props.id
+            order_id: this.props.id,
+            ...expansion_param
         }).then((data)=>{
             if(data.data.code==1) {
                 alert(data.data.msg);
                 this.props.update && this.props.update();
                 this.close();
+            }else if(data.data.code==-1) {
+                if(confirm(data.data.msg)) {
+                    this.postUse(true);
+                }
             } else {
                 alert(data.data.msg);
             }
         });
+    }
+    use = () => {
+        this.postUse();
     }
     setCheckBoxValue = (name,value) => {
         this.selectedData = this.state.data.find(item => item.id==value);

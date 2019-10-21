@@ -13,6 +13,8 @@ import IconButton from '@material-ui/core/IconButton';
 import RenewalFeeIcon from "../icon/renewalFee.jsx";
 import MenuItem from '@material-ui/core/MenuItem';
 import {post} from "../../tool/http";
+import "layui-laydate/src/theme/default/laydate.css";
+import laydate from 'layui-laydate';
 
 const styles = theme => ({
     iconButton: {
@@ -29,8 +31,21 @@ class ManualRecharge extends React.Component {
         }
     }
     open = () => {
+
         this.setState({
             manualRecharge: true
+        });
+    }
+    entered = () => {
+        laydate.render({
+            elem: '#pay_at', //指定元素
+            type: 'datetime',
+            // format: 'yyyy-MM-dd HH:mm',
+            done: (value, date, endDate) => {
+                this.time = {
+                    value,
+                }
+            }
         });
     }
     close = () => {
@@ -75,6 +90,7 @@ class ManualRecharge extends React.Component {
             <Dialog
           open={this.state.manualRecharge}
           onClose={this.close}
+          onEntered={this.entered}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">手动充值</DialogTitle>
@@ -141,7 +157,7 @@ class ManualRecharge extends React.Component {
               fullWidth
               inputRef = {ref => this.note = ref}
             />
-            <TextField
+            {/* <TextField
                 id="datetime-local"
                 label="到账时间"
                 type="datetime-local"
@@ -150,6 +166,15 @@ class ManualRecharge extends React.Component {
                 }}
                 inputRef={(ref) => this.time = ref}
                 fullWidth
+            /> */}
+            <TextField
+              margin="dense"
+              id="pay_at"
+              label="到账时间"
+              InputLabelProps={{
+                    shrink: true,
+                }}
+              fullWidth
             />
           </DialogContent>
           <DialogActions>

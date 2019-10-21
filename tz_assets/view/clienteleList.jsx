@@ -14,6 +14,7 @@ import PersonnelTransfer from "../component/dialog/personnelTransfer.jsx";
 import { routerConfig } from "../config/common/config.js";
 import Finance from "../component/icon/finance.jsx";
 import Backup from "@material-ui/icons/Backup";
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 const classNames = require('classnames');
 
 const styles = theme => ({
@@ -111,6 +112,12 @@ const columnData = [
             link: `${routerConfig.baseUrl}/statisticalPerformance`,
             param: ["id"],
             icon: <Finance />
+        },
+        {
+            title: "发票管理",
+            link: `${routerConfig.baseUrl}/invoice`,
+            param: ["id"],
+            icon: <InsertDriveFileIcon />
         }
     ], label: '操作' }
 ];

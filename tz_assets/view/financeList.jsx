@@ -397,6 +397,7 @@ const columnData = [
         {id: "before_money", label: "支付前余额", type: "text"},
         {id: "after_money", label: "支付后余额" ,type: "text"},
         {id: "created_at", label: "创建时间" ,type: "text"},
+        {id: "note", label: "增值备注" ,type: "text"},
         {id: "order_arr", label: "订单详情" ,type: "table",tableData: [
             {
                 id: "business_sn",

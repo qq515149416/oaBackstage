@@ -56,6 +56,7 @@ const columnData = [
     { id: 'machineroom_name', numeric: true, disablePadding: true, label: '所属机房' },
     { id: 'cabinets', numeric: true, disablePadding: true, label: '所属机柜' },
     { id: 'remove', numeric: true, disablePadding: true, label: '下架状态' },
+    { id: 'endding_time', numeric: true, disablePadding: true, label: '到期时间' },
     { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
         {id: "order_number", label: "订单号", type: "text"},
         {id: "resource_detail", label: "资源详情", type: "subordinate", subordinate: [
@@ -74,7 +75,7 @@ const columnData = [
         {id: "money", label: "单价" ,type: "text"},
         {id: "length", label: "时长" ,type: "text"},
         {id: "start_time", label: "业务开始时间" ,type: "text"},
-        {id: "endding_time", label: "业务结束时间" ,type: "text"},
+        // {id: "endding_time", label: "业务结束时间" ,type: "text"},
         {id: "business_note", label: "业务备注" ,type: "text"},
         {id: "check_note", label: "审核备注" ,type: "text"}
     ], extendConfirm: {

@@ -21,6 +21,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Pay from './pay.jsx';
 import { post, get } from "../../tool/http";
+import Switch from '@material-ui/core/Switch';
 
 const classNames = require('classnames');
 
@@ -69,7 +70,8 @@ class RenewalFee extends React.Component {
             },
             resource: {
                 [this.props.order_sn ? this.props.order_sn : 0]: true
-            }
+            },
+            primary: true
         }
         this.renewalFeeDates = [
             {
@@ -119,11 +121,19 @@ class RenewalFee extends React.Component {
         if(confirm_next) {
             this.props.length = this.state.currency;
             this.props.order_note = this.note.value;
+            const expansion = {
+
+            }
+            if(this.state.primary) {
+                // delete this.props.business_number;
+                expansion["business_number"] = this.props.business_number?this.props.business_number:undefined;
+            }
             post(this.props.postUrl,{
             //    ...this.props,
                 orders: Object.keys(resource).filter(item => resource[item]),
-               business_number: this.props.business_number?this.props.business_number:undefined,
+            //    business_number: this.props.business_number?this.props.business_number:undefined,
             //    order_sn: this.props.order_sn ? this.props.order_sn : undefined,
+                ...expansion,
                price: this.props.money,
                length: this.props.length,
                order_note: this.props.order_note,
@@ -162,6 +172,12 @@ class RenewalFee extends React.Component {
     handleChange = name => event => {
         this.setState({
           [name]: event.target.value,
+        });
+    }
+
+    handleSwitchChange = name => event => {
+        this.setState({
+          [name]: event.target.checked,
         });
     }
 
@@ -206,7 +222,13 @@ class RenewalFee extends React.Component {
                         <p>机器编号：{this.props.machine_number}</p>,
                         <p>IP：{this.props.resource_detail_json.ip}</p>,
                         <p>单价：{this.props.money}</p>,
-                        <p>到期时间：{this.props.endding_time}</p>
+                        <p>到期时间：{this.props.endding_time}</p>,
+                        <p>主机续费：<Switch
+                        checked={this.state.primary}
+                        onChange={this.handleSwitchChange('primary')}
+                        value="primary"
+                        color="primary"
+                      /></p>
                     ]
                 }
             </DialogContentText>

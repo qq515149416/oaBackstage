@@ -24,6 +24,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ExpansionComponent from "../component/expansionComponent.jsx";
 import GetResource from "../component/dialog/GetResource.jsx";
+import OtherConsumption from "../component/dialog/otherConsumption.jsx";
 const classNames = require('classnames');
 const dateFormat = require('dateformat');
 const qs = require('qs');
@@ -262,6 +263,7 @@ const columnData = [
     { id: 'resource_detail_json.machineroom_name', numeric: true, disablePadding: true, label: '所属机房' },
     { id: 'cabinets', numeric: true, disablePadding: true, label: '所属机柜' },
     { id: 'remove', numeric: true, disablePadding: true, label: '下架状态' },
+    { id: 'endding_time', numeric: true, disablePadding: true, label: '到期时间' },
     { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
         {id: "order_number", label: "订单号", type: "text"},
         {id: "resource_detail", label: "资源详情", type: "subordinate", subordinate: [
@@ -280,7 +282,7 @@ const columnData = [
         {id: "money", label: "单价" ,type: "text"},
         {id: "length", label: "时长" ,type: "text"},
         {id: "start_time", label: "业务开始时间" ,type: "text"},
-        {id: "endding_time", label: "业务结束时间" ,type: "text"},
+        // {id: "endding_time", label: "业务结束时间" ,type: "text"},
         {id: "business_note", label: "业务备注" ,type: "text"}
     ],extendElement: (data,update) => {
         let components = [];
@@ -593,9 +595,9 @@ class BusinesList extends React.Component {
         ]}>
              <ListTableComponent
                 title={`客户账号：${customerInfo.nickname}&nbsp;&nbsp;&nbsp;&nbsp;客户余额：${customerInfo.money}&nbsp;&nbsp;&nbsp;&nbsp;客户账号状态：${customerInfo.status}&nbsp;&nbsp;&nbsp;&nbsp;业务员：${customerInfo.clerk_name}`}
-                operatBtns={<ManualRecharge postUrl="business/recharge" nameParam="email" {...customerInfo} buttonEl={(open) => (<Button variant="contained" onClick={open} color="primary">
+                operatBtns={[<ManualRecharge postUrl="business/recharge" nameParam="email" {...customerInfo} buttonEl={(open) => (<Button variant="contained" onClick={open} color="primary">
                 充值
-              </Button>)} />}
+                </Button>)} />,<OtherConsumption {...customerInfo} />]}
                 operattext="业务信息"
                 listFilterComponentClassName={classes.listFilterComponent}
                 className={classes.listTableComponent}

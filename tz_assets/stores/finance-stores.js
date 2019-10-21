@@ -4,6 +4,7 @@ import ActionBoundStores from "./common/action-bound-stores.js";
 const dateFormat = require('dateformat');
 class FinanceStores {
     constructor(data) {
+        data.id = data.flow_id;
         extendObservable(this,data);
     }
 }

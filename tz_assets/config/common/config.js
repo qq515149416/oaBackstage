@@ -36,6 +36,9 @@ import BusinessStatisticssStores from "../../stores/businessStatistics-stores";
 import OverlaysStores from "../../stores/overlay-stores";
 import OverlayBusinesssStores from "../../stores/overlayBusiness-stores";
 import ResourceHistorysStores from "../../stores/resourceHistory-stores";
+import InvoicesStores from "../../stores/invoice-stores";
+import ApisStores from "../../stores/api-stores";
+import StatisticalOverviewStores from "../../stores/statisticalOverview-stores";
 
 
 
@@ -83,7 +86,10 @@ export const stores = {
     businessStatisticssStores: new BusinessStatisticssStores(),
     overlaysStores: new OverlaysStores(),
     overlayBusinesssStores: new OverlayBusinesssStores(),
-    resourceHistorysStores: new ResourceHistorysStores()
+    resourceHistorysStores: new ResourceHistorysStores(),
+    invoicesStores: new InvoicesStores(),
+    apisStores: new ApisStores(),
+    statisticalOverviewStores: new StatisticalOverviewStores(),
 }
 export const domIds = [
     "user_list",
@@ -126,5 +132,8 @@ export const domIds = [
     "businessStatistics",
     "overlay",
     "overlayBusiness",
-    "resourceHistory"
+    "resourceHistory",
+    "invoice",
+    "api",
+    "statisticalOverview"
 ];

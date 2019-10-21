@@ -101,7 +101,7 @@ class UpdateOrder extends React.Component {
                     type="datetime-local"
                     fullWidth
                     onChange={this.handleChange('end_time')}
-                    defaultValue={dateFormat(new Date(end_time),"isoDateTime",true).split("+")[0]}
+                    defaultValue={dateFormat(new Date(end_time),"yyyy-mm-dd'T'HH:MM:ss")}
                     InputLabelProps={{
                         shrink: true,
                     }}

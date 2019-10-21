@@ -130,7 +130,7 @@ class OverlayBusinessList extends React.Component {
         inputType[inputType.findIndex(item => item.field == 'overlay_id')].defaultData = this.props.overlaysStores.overlays.map(item => {
             return {
                 value: item.id,
-                text: "名称："+item.name + "  |  机房：" + item.machine_room_name
+                text: "编号："+item.id+"  |  名称："+item.name + "  |  机房：" + item.machine_room_name + "  |  价格："  + item.price
              }
         });
         let WrapComponent = (

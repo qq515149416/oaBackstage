@@ -96,6 +96,8 @@ const inputType = [
               return 1;
           case "联通公司":
               return 2;
+          case "BGP":
+              return 3;
         }
       }
     },
@@ -179,6 +181,9 @@ const filterType = [
       },
       {
         view: "联通公司"
+      },
+      {
+        view: "BGP"
       }
     ],
     type: "select"

@@ -41,7 +41,9 @@ import BusinessStatisticssList from "../view/businessStatisticssList.jsx";
 import OverlayList from "../view/overlayList.jsx";
 import OverlayBusinessList from "../view/overlayBusinessList.jsx";
 import ResourceHistoryList from "../view/resourceHistoryList.jsx";
-
+import InvoiceList from "../view/invoiceList.jsx";
+import ApiList from "../view/apiList.jsx";
+import StatisticalOverviewShow from "../view/statisticalOverviewShow.jsx";
 
 
 
@@ -91,5 +93,8 @@ export default () => [
     <Route path={`${baseUrl}/businessStatistics`} component={BusinessStatisticssList} />,
     <Route path={`${baseUrl}/overlay`} component={OverlayList} />,
     <Route path={`${baseUrl}/overlayBusiness`} component={OverlayBusinessList} />,
-    <Route path={`${baseUrl}/resourceHistory`} component={ResourceHistoryList} />
+    <Route path={`${baseUrl}/resourceHistory`} component={ResourceHistoryList} />,
+    <Route path={`${baseUrl}/invoice`} component={InvoiceList} />,
+    <Route path={`${baseUrl}/api`} component={ApiList} />,
+    <Route path={`${baseUrl}/statisticalOverview`} component={StatisticalOverviewShow} />,
 ];
