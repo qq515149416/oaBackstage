@@ -49,6 +49,39 @@ class Socket extends React.Component {
   }
 }
 
+class SocketComponent extends React.Component {
+    getSocket = () => new Promise((resolve,reject) => {
+        axios.get("/socketurl").then(resp => {
+            if(resp.data.code==1) {
+                const socket = io(resp.data.data);
+                get("show/pwdDepartment").then(res => {
+                    if(res.data.code == 1) {
+                        // socket.emit("connect","start"); res.data.data.id
+                        socket.emit("login",{
+                            "depart": res.data.data.id
+                        });
+                        socket.on("new_work_order",content=>{
+                            if(content.work_order_status=="0") {
+                                if(!document.getElementById("orderListAudio")) {
+                                    let audio = new Audio();
+                                    audio.src = require("../resource/export.mp3");
+                                    audio.setAttribute("id","orderListAudio");
+                                    audio.loop = false;
+                                    audio.autoplay = true;
+                                    document.body.appendChild(audio);
+                                }
+                                if(document.getElementById("orderListAudio").ended) {
+                                    document.getElementById("orderListAudio").play();
+                                }
+                            }
+                        });
+                    }
+                });
+                resolve(socket);
+            }
+        }).catch(reject);
+    })
+}
 class SocketWarper extends React.Component {
     constructor(...arg) {
         super(arg);
@@ -100,4 +133,4 @@ class SocketWarper extends React.Component {
     }
 }
 
-export default SocketWarper;
+export default SocketComponent;

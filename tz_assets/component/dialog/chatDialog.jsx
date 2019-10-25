@@ -19,7 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ChangeStatus from "./changeStatus.jsx";
 import TextField from '@material-ui/core/TextField';
 import { get,post } from '../../tool/http';
-import { SocketContext } from '../../config/socket.jsx';
+import SocketComponent from '../../config/socket.jsx';
 const classNames = require('classnames');
 
 const styles = (theme) => ({
@@ -75,11 +75,7 @@ let listened = {
 
 };
 
-class ChatDialog extends React.Component {
-    // 声明需要使用的Context属性
-    static contextTypes = {
-        socket: PropTypes.object
-    }
+class ChatDialog extends SocketComponent {
     state = {
       open: false,
       contents: [],
@@ -129,43 +125,45 @@ class ChatDialog extends React.Component {
         }
     }
     handleClickOpen = (data) => {
-        const { socket } = this.context;
         const { work_order_number } = data;
-        socket.off("new_work_chat");
-        socket.emit("login",{
-            "work": work_order_number
-        });
-        socket.on("new_work_chat",content=>{
-            this.setState(state=>{
-                state.contents.push(content);
-                return state;
+        this.getSocket().then(socket => {
+            socket.off("new_work_chat");
+            socket.emit("login",{
+                "work": work_order_number
             });
-            setTimeout(() => {
-                this.container.scrollTop = this.content_container.offsetHeight;
-            },500);
-        });
-
-        this.setState({
-            attr: data
-        });
-
-        get("work_answer/show",{
-            work_number: work_order_number
-        }).then(res => {
-            if(res.data.code == 1) {
-                this.setState({
-                    contents: res.data.data.content,
-                    open: true,
-                    attr: {
-                        ...this.state.attr,
-                        bandwidth: res.data.data.business.bandwidth,
-                        protect: res.data.data.business.protect,
-                        ip: res.data.data.business.ip,
-                        cabinets: res.data.data.business.cabinets
-                    }
+            socket.on("new_work_chat",content=>{
+                this.setState(state=>{
+                    state.contents.push(content);
+                    return state;
                 });
-            }
+                setTimeout(() => {
+                    this.container.scrollTop = this.content_container.offsetHeight;
+                },500);
+            });
+
+            this.setState({
+                attr: data
+            });
+
+            get("work_answer/show",{
+                work_number: work_order_number
+            }).then(res => {
+                if(res.data.code == 1) {
+                    this.setState({
+                        contents: res.data.data.content,
+                        open: true,
+                        attr: {
+                            ...this.state.attr,
+                            bandwidth: res.data.data.business.bandwidth,
+                            protect: res.data.data.business.protect,
+                            ip: res.data.data.business.ip,
+                            cabinets: res.data.data.business.cabinets
+                        }
+                    });
+                }
+            });
         });
+
     };
 
     handleClose = () => {

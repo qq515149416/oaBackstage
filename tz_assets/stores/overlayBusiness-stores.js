@@ -20,6 +20,9 @@ class OverlayBusinesssStores extends ActionBoundStores {
             Object.assign(data,{
                 user_id: qs.parse(location.search.substr(1)).id
             });
+            if(!data.price) {
+                delete data.price;
+            }
             post("overlay/buyNowByAdmin",data).then((res) => {
                 if(res.data.code==1) {
                     this.getData({

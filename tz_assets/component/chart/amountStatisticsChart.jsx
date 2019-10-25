@@ -7,9 +7,21 @@ import 'echarts/lib/component/title'
 
 
 class AmountStatisticsChart extends React.Component {
-    renderChart (data) {
+    renderChart (data,props) {
         const seriesExpansion = {};
-        if(this.props.showShadow) {
+        const optionExpansion = {};
+        if(props.title) {
+            optionExpansion["title"] = {
+                text: props.title,
+                textAlign: "left"
+            };
+        }
+        if(props.splitNumber) {
+            optionExpansion["yAxis"] = {
+                splitNumber: props.splitNumber
+            };
+        }
+        if(props.showShadow) {
             seriesExpansion["areaStyle"] = {
                 color: {
                     type: 'linear',
@@ -27,6 +39,7 @@ class AmountStatisticsChart extends React.Component {
             };
         }
         const option = {
+            ...optionExpansion,
             tooltip: {
                 trigger: "item",
                 backgroundColor: "#0d91dd",
@@ -35,13 +48,13 @@ class AmountStatisticsChart extends React.Component {
             },
             xAxis: {
                 type: 'category',
-                data: ['2019-04', '2019-05', '2019-06', '2019-07', '2019-08', '2019-09', '2019-10']
+                data: data.map(item => item["time"])
             },
             yAxis: {
                 type: 'value'
             },
             series: [{
-                data,
+                data: data.map(item => item["amount"]),
                 type: 'line',
                 ...seriesExpansion
             }]
@@ -52,7 +65,16 @@ class AmountStatisticsChart extends React.Component {
         myChart.setOption(option, true);
     }
     componentDidMount () {
-        this.renderChart(this.props.chartData)
+        const chartData = this.props.chartData ? this.props.chartData : [];
+        this.renderChart(chartData,{
+            ...this.props
+        });
+    }
+    componentWillReceiveProps (nextProps) {
+        const chartData = nextProps.chartData ? nextProps.chartData : [];
+        this.renderChart(chartData,{
+            ...nextProps
+        });
     }
     render () {
         return (<div style={{

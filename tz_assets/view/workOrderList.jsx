@@ -11,6 +11,7 @@ import TabComponent from "../component/tabComponent.jsx";
 import { inject,observer } from "mobx-react";
 import { get } from "../tool/http.js";
 import ChatDialog from "../component/dialog/chatDialog.jsx";
+import SocketComponent from '../config/socket.jsx';
 const qs = require('qs');
 
 const styles = theme => ({
@@ -69,10 +70,7 @@ const inputType = [
 ];
 @inject("workOrdersStores")
 @observer
-class WorkOrderList extends React.Component {
-    static contextTypes = {
-        socket: PropTypes.object
-    }
+class WorkOrderList extends SocketComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -94,28 +92,29 @@ class WorkOrderList extends React.Component {
         };
     }
     componentDidMount() {
-        const { socket } = this.context;
-        get("show/pwdDepartment").then(res => {
-            if(res.data.code == 1) {
-                if(res.data.data.sign==2) {
+        this.getSocket().then(socket => {
+            get("show/pwdDepartment").then(res => {
+                if(res.data.code == 1) {
+                    if(res.data.data.sign==2) {
 
-                    this.setState(state => {
-                        state["types"].unshift({
-                            label: "待处理",
-                            value: 0
+                        this.setState(state => {
+                            state["types"].unshift({
+                                label: "待处理",
+                                value: 0
+                            });
+                            state["value"] = 0;
+                            return state;
                         });
-                        state["value"] = 0;
-                        return state;
+                    }
+                    socket.emit("connect","start");
+                    socket.emit("login",res.data.data.id);
+                    socket.on("new_work_order",content=>{
+                        this.props.workOrdersStores.addData(content);
                     });
                 }
-                socket.emit("connect","start");
-                socket.emit("login",res.data.data.id);
-                socket.on("new_work_order",content=>{
-                    this.props.workOrdersStores.addData(content);
-                });
-            }
-        })
-        this.props.workOrdersStores.getData();
+            })
+            this.props.workOrdersStores.getData();
+        });
     }
     delData = (selectedData,callbrak) => {
         const {workOrdersStores} = this.props;

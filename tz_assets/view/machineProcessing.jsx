@@ -12,6 +12,7 @@ import { inject,observer } from "mobx-react";
 import { get, post } from "../tool/http.js";
 import ChatDialog from "../component/dialog/chatDialog.jsx";
 import ClearMachineLibrary from "../component/dialog/clearMachineLibrary.jsx";
+import SocketComponent from '../config/socket.jsx';
 
 const disposalStyles = theme => ({
     listTableComponent: {
@@ -242,10 +243,8 @@ const DisposalListWepper = withStyles(disposalStyles)(DisposalList);
 
 @inject("workOrdersStores")
 @observer
-class WorkOrderList extends React.Component {
-    static contextTypes = {
-        socket: PropTypes.object
-    }
+class WorkOrderList extends SocketComponent {
+
     constructor(props) {
         super(props);
         this.columnData = [
@@ -296,36 +295,38 @@ class WorkOrderList extends React.Component {
         this.inputType = [];
     }
     componentDidMount() {
-        const { socket } = this.context;
-        get("show/pwdDepartment").then(res => {
-            if(res.data.code == 1) {
-                // socket.emit("connect","start"); res.data.data.id
-                socket.emit("login",{
-                    "depart": res.data.data.id
-                });
-                socket.on("new_work_order",content=>{
-                    // if(content.work_order_status=="0") {
-                    //     if(!document.getElementById("orderListAudio")) {
-                    //         let audio = new Audio();
-                    //         audio.src = require("../resource/export.mp3");
-                    //         audio.setAttribute("id","orderListAudio");
-                    //         audio.loop = false;
-                    //         audio.autoplay = true;
-                    //         document.body.appendChild(audio);
-                    //     }
-                    //     if(document.getElementById("orderListAudio").ended) {
-                    //         document.getElementById("orderListAudio").play();
-                    //     }
-                    // }
-                    console.log(content);
-                    this.props.workOrdersStores.addData(content);
-                });
-            }
+        this.getSocket().then(socket => {
+            get("show/pwdDepartment").then(res => {
+                if(res.data.code == 1) {
+                    // socket.emit("connect","start"); res.data.data.id
+                    socket.emit("login",{
+                        "depart": res.data.data.id
+                    });
+                    socket.on("new_work_order",content=>{
+                        // if(content.work_order_status=="0") {
+                        //     if(!document.getElementById("orderListAudio")) {
+                        //         let audio = new Audio();
+                        //         audio.src = require("../resource/export.mp3");
+                        //         audio.setAttribute("id","orderListAudio");
+                        //         audio.loop = false;
+                        //         audio.autoplay = true;
+                        //         document.body.appendChild(audio);
+                        //     }
+                        //     if(document.getElementById("orderListAudio").ended) {
+                        //         document.getElementById("orderListAudio").play();
+                        //     }
+                        // }
+                        console.log(content);
+                        this.props.workOrdersStores.addData(content);
+                    });
+                }
+            });
+
+            this.props.workOrdersStores.getData({
+                work_order_status: this.props.type
+            });
         });
 
-        this.props.workOrdersStores.getData({
-            work_order_status: this.props.type
-        });
     }
     delData = (selectedData,callbrak) => {
         const {workOrdersStores} = this.props;

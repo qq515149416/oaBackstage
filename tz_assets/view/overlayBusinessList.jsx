@@ -61,12 +61,14 @@ const inputType = [
     {
         field: "buy_num",
         label: "数量",
-        type: "text"
+        type: "text",
+        helperText: "若防护总值超过300G,无法通过购买叠加包增加防护值"
     },
     {
         field: "price",
         label: "价格",
-        type: "text"
+        type: "text",
+        helperText: "若价格不填就是默认价格"
     }
 ]
 

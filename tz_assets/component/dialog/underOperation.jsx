@@ -20,6 +20,11 @@ const styles = theme => ({
         ...theme.tableIconButton
     }
 });
+
+/**
+ * @class UnderOperation
+ * 下架审核
+ *  */
 class UnderOperation extends React.Component {
     constructor(props) {
         super(props);
