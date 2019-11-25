@@ -27,7 +27,8 @@ class UpdateOrder extends React.Component {
         this.state = {
             updateOrder: false,
             price: this.props.price,
-            end_time: this.props.end_time
+            end_time: this.props.end_time,
+            monthly: this.props.monthly
         }
     }
     open = () => {
@@ -38,7 +39,8 @@ class UpdateOrder extends React.Component {
                 this.setState({
                     updateOrder: true,
                     price: res.data.data[0].price,
-                    end_time: res.data.data[0].end_time
+                    end_time: res.data.data[0].end_time,
+                    monthly:  res.data.data[0].monthly
                 });
             }
         });
@@ -60,7 +62,8 @@ class UpdateOrder extends React.Component {
             post(this.props.postUrl,{
                 id: this.props.id,
                 price: this.state.price,
-                end_time: Math.round(new Date(this.state.end_time).getTime()/1000)
+                end_time: Math.round(new Date(this.state.end_time).getTime()/1000),
+                monthly: this.state.monthly
             }).then((data)=>{
                 if(data.data.code==1) {
                     this.close();
@@ -105,6 +108,16 @@ class UpdateOrder extends React.Component {
                     InputLabelProps={{
                         shrink: true,
                     }}
+                />
+                <TextField
+                    id="monthly"
+                    label="月结日"
+                    type="number"
+                    helperText="只能填数字范围0-31"
+                    value={this.state.monthly}
+                    onChange={this.handleChange('monthly')}
+                    margin="normal"
+                    fullWidth
                 />
             </DialogContentText>
           </DialogContent>

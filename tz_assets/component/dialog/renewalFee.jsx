@@ -119,8 +119,8 @@ class RenewalFee extends React.Component {
             return item.value == this.state.currency;
         }).label+"?");
         if(confirm_next) {
-            this.props.length = this.state.currency;
-            this.props.order_note = this.note.value;
+            let _length = this.state.currency;
+            let order_note = this.note.value;
             const expansion = {
 
             }
@@ -135,8 +135,8 @@ class RenewalFee extends React.Component {
             //    order_sn: this.props.order_sn ? this.props.order_sn : undefined,
                 ...expansion,
                price: this.props.money,
-               length: this.props.length,
-               order_note: this.props.order_note,
+               length: _length,
+               order_note: order_note,
                client_id: this.props.customer_id?this.props.customer_id:this.props.client_id,
                resource_type: this.props.resource_type?this.props.resource_type:this.props.business_type
             }).then((data)=>{

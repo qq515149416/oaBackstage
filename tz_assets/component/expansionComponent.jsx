@@ -75,7 +75,7 @@ class ExpansionComponent extends React.Component {
     }
     toLink = url => event => {
         // console.log(url,event);
-        location.href =  url;
+        window.parent.location.href = url.replace("/admin","/tz_admin/show");
     }
     handleChange = name => event => {
         this.setState({

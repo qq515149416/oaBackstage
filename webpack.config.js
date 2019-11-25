@@ -1,17 +1,41 @@
 const path = require('path');
 const package = require("./package.json");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: './tz_assets/app.js',
     output: {
-      filename: 'bundle.js',
+      filename: '[chunkhash]_bundle.js',
       path: path.resolve(__dirname, '../TZ/public/tz_assets'),
       publicPath: "/tz_assets/"
     },
     plugins: [
         new CleanWebpackPlugin(['tz_assets'],{
             root: path.resolve(__dirname, '../TZ/public')
+        }),
+        new ParallelUglifyPlugin({
+            cacheDir: '.cache/',
+            sourceMap: true,
+            uglifyJS:{
+                output: {
+                    comments: false
+                },
+                compress: {
+
+                }
+            }
+        }),
+        new webpack.DllReferencePlugin({
+            context: __dirname,
+            manifest: require("../TZ/public/lib-manifest.json")
+        }),
+        new HtmlWebpackPlugin({
+            title: '腾正后台',
+            template: path.join(__dirname,"tz_assets/template/app.html"),
+            filename: path.resolve(__dirname, '../TZ/public/tz_assets/template.html')
         })
     ],
     mode: "production",
@@ -33,7 +57,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.(png|jpg|gif|svg)$/i,
+                test: /\.(png|jpg|gif)$/i,
                 use: [
                     {
                         loader: 'url-loader',
@@ -44,7 +68,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(woff|woff2|eot|ttf|otf|mp3)$/,
+                test: /\.(woff|woff2|eot|ttf|otf|mp3|svg)$/,
                 use: [
                     'file-loader'
                 ]
@@ -55,7 +79,7 @@ module.exports = {
             }
         ]
     },
-    devtool: "source-map",
+    // devtool: "source-map",
     node: {fs: 'empty'},
     externals: [
         {'./cptable': 'var cptable'},

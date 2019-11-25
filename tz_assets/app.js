@@ -11,5 +11,13 @@ $(function() {
         }
     });
 });
+// window.addEventListener("unload",() => {
+//     console.log("卸载了");
+//     domIds.forEach(item => {
+//         if(document.getElementById(item)) {
+//             route(ReactDOM,route_config,item);
+//         }
+//     });
+// });
 
 

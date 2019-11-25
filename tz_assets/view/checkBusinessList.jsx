@@ -56,6 +56,7 @@ const columnData = [
     { id: 'machineroom_name', numeric: true, disablePadding: true, label: '所属机房' },
     { id: 'cabinets', numeric: true, disablePadding: true, label: '所属机柜' },
     { id: 'remove', numeric: true, disablePadding: true, label: '下架状态' },
+    { id: 'monthly', numeric: true, disablePadding: true, label: '月结日' },
     { id: 'endding_time', numeric: true, disablePadding: true, label: '到期时间' },
     { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
         {id: "order_number", label: "订单号", type: "text"},

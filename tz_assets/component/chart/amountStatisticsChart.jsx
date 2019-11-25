@@ -40,6 +40,7 @@ class AmountStatisticsChart extends React.Component {
         }
         const option = {
             ...optionExpansion,
+            grid: this.props.position || {},
             tooltip: {
                 trigger: "item",
                 backgroundColor: "#0d91dd",
@@ -82,7 +83,7 @@ class AmountStatisticsChart extends React.Component {
             height: "324px"
         }}>
             <div id={this.props.domId+"ChartDom"} style={{
-                width: '100%',
+                width: this.props.width || "100%",
                 height: '100%'
             }}></div>
             {this.props.children && this.props.children}

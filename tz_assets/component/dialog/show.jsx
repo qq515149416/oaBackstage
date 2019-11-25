@@ -27,6 +27,7 @@ const ShowStyle = theme => ({
     title_content: {
         float: "left",
         fontSize: "16px",
+        margin: 0
     },
     dialog: {
         minWidth: theme.breakpoints.values.md

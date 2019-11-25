@@ -44,6 +44,7 @@ import ResourceHistoryList from "../view/resourceHistoryList.jsx";
 import InvoiceList from "../view/invoiceList.jsx";
 import ApiList from "../view/apiList.jsx";
 import StatisticalOverviewShow from "../view/statisticalOverviewShow.jsx";
+import NewClienteleList from "../view/new/clienteleList.jsx";
 
 
 
@@ -73,7 +74,7 @@ export default () => [
     <Route path={`${baseUrl}/whitelist`} component={WhitelistList} />,
     <Route path={`${baseUrl}/work_order_type`} component={WorkOrderTypeList} />,
     <Route path={`${baseUrl}/work_order`} component={WorkOrderList} />,
-    <Route path="/tz_admin" component={Home} exact />,
+    <Route path="/admin" component={Home} exact />,
     <Route path={`${baseUrl}/hr/departmentview`} component={DepartmentList} />,
     <Route path={`${baseUrl}/hr/position`} component={PositionList} />,
     <Route path={`${baseUrl}/hr/usermanagement`} component={UserList} />,
@@ -97,4 +98,5 @@ export default () => [
     <Route path={`${baseUrl}/invoice`} component={InvoiceList} />,
     <Route path={`${baseUrl}/api`} component={ApiList} />,
     <Route path={`${baseUrl}/statisticalOverview`} component={StatisticalOverviewShow} />,
+    <Route path={`${baseUrl}/new_app`} component={NewClienteleList} />
 ];

@@ -7,16 +7,17 @@ import Tab from '@material-ui/core/Tab';
 
 const styles = theme => ({
     root: {
-    marginTop: 10,
+        marginTop: 10,
       flexGrow: 1,
       width: '100%',
-      backgroundColor: "transparent",
+      backgroundColor: "transparent"
     },
     tab: {
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+        boxShadow: "0px 0px 0px 0px rgba(0,0,0,0.2), 0px -1px 5px 0px rgba(0,0,0,0.14), 0px 0px 0px 0px rgba(0,0,0,0)"
     },
     tab_item_text: {
-        fontSize: "14px"
+        fontSize: 16
     }
 });
 
@@ -48,7 +49,7 @@ class TabComponent extends React.Component {
             {
                 this.props.types.map(item => (
                     <Tab classes={{
-                        label: classes.tab_item_text
+                        wrapper: classes.tab_item_text
                     }} label={item.label} value={item.value} />
                 ))
             }

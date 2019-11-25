@@ -58,7 +58,8 @@ class AddBusiness extends React.Component {
       business_note: '',
       business_type: this.props.ziyuan + '',
       sales: [],
-      clients: []
+      clients: [],
+      monthly: ""
     };
     this.radioData = [{
       value: '1',
@@ -139,7 +140,8 @@ class AddBusiness extends React.Component {
         money: this.state.money,
         length: this.state.length,
         business_note: this.state.business_note,
-        business_type: this.state.business_type
+        business_type: this.state.business_type,
+        monthly: this.state.monthly
       }).then(res => {
         if (res.data.code === 1) {
           this.close();
@@ -241,6 +243,16 @@ class AddBusiness extends React.Component {
                 this.newHandleChange('client_id',item);
             }}
           />
+          {/* <TextField
+              id="monthly"
+              label="月结日(与客户有商谈好月结日期的业务，直接填商谈好的日期(号数)，无的直接填0，或者不填(默认为0)，范围0-31)"
+              type="number"
+              helperText="与客户有商谈好月结日期的业务，直接填商谈好的日期(号数)，无的直接填0，或者不填(默认为0)，范围0-31"
+              value={this.state.monthly}
+              onChange={this.handleChange('monthly')}
+              margin="normal"
+              fullWidth
+          /> */}
           <TextField
               id="money"
               label="价格/单价"

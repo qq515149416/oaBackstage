@@ -15,16 +15,26 @@ class SelectExpansion extends React.Component {
         super(props);
         this.state = {
             inputContent: "",
-            buttonName: this.props.param.buttonName
+            buttonName: this.props.param.buttonName,
+            resourceInputError: false
         };
     }
     handleOpen = type => event => {
         this.selectModal.handleOpen(type);
     }
     handleChange = name => event => {
+        if(!/^\d*$/.test(event.target.value)) {
+            this.setState({
+                [name]: event.target.value,
+                resourceInputError: true
+            });
+            this.props.setComponentParam("");
+            return;
+        }
         this.props.setComponentParam(event.target.value);
         this.setState({
           [name]: event.target.value,
+          resourceInputError: false
         });
     }
     setCurrentData = (param,type) => {
@@ -69,6 +79,8 @@ class SelectExpansion extends React.Component {
                             fullWidth
                             onChange={this.handleChange('inputContent')}
                             margin="normal"
+                            error={this.state.resourceInputError}
+                            helperText="只能填数字"
                         />
                     )
                 }

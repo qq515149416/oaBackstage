@@ -1,4 +1,4 @@
 {
     "presets": ["env","react","mobx","stage-2","stage-1"],
-    "plugins": ["transform-decorators-legacy"]
+    "plugins": ["transform-decorators-legacy","transform-runtime"]
 }

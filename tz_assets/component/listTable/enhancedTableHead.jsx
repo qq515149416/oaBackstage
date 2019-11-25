@@ -36,7 +36,7 @@ const styles = theme => ({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(','),
-    fontSize: 14,
+    fontSize: 16
   }
 });
 

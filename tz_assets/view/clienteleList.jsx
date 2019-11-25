@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import ListTableComponent from "../component/listTableComponent.jsx";
 import { inject,observer } from "mobx-react";
 import {post} from "../tool/http.js";
@@ -121,6 +121,17 @@ const columnData = [
         }
     ], label: '操作' }
 ];
+
+// const columnData = [
+//     { field: 'name', title: '用户名' },
+//     { field: 'nickname', title: '昵称' },
+//     { field: 'email', title: '邮箱' },
+//     { field: 'money', title: '余额' },
+//     { field: 'clerk_name', title: '业务员' },
+//     { field: 'status', title: '状态' },
+//     { field: 'created_at', title: '创建时间' },
+// ];
+
 /**
  * @var inputType 添加数据时对应字段的输入组件
  */
@@ -228,28 +239,28 @@ class ClienteleList extends React.Component {
     render() {
         const {classes} = this.props;
         return (
-          <ListTableComponent
-            title="CRM管理"
-            operattext="客户"
-            addTitle="绑定客户"
-            headTitlesData={columnData}
-            inputType={inputType}
-            filterType={filterType}
-            data={this.props.clientelesStores.clienteles}
-            addData={this.addData.bind(this)}
-            updata={this.updata.bind(this)}
-            filterData={this.filterData.bind(this)}
-            currentStores={this.props.clientelesStores}
-            tableRowStyle={data => {
-                return {
-                    classes: {
-                        root: classNames({
-                            [classes.expired]: data.haveBusiness == 0
-                        })
-                    }
-                };
-            }}
-          />
+            <ListTableComponent
+                title="CRM管理"
+                operattext="客户"
+                addTitle="绑定客户"
+                headTitlesData={columnData}
+                inputType={inputType}
+                filterType={filterType}
+                data={this.props.clientelesStores.clienteles}
+                addData={this.addData.bind(this)}
+                updata={this.updata.bind(this)}
+                filterData={this.filterData.bind(this)}
+                currentStores={this.props.clientelesStores}
+                tableRowStyle={data => {
+                    return {
+                        classes: {
+                            root: classNames({
+                                [classes.expired]: data.haveBusiness == 0
+                            })
+                        }
+                    };
+                }}
+            />
         );
       }
 }

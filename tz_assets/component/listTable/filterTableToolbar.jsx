@@ -36,7 +36,7 @@ const styles = theme => ({
   },
   button: {
     margin: `0 ${theme.spacing.unit}px`,
-    height: 30,
+    height: 35,
     position: "relative",
     top: theme.spacing.unit * 2
   }

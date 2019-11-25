@@ -14,7 +14,8 @@ const theme = createMuiTheme({
     },
     tableIconButton: {
         width: 35,
-        height: 35
+        height: 35,
+        padding: 0
     },
     typography: {
         // Use the system font instead of the default Roboto font.
@@ -33,9 +34,9 @@ const theme = createMuiTheme({
             '"Segoe UI Emoji"',
             '"Segoe UI Symbol"',
         ].join(','),
-        htmlFontSize: 14,
-        fontSize: 16,
-        useNextVariants: true,
+        // htmlFontSize: 12,
+        fontSize: 14,
+        useNextVariants: true
     }
 });
 // mobx错误捕获

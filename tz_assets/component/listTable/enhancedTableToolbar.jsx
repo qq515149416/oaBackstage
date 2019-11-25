@@ -36,6 +36,7 @@ const toolbarStyles = theme => ({
     },
     title: {
       flex: '0 0 auto',
+      fontSize: 16
     },
     iconButton: {
         ...theme.tableIconButton
@@ -112,7 +113,9 @@ const toolbarStyles = theme => ({
             </Typography>
           ) : (
             <div>
-                <Typography variant="title" id="tableTitle" dangerouslySetInnerHTML={{__html: props.title}}>
+                <Typography style={{
+                    marginRight: 16
+                }} variant="title" id="tableTitle" dangerouslySetInnerHTML={{__html: props.title}}>
                 </Typography>
                 {props.operatBtns}
             </div>

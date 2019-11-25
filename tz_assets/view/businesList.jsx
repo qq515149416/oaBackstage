@@ -263,6 +263,7 @@ const columnData = [
     { id: 'resource_detail_json.machineroom_name', numeric: true, disablePadding: true, label: '所属机房' },
     { id: 'cabinets', numeric: true, disablePadding: true, label: '所属机柜' },
     { id: 'remove', numeric: true, disablePadding: true, label: '下架状态' },
+    { id: 'monthly', numeric: true, disablePadding: true, label: '月结日' },
     { id: 'endding_time', numeric: true, disablePadding: true, label: '到期时间' },
     { id: 'operat', numeric: true, disablePadding: false, extend: true, extendData: [
         {id: "order_number", label: "订单号", type: "text"},
@@ -351,6 +352,12 @@ const inputType = [
     label: "时长",
     type: "text"
   },
+  // {
+  //   field: "monthly",
+  //   label: "月结日(与客户有商谈好月结日期的业务，直接填商谈好的日期(号数)，无的直接填0，或者不填(默认为0)，范围0-31)",
+  //   type: "text",
+  //   helperText: "与客户有商谈好月结日期的业务，直接填商谈好的日期(号数)，无的直接填0，或者不填(默认为0)，范围0-31"
+  // },
   {
     field: "business_note",
     label: "业务备注",
