@@ -96,17 +96,17 @@ class DisposalHistoryList extends React.Component {
             columnData = [
                 { id: 'customer_name', numeric: true, disablePadding: false, label: '客户' },
                 { id: 'business_name', numeric: true, disablePadding: false, label: '业务员' },
-                { id: 'resource', numeric: true, disablePadding: false, label: '资源' },
+                { id: 'resource_detail', numeric: true, disablePadding: false, label: '资源' },
                 { id: 'resourcetype', numeric: true, disablePadding: false, label: '资源类型' },
                 { id: 'length', numeric: true, disablePadding: false, label: '累计时长' },
                 { id: 'price', numeric: true, disablePadding: false, label: '单价' },
                 { id: 'updated_at', numeric: true, disablePadding: false, label: '下架时间' },
                 { id: 'remove_status', numeric: true, disablePadding: false, label: '下架状态' },
                 { id: 'operat', numeric: true, disablePadding: false, label: '操作',  extend: true, extendData: [
-                    {id: "business_sn", label: "业务号", type: "text"},
-                    {id: "order_sn", label: "订单号", type: "text"},
+                    {id: "parent_businessnum", label: "业务号", type: "text"},
+                    {id: "resource_businessnum", label: "资源号", type: "text"},
                     {id: "remove_reason", label: "下架原因", type: "text"},
-                    {id: "machine_sn", label: "资源值", type: "text"},
+                    {id: "resource_num", label: "资源值", type: "text"},
                 ]}
             ]
             break;
@@ -122,7 +122,7 @@ class DisposalHistoryList extends React.Component {
                     value: 1
                 },
                 {
-                    label: "订单记录",
+                    label: "资源记录",
                     value: 2
                 }
             ]}>

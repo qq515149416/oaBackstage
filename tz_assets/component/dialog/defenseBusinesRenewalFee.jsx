@@ -12,6 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import RenewalFeeIcon from "../icon/renewalFee.jsx";
 import MenuItem from '@material-ui/core/MenuItem';
+import NewPay from './newPay.jsx';
 import { get } from "../../tool/http";
 const dateFormat = require('dateformat');
 
@@ -69,8 +70,9 @@ class DefenseBusinesRenewalFee extends React.Component {
             }).then((data)=>{
                 if(data.data.code==1) {
                     alert(data.data.msg);
-                    this.close();
-                    this.props.update && this.props.update();
+                    // this.close();
+                    this.pay.handleClickOpen(data.data.data);
+                    // this.props.update && this.props.update();
                 } else {
                     alert(data.data.msg);
                 }
@@ -83,7 +85,7 @@ class DefenseBusinesRenewalFee extends React.Component {
         });
     }
     render() {
-        const { classes } = this.props;
+        const { classes, user_id } = this.props;
         return [
             <Tooltip title="高防业务续费">
                     <IconButton className={classes.iconButton} onClick={this.open} aria-label="renewalFee">
@@ -137,7 +139,8 @@ class DefenseBusinesRenewalFee extends React.Component {
               确定
             </Button>
           </DialogActions>
-        </Dialog>
+        </Dialog>,
+        <NewPay getRef={(ref) => this.pay = ref} client={user_id} update={this.props.update} />
         ];
     }
 }

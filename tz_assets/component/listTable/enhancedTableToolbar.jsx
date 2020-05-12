@@ -100,6 +100,27 @@ const toolbarStyles = theme => ({
             })
         }
     }
+    const checkAllUnderData = (result,param) => {
+      const { selectedData,updata } = props;
+      props.handleSelectAllEmptyClick();
+      const postAllData = selectedData.filter(id => data.find(item => item.id == id).remove_status==1).map(id => ({
+        id,
+        status: param,
+        note: result.note
+      }));
+      props.checkUnderAll(postAllData,(checkAllIng) => {
+          Promise.all(checkAllIng).then((ret) => {
+              selectedData.forEach((item,index) => {
+                if(ret[index]) {
+                  console.log("ID:"+item+"，审批成功");
+                } else {
+                  console.warn("ID:"+item+"，审批失败");
+                }
+              });
+              updata && updata();
+          });
+      })
+  }
     return (
       <Toolbar
         className={classNames(classes.root, {
@@ -153,6 +174,33 @@ const toolbarStyles = theme => ({
                                 text: "审核不通过",
                                 value: -2,
                                 default: true
+                            }
+                        ]
+                    )}
+                    />
+                  )
+              }
+              {
+                props.checkUnderAll && (
+                    <ExpansionComponent
+                      type="confirm"
+                      tip_title="批量下架操作"
+                      tip_content="通知机房代表着你同意了这次的下架审核，网维将会收到这次的下架请求并进行处理，请您谨慎选择"
+                      ok={checkAllUnderData.bind(this)}
+                      data={{}}
+                      select={true}
+                      input={true}
+                      icon={<Approval />}
+                      selectOptions={(
+                        props.checkSelectOptions ? props.checkSelectOptions : [
+                            {
+                                text: "同意",
+                                value: 1,
+                                default: true
+                            },
+                            {
+                                text: "驳回",
+                                value: 0
                             }
                         ]
                     )}

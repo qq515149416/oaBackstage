@@ -25,6 +25,7 @@ import TableRow from '@material-ui/core/TableRow';
 import ExpansionComponent from "../component/expansionComponent.jsx";
 import GetResource from "../component/dialog/GetResource.jsx";
 import OtherConsumption from "../component/dialog/otherConsumption.jsx";
+import Order from '../component/dialog/order.jsx';
 const classNames = require('classnames');
 const dateFormat = require('dateformat');
 const qs = require('qs');
@@ -311,7 +312,7 @@ const columnData = [
         if(data.business_type==3) {
             components.push(AddResource);
         }
-
+        components.push(Order);
         let Element = extendElementsComponent(components);
           return <Element {...data} disposal_type={1} update={update} postUrl="business/renewresource" nameParam="machine_number" type="业务" />;
     //   if(data.business_status==2) {

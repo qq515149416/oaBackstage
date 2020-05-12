@@ -22,12 +22,13 @@ import Paper from '@material-ui/core/Paper';
 import Pay from './pay.jsx';
 import { post, get } from "../../tool/http";
 import Switch from '@material-ui/core/Switch';
+import dialogDecorator from '../../decorator/dialog';
 
 const classNames = require('classnames');
 
 const styles = theme => ({
     root: {
-        width: 900,
+        // width: 900,
     },
     heading: {
       fontSize: theme.typography.pxToRem(15),
@@ -53,12 +54,12 @@ const styles = theme => ({
         margin: "10px 10px"
     }
 });
+
 class RenewalFee extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             currency: 1,
-            renewalFee: false,
             resources: {
                 IP: [],
                 bandwidth: [],
@@ -68,10 +69,12 @@ class RenewalFee extends React.Component {
                 memory: [],
                 protected: [],
             },
-            resource: {
-                [this.props.order_sn ? this.props.order_sn : 0]: true
+            resource: this.props.order_sn ? {
+                [this.props.id]: this.props
+            } : {
+                // [this.props.order_sn ? this.props.order_sn : 0]: true
             },
-            primary: true
+            primary: false
         }
         this.renewalFeeDates = [
             {
@@ -88,10 +91,15 @@ class RenewalFee extends React.Component {
             }
         ];
     }
+    componentDidMount() {
+        const { getRef } = this.props;
+        getRef && getRef(this);
+    }
     show = () => {
         if(!this.props.order_sn) {
-            get("business/all_renew",{
-                business_sn: this.props.business_number
+            get("business/showresource",{
+                business_sn: this.props.id,
+                renew: "renew"
             }).then(res => {
                 if(res.data.code==1) {
                     this.setState({
@@ -103,17 +111,8 @@ class RenewalFee extends React.Component {
             })
         }
     }
-    open = () => {
-        this.setState({
-            renewalFee: true
-        });
-    }
-    close = () => {
-        this.setState({
-            renewalFee: false
-        });
-    }
-    renewalFeeOperat = () => {
+
+    postForm = () => {
         const { resource } = this.state;
         var confirm_next = confirm("是否要将"+this.props[this.props.nameParam]+this.props.type+"，续费"+this.renewalFeeDates.find(item => {
             return item.value == this.state.currency;
@@ -126,23 +125,30 @@ class RenewalFee extends React.Component {
             }
             if(this.state.primary) {
                 // delete this.props.business_number;
-                expansion["business_number"] = this.props.business_number?this.props.business_number:undefined;
+                // expansion["business_number"] = this.props.business_number?this.props.business_number:undefined;
+                resource[this.props.id] = {
+                    id: this.props.id,
+                    resource_type: this.props.business_type
+                };
             }
-            post(this.props.postUrl,{
+            post("business/renew",{
             //    ...this.props,
-                orders: Object.keys(resource).filter(item => resource[item]),
+                resource: Object.keys(resource).filter(item => resource[item]).map(key => ({
+                    id: resource[key].id,
+                    resource_type: resource[key].resource_type
+                })),
             //    business_number: this.props.business_number?this.props.business_number:undefined,
             //    order_sn: this.props.order_sn ? this.props.order_sn : undefined,
                 ...expansion,
-               price: this.props.money,
+            //    price: this.props.money,
                length: _length,
                order_note: order_note,
-               client_id: this.props.customer_id?this.props.customer_id:this.props.client_id,
-               resource_type: this.props.resource_type?this.props.resource_type:this.props.business_type
+            //    client_id: this.props.customer_id?this.props.customer_id:this.props.client_id,
+            //    resource_type: this.props.resource_type?this.props.resource_type:this.props.business_type
             }).then((data)=>{
                 if(data.data.code==1) {
                     alert(data.data.msg);
-                    this.close();
+                    // this.close();
                     this.pay.handleClickOpen(data.data.data);
                 } else {
                     alert(data.data.msg);
@@ -153,7 +159,7 @@ class RenewalFee extends React.Component {
     handleSelectChange = items => event => {
         this.setState(state => {
             items.forEach(item => {
-                state.resource[item.order_sn] = true;
+                state.resource[item.id] = item;
             });
             return state;
         });
@@ -163,7 +169,7 @@ class RenewalFee extends React.Component {
     handleSelectCancelChange = items => event => {
         this.setState(state => {
             items.forEach(item => {
-                state.resource[item.order_sn] = false;
+                state.resource[item.id] = null;
             });
             return state;
         });
@@ -181,9 +187,9 @@ class RenewalFee extends React.Component {
         });
     }
 
-    handleClick = id => event => {
+    handleClick = item => event => {
         this.setState(state => {
-            state.resource[id] = !state.resource[id];
+            state.resource[item.id] = (!state.resource[item.id] ? item : null);
             return state;
         });
     }
@@ -194,30 +200,16 @@ class RenewalFee extends React.Component {
         const resource_types = {
             IP: "IP",
             bandwidth: "带宽",
-            cdn: "CDN",
+            // cdn: "CDN",
             cpu: "CPU",
             harddisk: "硬盘",
             memory: "内存",
             protected: "防御"
         };
         return [
-            <Tooltip title="续费">
-                    <IconButton className={classes.iconButton} onClick={this.open} aria-label="renewalFee">
-                        <RenewalFeeIcon />
-                    </IconButton>
-                </Tooltip>,
-            <Dialog
-          open={this.state.renewalFee}
-          onClose={this.close}
-          aria-labelledby="form-dialog-title"
-          maxWidth="lg"
-          onEntered={this.show}
-        >
-          <DialogTitle id="form-dialog-title">续费</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
+            <div>
                 {
-                    this.props.order_sn ? this.props.resource + this.props.resourcetype+"资源的订单" : [
+                    this.props.order_sn ? this.props.resource_detail+"资源的订单" : [
                         <p>业务编号：{this.props.business_number}</p>,
                         <p>机器编号：{this.props.machine_number}</p>,
                         <p>IP：{this.props.resource_detail_json.ip}</p>,
@@ -228,91 +220,111 @@ class RenewalFee extends React.Component {
                         onChange={this.handleSwitchChange('primary')}
                         value="primary"
                         color="primary"
-                      /></p>
+                        /></p>
                     ]
                 }
-            </DialogContentText>
-            <div className={classes.root}>
-                {this.props.order_sn ? null : [
-                    Object.keys(resource_types).map(byKeyVal => (
-                        <ExpansionPanel>
-                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography className={classes.heading}>{resource_types[byKeyVal]}</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <Grid container className={classes.gridRoot} spacing={16}>
-                                {
-                                    resources[byKeyVal].filter(item => item.order_status!=0).map(item => (
-                                        <Grid key={item.id} xs={4} item>
-                                            <Paper className={classNames({
-                                                [classes.paper]: true,
-                                                [classes.paperActive]: resource[item.order_sn]
-                                            })} onClick={this.handleClick(item.order_sn)} elevation={1}>
-                                                <p>资源名称：{item.machine_sn}</p>
-                                                <p>价格：{item.price}</p>
-                                                <p>详细：{item.resource}</p>
-                                                <p>到期时间：{item.end_time}</p>
-                                            </Paper>
-                                        </Grid>
-                                    ))
-                                }
-                                <Grid xs={12} item>
-                                    <Button onClick={this.handleSelectChange(resources[byKeyVal].filter(item => item.order_status!=0))} variant="contained" color="primary" className={classes.selectAllBtn}>
-                                        全选
-                                    </Button>
-                                    <Button variant="contained" onClick={this.handleSelectCancelChange(resources[byKeyVal].filter(item => item.order_status!=0))} color="primary" className={classes.selectAllBtn}>
-                                        取消全选
-                                    </Button>
+                <div className={classes.root}>
+                    {this.props.order_sn ? null : [
+                        Object.keys(resource_types).map(byKeyVal => (
+                            <ExpansionPanel>
+                            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                <Typography className={classes.heading}>{resource_types[byKeyVal]}</Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                                <Grid container className={classes.gridRoot} spacing={16}>
+                                    {
+                                        resources[byKeyVal].filter(item => item.order_status!=0).map(item => (
+                                            <Grid key={item.id} xs={4} item>
+                                                <Paper className={classNames({
+                                                    [classes.paper]: true,
+                                                    [classes.paperActive]: resource[item.id]
+                                                })} onClick={this.handleClick(item)} elevation={1}>
+                                                    <p>资源名称：{item.resource_num}</p>
+                                                    <p>价格：{item.price}</p>
+                                                    <p>详细：{item.resource_detail}</p>
+                                                    <p>到期时间：{item.end_time}</p>
+                                                </Paper>
+                                            </Grid>
+                                        ))
+                                    }
+                                    <Grid xs={12} item>
+                                        <Button onClick={this.handleSelectChange(resources[byKeyVal].filter(item => item.order_status!=0))} variant="contained" color="primary" className={classes.selectAllBtn}>
+                                            全选
+                                        </Button>
+                                        <Button variant="contained" onClick={this.handleSelectCancelChange(resources[byKeyVal].filter(item => item.order_status!=0))} color="primary" className={classes.selectAllBtn}>
+                                            取消全选
+                                        </Button>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                    </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                    ))
+                        </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                        ))
 
-                ]}
+                    ]}
 
 
-            </div>
-            <TextField
-            id="renewalFee_duration"
-            fullWidth
-            select
-            label="时长"
-            value={this.state.currency}
-            onChange={this.handleChange('currency')}
-            margin="normal"
-            >
-                {
-                    this.renewalFeeDates.map(item => (
-                        <MenuItem key={item.value} value={item.value}>
-                            {item.label}
-                        </MenuItem>
-                    ))
-                }
+                </div>
+                <TextField
+                id="renewalFee_duration"
+                fullWidth
+                select
+                label="时长"
+                value={this.state.currency}
+                onChange={this.handleChange('currency')}
+                margin="normal"
+                >
+                    {
+                        this.renewalFeeDates.map(item => (
+                            <MenuItem key={item.value} value={item.value}>
+                                {item.label}
+                            </MenuItem>
+                        ))
+                    }
 
-            </TextField>
-            <TextField
-              margin="dense"
-              id="note"
-              label="备注"
-              fullWidth
-              inputRef = {ref => this.note = ref}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.close} color="primary">
-              取消
-            </Button>
-            <Button onClick={this.renewalFeeOperat} color="primary">
-              确定
-            </Button>
-          </DialogActions>
-        </Dialog>,
-        <Pay getRef={(ref) => this.pay = ref} update={this.props.update} />
+                </TextField>
+                <TextField
+                margin="dense"
+                id="note"
+                label="备注"
+                fullWidth
+                inputRef = {ref => this.note = ref}
+                />
+            </div>,
+            <Pay getRef={(ref) => this.pay = ref} update={this.props.update} />
         ];
     }
 }
-RenewalFee.propTypes = {
+
+@dialogDecorator({
+    title: "续费",
+    buttonType: "normal",
+    type: "action",
+    icon: "renewalFee"
+})
+class RenewalFeeNormalButton extends RenewalFee {
+
+}
+
+@dialogDecorator({
+    title: "续费",
+    // buttonType: "normal",
+    type: "action",
+    icon: "renewalFee"
+})
+class RenewalFeeIconButton extends RenewalFee {
+
+}
+
+RenewalFeeNormalButton.propTypes = {
     classes: PropTypes.object.isRequired,
 }
-export default withStyles(styles)(RenewalFee);
+
+RenewalFeeIconButton.propTypes = {
+    classes: PropTypes.object.isRequired,
+}
+
+const RenewalFeeNormalButtonStyle = withStyles(styles)(RenewalFeeNormalButton);
+
+export {RenewalFeeNormalButtonStyle};
+export default withStyles(styles)(RenewalFeeIconButton);
+

@@ -12,6 +12,17 @@ class DismissalReviewsStores extends ActionBoundStores {
         business: [],
         orders: [],
     };
+    doUnder(data) {
+        return new Promise((resolve,reject) => {
+            post("under/do_under",data).then((res) => {
+                if(res.data.code==1) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            }).catch(reject);
+        });
+    }
     @action.bound
     getData(type = "dismissalReview") {
         this.changeRequestState(2);

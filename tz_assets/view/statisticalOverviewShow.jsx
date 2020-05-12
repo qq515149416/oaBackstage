@@ -352,6 +352,10 @@ class StatisticalOverviewShow extends React.Component {
                         this.setState({
                             typeActive: "allBusiness"
                         });
+                    } else {
+                        this.setState({
+                            typeActive: "customer"
+                        });
                     }
                     this.setState({
                         detail: data
@@ -864,6 +868,7 @@ class StatisticalOverviewShow extends React.Component {
                                     <StyledTableCell align="left">流水号</StyledTableCell>
                                     <StyledTableCell align="left">客户</StyledTableCell>
                                     <StyledTableCell align="left">所属业务员</StyledTableCell>
+                                    <StyledTableCell align="left">消费类型</StyledTableCell>
                                     <StyledTableCell align="left">消费金额</StyledTableCell>
                                     <StyledTableCell align="left">支付时间</StyledTableCell>
                                 </TableRow>
@@ -880,6 +885,9 @@ class StatisticalOverviewShow extends React.Component {
                                                 </StyledTableCell>
                                                 <StyledTableCell align="left">
                                                     {item["name"]}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="left">
+                                                    {item["type"]}
                                                 </StyledTableCell>
                                                 <StyledTableCell align="left">
                                                     {item["actual_payment"]}
@@ -1054,8 +1062,8 @@ class StatisticalOverviewShow extends React.Component {
                                 <TableRow>
                                     <StyledTableCell align="left">业务编号</StyledTableCell>
                                     <StyledTableCell align="left">客户</StyledTableCell>
-                                    <StyledTableCell align="left">业务类型</StyledTableCell>
                                     <StyledTableCell align="left">所属业务员</StyledTableCell>
+                                    <StyledTableCell align="left">业务类型</StyledTableCell>
                                     <StyledTableCell align="left">机器编号</StyledTableCell>
                                     <StyledTableCell align="left">单价</StyledTableCell>
                                     <StyledTableCell align="left">开始时间</StyledTableCell>
@@ -1073,10 +1081,10 @@ class StatisticalOverviewShow extends React.Component {
                                                     {item["customer_name"]}
                                                 </StyledTableCell>
                                                 <StyledTableCell align="left">
-                                                    {item["business_type"]}
+                                                    {item["sales_name"]}
                                                 </StyledTableCell>
                                                 <StyledTableCell align="left">
-                                                    {item["sales_name"]}
+                                                    {item["business_type"]}
                                                 </StyledTableCell>
                                                 <StyledTableCell align="left">
                                                     {item["machine_number"]}
@@ -1106,9 +1114,9 @@ class StatisticalOverviewShow extends React.Component {
                                 <TableRow>
                                     <StyledTableCell align="left">业务编号</StyledTableCell>
                                     <StyledTableCell align="left">客户</StyledTableCell>
-                                    <StyledTableCell align="left">业务类型</StyledTableCell>
                                     <StyledTableCell align="left">所属业务员</StyledTableCell>
-                                    <StyledTableCell align="left">套餐名称</StyledTableCell>
+                                    {/* <StyledTableCell align="left">业务类型</StyledTableCell> */}
+                                    <StyledTableCell align="left">机器编号</StyledTableCell>
                                     <StyledTableCell align="left">单价</StyledTableCell>
                                     <StyledTableCell align="left">开始时间</StyledTableCell>
                                     <StyledTableCell align="left">结束时间</StyledTableCell>
@@ -1125,11 +1133,11 @@ class StatisticalOverviewShow extends React.Component {
                                                     {item["customer_name"]}
                                                 </StyledTableCell>
                                                 <StyledTableCell align="left">
-                                                    {item["business_type"]}
-                                                </StyledTableCell>
-                                                <StyledTableCell align="left">
                                                     {item["sales_name"]}
                                                 </StyledTableCell>
+                                                {/* <StyledTableCell align="left">
+                                                    {item["business_type"]}
+                                                </StyledTableCell> */}
                                                 <StyledTableCell align="left">
                                                     {item["machine_number"]}
                                                 </StyledTableCell>
@@ -1156,9 +1164,10 @@ class StatisticalOverviewShow extends React.Component {
                             <Table className={classes.dataTable} aria-label="customized table">
                                 <TableHead>
                                 <TableRow>
+                                    <StyledTableCell align="left">业务编号</StyledTableCell>
                                     <StyledTableCell align="left">客户</StyledTableCell>
-                                    <StyledTableCell align="left">业务类型</StyledTableCell>
                                     <StyledTableCell align="left">所属业务员</StyledTableCell>
+                                    {/* <StyledTableCell align="left">业务类型</StyledTableCell> */}
                                     <StyledTableCell align="left">套餐名称</StyledTableCell>
                                     <StyledTableCell align="left">单价</StyledTableCell>
                                     <StyledTableCell align="left">时间</StyledTableCell>
@@ -1169,14 +1178,17 @@ class StatisticalOverviewShow extends React.Component {
                                         data.overlay_on.map(item => (
                                             <TableRow>
                                                 <StyledTableCell align="left">
-                                                    {item["customer_name"]}
+                                                    {item["business_number"]}
                                                 </StyledTableCell>
                                                 <StyledTableCell align="left">
-                                                    {item["business_type"]}
+                                                    {item["customer_name"]}
                                                 </StyledTableCell>
                                                 <StyledTableCell align="left">
                                                     {item["sales_name"]}
                                                 </StyledTableCell>
+                                                {/* <StyledTableCell align="left">
+                                                    {item["business_type"]}
+                                                </StyledTableCell> */}
                                                 <StyledTableCell align="left">
                                                     {item["machine_number"]}
                                                 </StyledTableCell>

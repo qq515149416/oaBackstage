@@ -135,6 +135,11 @@ const inputType = [
                 checked: false,
                 value: "2",
                 label: "联通公司"
+            },
+            {
+                checked: false,
+                value: "3",
+                label: "BGP"
             }
         ]
     },

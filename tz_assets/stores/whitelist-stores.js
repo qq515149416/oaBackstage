@@ -4,6 +4,9 @@ import ActionBoundStores from "./common/action-bound-stores.js";
 const dateFormat = require('dateformat');
 class WhitelistStores {
     constructor(data) {
+        // console.log(Object.keys(data).map(key => {
+        //     return typeof data[key];
+        // }));
         extendObservable(this, data);
     }
 }
@@ -110,7 +113,14 @@ class WhitelistsStores extends ActionBoundStores {
         })).then((res) => {
             this.changeRequestState(res.data.code);
             if (res.data.code == 1) {
+                // console.log(res.data.data.length);
+                // res.data.data.map(item => new WhitelistStores(item)).forEach((item,index) => {
+                //     this.whitelists[index] = item;
+                // });
                 this.whitelists = res.data.data.map(item => new WhitelistStores(item));
+                // this.whitelists = data_start.concat(data_end);
+                // console.log(res.data.data.filter((item,index) => index == 9999));
+                // console.log(this.whitelists);
             }
         });
     }

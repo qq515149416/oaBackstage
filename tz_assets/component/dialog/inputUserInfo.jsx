@@ -99,6 +99,7 @@ class InputUserInfo extends React.Component {
                     value={this.state.name}
                     onChange={this.handleChange('name')}
                     inputRef = {ref => this.name = ref}
+                    disabled
                 />
                 <TextField
                     margin="dense"

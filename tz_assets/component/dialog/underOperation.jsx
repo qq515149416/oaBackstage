@@ -61,8 +61,8 @@ class UnderOperation extends React.Component {
     }
     obtained = () => {
         let param = {};
+        param["business_id"] = this.props.id;
         if(this.props.obtained_type == 1) {
-            param["business_number"] = this.props.business_number;
             param["type"] = 1;
             param["parent_business"] = this.props.parent_business;
             if(this.state.type != 1) {
@@ -71,7 +71,7 @@ class UnderOperation extends React.Component {
             }
         }
         if(this.props.obtained_type == 2) {
-            param["order_sn"] = this.props.order_sn;
+            // param["order_sn"] = this.props.order_sn;
             param["type"] = 2;
             if(this.state.type != 1) {
                 // param["machineroom"] = this.state.depart_ed;

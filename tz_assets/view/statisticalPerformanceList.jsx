@@ -203,6 +203,7 @@ class StatisticalPerformanceList extends React.Component {
                 break;
             }
             this.props.statisticalPerformancesStores.getData();
+            this.performance_statistics.rePage();
         }
         this.setState({ value });
     }
@@ -279,6 +280,7 @@ class StatisticalPerformanceList extends React.Component {
                         data={this.props.statisticalPerformancesStores.statisticalPerformances}
                         currentStores={this.props.statisticalPerformancesStores}
                         nosort={true}
+                        getRef={ref => this.performance_statistics = ref}
                         customizeToolbar={[
                             <CustomizeTableToolbar getData={this.props.statisticalPerformancesStores.getData} />,
                             <div>

@@ -27,9 +27,20 @@ class ActionBoundStores {
     filterStoreData(storeAttr, type, param) {
         if(type=="select") {
             // console.log(this.copyData);
+            console.log(this[storeAttr].length);
             if(!this.copyData.length) {
-                for(let key in this[storeAttr]) {
-                    this.copyData[key] = this[storeAttr][key];
+                if(this[storeAttr].length) {
+                    if(this[storeAttr].length < 9999) {
+                        for(let key in this[storeAttr]) {
+                            this.copyData[key] = this[storeAttr][key];
+                        }
+                    } else {
+                        this.copyData = this[storeAttr].slice();
+                    } 
+                } else {
+                    for(let key in this[storeAttr]) {
+                        this.copyData[key] = this[storeAttr][key];
+                    }
                 }
             } else {
                 this[storeAttr] = this.copyData.map(item => item);

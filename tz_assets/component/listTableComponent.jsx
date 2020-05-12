@@ -24,6 +24,22 @@ const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 const qs = require('qs');
 
+function string_multistage_transfer(obj,attrString) {
+    if(attrString.indexOf(".") > -1) {
+        var result = null;
+        attrString.split(".").forEach(function(item) {
+            if(!result) {
+                result = obj[item];
+            }else {
+                result = result[item];
+            }
+        });
+        return result;
+    } else {
+        return obj[attrString];
+    }
+}
+
 function getSorting(order, orderBy) {
     if(orderBy=="calories") {
         return (a,b) => {
@@ -45,9 +61,10 @@ function getSorting(order, orderBy) {
             ? (a, b) => (Number(b[orderBy]) < Number(a[orderBy]) ? -1 : 1)
             : (a, b) => (Number(a[orderBy]) < Number(b[orderBy]) ? -1 : 1);
     }
+    console.log(order,orderBy);
     return order === 'desc'
-      ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
-      : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
+      ? (a, b) => (string_multistage_transfer(b,orderBy) < string_multistage_transfer(a,orderBy) ? -1 : 1)
+      : (a, b) => (string_multistage_transfer(a,orderBy) < string_multistage_transfer(b,orderBy) ? -1 : 1);
 
 }
 //计算字符串长度包含中文
@@ -170,6 +187,7 @@ const styles = theme => ({
       };
       Array.prototype.extendSort = function(fn) {
         if(!nosort) {
+            // console.log(this.sort(fn));
             return this.sort(fn);
         }
         return this;
@@ -182,7 +200,15 @@ const styles = theme => ({
                 ...this.props.otherConfig
             });
         }
+        if(this.props.getRef) {
+          this.props.getRef(this);
+        }
         // this.props.usersLinkInfoStores.getData();
+    }
+    rePage() {
+      this.setState({
+        page: 0
+      });
     }
     getData() {
         return this.props.data;
@@ -572,11 +598,13 @@ const styles = theme => ({
             handleSelectAllEmptyClick={this.handleSelectAllEmptyClick}
             delData={this.props.delData}
             checkAll={this.props.checkAll}
+            checkUnderAll={this.props.checkUnderAll}
             checkSelectOptions={this.props.checkSelectOptions}
             selectedData={selected}
             addTitle={this.props.addTitle}
             showPrompt={this.showPrompt}
             hidePrompt={this.hidePrompt}
+            updata={this.props.updata}
           />
           {
               this.props.customizeToolbar && (
@@ -737,12 +765,21 @@ const styles = theme => ({
             </Button>
           )}>
             <ExcelSheet data={this.props.data
+                  .map(item => {
+                    let result = {};
+                    Object.keys(item).forEach(key => {
+                      if(typeof item[key] == "number" || typeof item[key] == "string") {
+                        result[key] = item[key];
+                      }
+                    });
+                    return result;
+                  })
                   .sort(getSorting(order, orderBy))
                   .sort((a,b) => {
                         return b.id - a.id
                 })} name="OA数据">
                 {
-                    excelHeadTitlesData.filter(item => item.id != "operat").map(item => (
+                    excelHeadTitlesData.filter(item => (item.id != "operat" && item.id != "order_arr")).map(item => (
                         <ExcelColumn label={item.label} value={item.id}/>
                     ))
                 }

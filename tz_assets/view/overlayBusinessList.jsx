@@ -13,6 +13,7 @@ import ExpansionComponent from '../component/expansionComponent.jsx'
 import Enable from '../component/icon/enable.jsx'
 import HighDefenseIpFlowChartDialog from '../component/dialog/highDefenseIpFlowChartDialog.jsx'
 import TabComponent from "../component/tabComponent.jsx";
+import NewPay from "../component/dialog/newPay.jsx";
 
 const qs = require('qs')
 
@@ -109,6 +110,7 @@ class OverlayBusinessList extends React.Component {
     // 添加叠加包业务
     addData = (param, callbrak) => {
         this.props.overlayBusinesssStores.addData(param).then((state) => {
+            this.newPay.handleClickOpen(state);
             callbrak(state)
         })
     }
@@ -161,6 +163,7 @@ class OverlayBusinessList extends React.Component {
                 updata={this.updata.bind(this)}
                 addData={this.addData.bind(this)}
             />
+            <NewPay getRef={ref => this.newPay = ref} client={qs.parse(location.search.substr(1)).id} />
             </TabComponent>
         );
         return WrapComponent;

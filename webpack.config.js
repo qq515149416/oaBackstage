@@ -5,16 +5,18 @@ const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const directory = "TZDEV";
+
 module.exports = {
     entry: './tz_assets/app.js',
     output: {
       filename: '[chunkhash]_bundle.js',
-      path: path.resolve(__dirname, '../TZ/public/tz_assets'),
+      path: path.resolve(__dirname, '../'+directory+'/public/tz_assets'),
       publicPath: "/tz_assets/"
     },
     plugins: [
         new CleanWebpackPlugin(['tz_assets'],{
-            root: path.resolve(__dirname, '../TZ/public')
+            root: path.resolve(__dirname, '../'+directory+'/public')
         }),
         new ParallelUglifyPlugin({
             cacheDir: '.cache/',
@@ -30,15 +32,15 @@ module.exports = {
         }),
         new webpack.DllReferencePlugin({
             context: __dirname,
-            manifest: require("../TZ/public/lib-manifest.json")
+            manifest: require("../"+directory+"/public/lib-manifest.json")
         }),
         new HtmlWebpackPlugin({
             title: '腾正后台',
             template: path.join(__dirname,"tz_assets/template/app.html"),
-            filename: path.resolve(__dirname, '../TZ/public/tz_assets/template.html')
+            filename: path.resolve(__dirname, '../'+directory+'/public/tz_assets/template.html')
         })
     ],
-    mode: "production",
+    mode: "development",
     module: {
         rules: [
             {
@@ -79,7 +81,7 @@ module.exports = {
             }
         ]
     },
-    // devtool: "source-map",
+    devtool: "source-map",
     node: {fs: 'empty'},
     externals: [
         {'./cptable': 'var cptable'},

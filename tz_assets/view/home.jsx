@@ -78,15 +78,15 @@ const types = {
     overdueRes: {
          url: "overdue/showOverdueRes",
          columnData: [
-            { id: 'business_number', label: '业务编号' },
-            { id: 'cabinet_num', label: '机柜编号' },
-            { id: 'machine_num', label: '机器编号' },
+            { id: 'parent_businessnum', label: '业务编号' },
+            { id: 'cabinet', label: '机柜编号' },
+            { id: 'type', label: '资源类型' },
+            { id: 'resource_detail', label: '资源参数' },
             { id: 'customer_name', label: '客户名称' },
             { id: 'sales_name', label: '业务员' },
-            { id: 'nickname', label: '客户昵称' },
-            { id: 'endding_time', label: '到期时间' },
-            { id: 'resource_type', label: '资源类型' },
-            { id: 'self_number', label: '自身编号' }
+            // { id: 'nickname', label: '客户昵称' },
+            { id: 'end_time', label: '到期时间' },
+            { id: 'resource_businessnum', label: '自身编号' }
         ]
     },
     unpaidMachine: {
@@ -131,15 +131,15 @@ const types = {
     xiaJiaRes: {
         url: "overdue/showXiaJiaRes",
         columnData: [
-            { id: 'business_number', label: '业务编号' },
-            { id: 'cabinet_num', label: '机柜编号' },
-            { id: 'machine_num', label: '机器编号' },
+            { id: 'parent_businessnum', label: '业务编号' },
+            { id: 'cabinet', label: '机柜编号' },
+            { id: 'type', label: '资源类型' },
+            { id: 'resource_detail', label: '资源参数' },
             { id: 'customer_name', label: '客户名称' },
-            { id: 'nickname', label: '客户昵称' },
+            // { id: 'nickname', label: '客户昵称' },
             { id: 'sales_name', label: '业务员' },
-            { id: 'endding_time', label: '到期时间' },
-            { id: 'resource_type', label: '资源类型' },
-            { id: 'self_number', label: '自身编号' }
+            { id: 'end_time', label: '到期时间' },
+            { id: 'resource_businessnum', label: '自身编号' }
         ]
     },
     trialDefenseIp: {
@@ -155,14 +155,14 @@ const types = {
     unpaidIdcOrder: {
         url: "overdue/showUnpaidIdcOrder",
         columnData: [
-            { id: 'business_sn', label: '业务编号' },
+            { id: 'order_sn', label: '业务编号' },
             { id: 'customer_name', label: '客户名称' },
-            { id: 'nickname', label: '客户昵称' },
+            // { id: 'nickname', label: '客户昵称' },
             { id: 'sales_name', label: '业务员' },
             { id: 'duration', label: '购买时长' },
-            { id: 'endding_time', label: '到期时间' },
+            { id: 'end_time', label: '到期时间' },
             { id: 'resource_type', label: '资源类型' },
-            // { id: 'order_type', label: '订单类型' },
+            { id: 'order_type', label: '订单类型' },
             { id: 'payable_money', label: '应付金额' },
             { id: 'price', label: '单价' }
         ]
@@ -179,15 +179,15 @@ const types = {
             {value: 10, label: 'CDN', default: false}
         ],
         columnData: [
-            { id: 'business_number', label: '业务编号' },
-            { id: 'cabinet_num', label: '机柜编号' },
-            { id: 'machine_num', label: '机器编号' },
+            { id: 'parent_businessnum', label: '业务编号' },
+            { id: 'cabinet', label: '机柜编号' },
+            { id: 'type', label: '资源类型' },
+            { id: 'resource_detail', label: '资源参数' },
             { id: 'customer_name', label: '客户名称' },
-            { id: 'nickname', label: '客户昵称' },
+            // { id: 'nickname', label: '客户昵称' },
             { id: 'sales_name', label: '业务员' },
-            { id: 'endding_time', label: '到期时间' },
-            { id: 'resource_type', label: '资源类型' },
-            { id: 'self_number', label: '自身编号' }
+            { id: 'end_time', label: '到期时间' },
+            { id: 'resource_businessnum', label: '自身编号' }
         ]
     }
 };
@@ -227,7 +227,7 @@ class Home extends React.Component {
             });
         }
         if(qs.parse(location.search.substr(1)).type && qs.parse(location.search.substr(1)).type==="admin") {
-            if(types[type].url.indexOf("X") === -1) {
+            if(types[type].url.lastIndexOf("X") === -1 || types[type].url.lastIndexOf("X") !== types[type].url.length-1) {
                 types[type].url = types[type].url + "X";
             }
         }

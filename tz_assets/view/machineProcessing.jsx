@@ -172,16 +172,16 @@ class DisposalList extends React.Component {
             columnData = [
                 { id: 'customer_name', numeric: true, disablePadding: false, label: '客户' },
                 { id: 'business_name', numeric: true, disablePadding: false, label: '业务员' },
-                { id: 'resource', numeric: true, disablePadding: false, label: '资源' },
+                { id: 'resource_detail', numeric: true, disablePadding: false, label: '资源' },
                 { id: 'resourcetype', numeric: true, disablePadding: false, label: '资源类型' },
                 { id: 'removestatus', numeric: true, disablePadding: false, label: '下架状态' },
-                { id: 'cabinets', numeric: true, disablePadding: false, label: '机柜' },
+                { id: 'cabinetid', numeric: true, disablePadding: false, label: '机柜' },
                 { id: 'ip', numeric: true, disablePadding: false, label: 'IP' },
                 { id: 'operat', numeric: true, disablePadding: false, label: '操作',  extend: true, extendData: [
-                    {id: "business_sn", label: "业务号", type: "text"},
-                    {id: "order_sn", label: "订单号", type: "text"},
+                    {id: "parent_businessnum", label: "业务号", type: "text"},
+                    {id: "resource_businessnum", label: "资源号", type: "text"},
                     {id: "remove_reason", label: "下架原因", type: "text"},
-                    {id: "machine_sn", label: "资源值", type: "text"},
+                    {id: "resource_num", label: "资源值", type: "text"},
 
                 ],extendConfirm: {
                     title: "下架操作",
@@ -190,7 +190,7 @@ class DisposalList extends React.Component {
                     ok: (data) => {
                         return new Promise((resolve,reject) => {
                             post("under/do_under",{
-                                order_sn: data.order_sn,
+                                business_id: data.id,
                                 type: 2
                             }).then((res) => {
                                 if(res.data.code==1) {
@@ -208,6 +208,7 @@ class DisposalList extends React.Component {
         }
         this.setState({ value,title,operattext,columnData,operat });
     }
+  
     render() {
         const { classes } = this.props;
         return (

@@ -1,20 +1,21 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Paper from '@material-ui/core/Paper';
-import Draggable from 'react-draggable';
+// import Button from '@material-ui/core/Button';
+// import Dialog from '@material-ui/core/Dialog';
+// import DialogActions from '@material-ui/core/DialogActions';
+// import DialogContent from '@material-ui/core/DialogContent';
+// import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogTitle from '@material-ui/core/DialogTitle';
+// import Paper from '@material-ui/core/Paper';
+// import Draggable from 'react-draggable';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { post,get } from "../../tool/http";
+import draggableDialogDecorator from '../../decorator/draggable_dialog';
 
 const CustomTableCell = withStyles(theme => ({
     head: {
@@ -50,17 +51,12 @@ const styles = theme => ({
       }
 });
 
-function PaperComponent(props) {
-    return (
-      <Draggable>
-        <Paper {...props} />
-      </Draggable>
-    );
-  }
-
+  @draggableDialogDecorator({
+    title: "支付确认",
+    type: "action"
+  })
   class Pay extends React.Component {
     state = {
-      open: false,
       data: []
     };
 
@@ -68,15 +64,15 @@ function PaperComponent(props) {
         this.props.getRef && this.props.getRef(this);
     }
 
-    handleClickOpen = (session_key) => {
+    show = (session_key) => {
         get("business/show_renew_order",{
             session_key
         }).then(res => {
             if(res.data.code==1) {
                 this.setState({
-                    data: res.data.data,
-                    open: true
+                    data: res.data.data.map(item => JSON.parse(item))
                 });
+                console.log(res.data.data.map(item => JSON.parse(item)));
                 this.session_key = session_key;
             } else {
                 alert(res.data.msg);
@@ -84,7 +80,7 @@ function PaperComponent(props) {
         });
     };
 
-    handlePay = () => {
+    postForm = (close) => {
         // this.setState({ open: false });
         get("business/renew_pay",{
             session_key: this.session_key
@@ -92,35 +88,19 @@ function PaperComponent(props) {
             if(res.data.code==1) {
                 alert(res.data.msg);
                 this.props.update && this.props.update();
-                this.setState({ open: false });
+                close();
             } else {
                 alert(res.data.msg);
             }
         })
     };
 
-    handleClose = () => {
-      this.setState({ open: false });
-    };
-
     render() {
         const { classes } = this.props;
         const { data } = this.state;
         return (
-        <span>
-          <Dialog
-            open={this.state.open}
-            onClose={this.handleClose}
-            PaperComponent={PaperComponent}
-            disableBackdropClick
-            aria-labelledby="draggable-dialog-title"
-            maxWidth="lg"
-            scroll="paper"
-          >
-            <DialogTitle id="draggable-dialog-title">订单确认</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    <div className={classes.total}>
+        <div>
+          <div className={classes.total}>
                         合计：<span>{(data.reduce((a,b) => a + Number(b.payable_money),0.00)).toFixed(2)}</span>
                     </div>
                     <Table className={classes.table}>
@@ -151,18 +131,7 @@ function PaperComponent(props) {
                         ))}
                         </TableBody>
                     </Table>
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                取消
-              </Button>
-              <Button onClick={this.handlePay} color="primary">
-                确定支付
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </span>
+        </div>
       );
     }
   }

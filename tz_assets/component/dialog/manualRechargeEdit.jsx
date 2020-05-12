@@ -194,6 +194,9 @@ class ManualRechargeEdit extends React.Component {
                 <MenuItem value={10}>
                     新支付宝
                 </MenuItem>
+                <MenuItem value={11}>
+                    腾正公账（东莞银行）
+                </MenuItem>
             </TextField>
             <TextField
                 id="datetime-local"

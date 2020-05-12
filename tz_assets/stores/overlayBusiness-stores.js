@@ -29,7 +29,7 @@ class OverlayBusinesssStores extends ActionBoundStores {
                         user_id: qs.parse(location.search.substr(1)).id,
                         status: this.type
                     });
-                    resolve(true);
+                    resolve(res.data.data);
                 } else {
                     alert(res.data.msg);
                     resolve(false);
